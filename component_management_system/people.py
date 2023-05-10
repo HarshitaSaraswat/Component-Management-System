@@ -1,6 +1,6 @@
 from config import db
 from flask import abort, make_response
-from models import Person
+from component_management_system.metadatas.models import Person
 from schema import people_schema, person_schema
 
 

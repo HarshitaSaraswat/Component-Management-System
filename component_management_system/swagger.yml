@@ -28,6 +28,10 @@ components:
         type: "string"
 
 paths:
+  # /tags:
+  #   get:
+  #     operationId: ""
+
   /people:
     get:
       operationId: "people.read_all"

@@ -1,6 +1,6 @@
 import config
 from flask import render_template
-from models import Person
+from component_management_system.metadatas.models import Person
 
 app = config.connex_app
 app.add_api(config.basedir / "swagger.yml")

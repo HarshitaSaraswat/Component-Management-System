@@ -1,5 +1,5 @@
 from config import db, ma
-from models import Person
+from component_management_system.metadatas.models import Person
 
 
 class PersonSchema(ma.SQLAlchemyAutoSchema):
