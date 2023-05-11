@@ -18,6 +18,9 @@ components:
           type: "string"
         lname:
           type: "string"
+        metadata_id:
+          type: "string"
+
     Tag:
       type: "object"
       required:
@@ -26,11 +29,46 @@ components:
         label:
           type: "string"
 
+    Component:
+      type: "object"
+      required:
+        - url
+        - type
+      properties:
+        url:
+          type: "string"
+        metadata_id:
+          type: "string"
+        type:
+          type: "string"
+          enum:
+            - step
+            - fcform
+
+    Metadata:
+      type: "object"
+
 
   parameters:
     lname:
       name: "lname"
       description: "Last name of the person to get"
+      in: path
+      required: True
+      schema:
+        type: "string"
+
+    label:
+      name: "label"
+      description: "Label of the tag to get"
+      in: path
+      required: True
+      schema:
+        type: "string"
+
+    pk:
+      name: "pk"
+      description: "Primary Key of the object to get"
       in: path
       required: True
       schema:
@@ -63,6 +101,129 @@ paths:
       responses:
         "201":
           description: "Successfully created a tag"
+
+  /tags/{pk}:
+    get:
+      operationId: "tags.operations.read_one"
+      tags:
+        - Tags
+      summary: "Read one tag"
+      parameters:
+        - $ref: "#/components/parameters/pk"
+      responses:
+        "200":
+          description: "Successfully read tag"
+
+    delete:
+      tags:
+        - Tags
+      operationId: "tags.operations.delete"
+      summary: "Delete a tag"
+      parameters:
+        - $ref: "#/components/parameters/pk"
+      responses:
+        "204":
+          description: "Successfully deleted tag"
+
+  /components:
+    get:
+      operationId: "components.operations.read_all"
+      tags:
+        - "Components"
+      summary: "Read the list of all components"
+      responses:
+        "200":
+          description: "Successfully read components list"
+
+    post:
+      operationId: "components.operations.create"
+      tags:
+        - "Components"
+      summary: "Create a Component"
+      requestBody:
+          description: "Component to create"
+          required: True
+          content:
+            application/json:
+              schema:
+                x-body-name: "component"
+                $ref: "#/components/schemas/Component"
+      responses:
+        "201":
+          description: "Successfully created a component"
+
+  /components/{pk}:
+    get:
+      operationId: "components.operations.read_one"
+      tags:
+        - Components
+      summary: "Read one component"
+      parameters:
+        - $ref: "#/components/parameters/pk"
+      responses:
+        "200":
+          description: "Successfully read component"
+
+    delete:
+      tags:
+        - Components
+      operationId: "components.operations.delete"
+      summary: "Delete a component"
+      parameters:
+        - $ref: "#/components/parameters/pk"
+      responses:
+        "204":
+          description: "Successfully deleted component"
+
+  /metadatas:
+    get:
+      operationId: "metadatas.operations.read_all"
+      tags:
+        - "Metadatas"
+      summary: "Read the list of all metadatas"
+      responses:
+        "200":
+          description: "Successfully read metadatas list"
+
+    post:
+      operationId: "metadatas.operations.create"
+      tags:
+        - "Metadatas"
+      summary: "Create a Component"
+      requestBody:
+          description: "Component to create"
+          required: True
+          content:
+            application/json:
+              schema:
+                x-body-name: "metadata"
+                $ref: "#/components/schemas/Metadata"
+      responses:
+        "201":
+          description: "Successfully created a metadata"
+
+  /metadatas/{pk}:
+    get:
+      operationId: "metadatas.operations.read_one"
+      tags:
+        - Metadatas
+      summary: "Read one metadata"
+      parameters:
+        - $ref: "#/components/parameters/pk"
+      responses:
+        "200":
+          description: "Successfully read metadata"
+
+    delete:
+      tags:
+        - Metadatas
+      operationId: "metadatas.operations.delete"
+      summary: "Delete a metadata"
+      parameters:
+        - $ref: "#/components/parameters/pk"
+      responses:
+        "204":
+          description: "Successfully deleted metadata"
 
   # /people:
   #   get:
