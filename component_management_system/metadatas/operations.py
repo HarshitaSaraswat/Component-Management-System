@@ -1,27 +1,30 @@
+from typing import Literal
+
+from components.schemas import components_schema
 from database import db
-from flask import abort, make_response
+from flask import Response, abort, make_response
+from tags.models import Tag
+from tags.schemas import tags_schema
 
 from .models import Metadata
 from .schemas import metadata_schema, metadatas_schema
-from tags.models import Tag
-from tags.schemas import tags_schema
-from components.schemas import components_schema
 
-def read_all():
-	metadatas = Metadata.query.all()
+
+def read_all() -> list[dict[str, str]]:
+	metadatas: list[Metadata] = Metadata.query.all()
 	return metadatas_schema.dump(metadatas)
 
 
-def read_one(pk):
+def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
 	metadata = Metadata.query.filter(Metadata.id==pk).one_or_none()
 
 	if metadata is None:
 		abort(404, f"Metadata with id {pk} not found!")
 
-	return metadata_schema.dump(metadata), 200
+	return metadata_schema.dump(metadata), 200 # type: ignore
 
 
-def create(metadata):
+def create(metadata) -> tuple[dict[str, str], Literal[201]]:
 	# url = metadata.get("url")
 
 	# existing_metadata = Metadata.query.filter(Metadata.url == url).one_or_none()
@@ -32,10 +35,10 @@ def create(metadata):
 	new_metadata = metadata_schema.load(metadata, session=db.session)
 	db.session.add(new_metadata)
 	db.session.commit()
-	return metadata_schema.dump(new_metadata), 201
+	return metadata_schema.dump(new_metadata), 201 # type: ignore
 
 
-def delete(pk):
+def delete(pk) -> Response:
 	existing_metadata = Metadata.query.filter(Metadata.id==pk).one_or_none()
 
 	if existing_metadata is None:
@@ -46,7 +49,7 @@ def delete(pk):
 	return make_response(f"metadata:{pk} successfully deleted", 200)
 
 
-def read_tags(pk):
+def read_tags(pk) -> list[dict[str, str]]:
 	existing_metadata = Metadata.query.filter(Metadata.id==pk).one_or_none()
 
 	if existing_metadata is None:
@@ -55,7 +58,7 @@ def read_tags(pk):
 	return tags_schema.dump(existing_metadata.tags)
 
 
-def add_tags(pk, tags):
+def add_tags(pk, tags) -> Response:
 	existing_metadata = Metadata.query.filter(Metadata.id==pk).one_or_none()
 
 	if existing_metadata is None:
@@ -73,7 +76,7 @@ def add_tags(pk, tags):
 	return make_response(f"tags added successfully", 200)
 
 
-def read_components(pk):
+def read_components(pk) -> list[dict[str, str]]:
 	existing_metadata = Metadata.query.filter(Metadata.id==pk).one_or_none()
 
 	if existing_metadata is None:

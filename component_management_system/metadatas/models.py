@@ -9,6 +9,6 @@ metadata_tag = db.Table(
 
 class Metadata(Base):
 
-    __tablename__ = "metadatas"
+    __tablename__: str = "metadatas"
     components = db.relationship("Component", backref="metadata", cascade="all, delete, delete-orphan")
     tags = db.relationship("Tag", secondary=metadata_tag, backref="metadatas")

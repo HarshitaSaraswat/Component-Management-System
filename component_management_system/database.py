@@ -1,9 +1,10 @@
 import uuid
+from typing import Any
 
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.types import CHAR, TypeDecorator
+from sqlalchemy.types import CHAR, TypeDecorator, TypeEngine
 
 db = SQLAlchemy()
 ma = Marshmallow()
@@ -17,13 +18,13 @@ class GUID(TypeDecorator):
     impl = CHAR
     cache_ok = True
 
-    def load_dialect_impl(self, dialect):
+    def load_dialect_impl(self, dialect) -> TypeEngine[UUID] | TypeEngine[str]:
         if dialect.name == 'postgresql':
-            return dialect.type_descriptor(UUID())
+            return dialect.type_descriptor(UUID()) # type: ignore
         else:
             return dialect.type_descriptor(CHAR(32))
 
-    def process_bind_param(self, value, dialect):
+    def process_bind_param(self, value, dialect) -> Any | str | None:
         if value is None:
             return value
         elif dialect.name == 'postgresql':
@@ -35,7 +36,7 @@ class GUID(TypeDecorator):
                 # hexstring
                 return "%.32x" % value.int
 
-    def process_result_value(self, value, dialect):
+    def process_result_value(self, value, dialect) -> Any | UUID | None:
         if value is None:
             return value
         else:

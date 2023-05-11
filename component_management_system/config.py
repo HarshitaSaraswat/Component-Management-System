@@ -2,11 +2,13 @@ import pathlib
 
 import connexion
 import database
+from connexion import FlaskApp
+from flask.app import Flask
 
-basedir = pathlib.Path(__file__).parent.resolve()
-connex_app = connexion.App(__name__, specification_dir=basedir)
+basedir: pathlib.Path = pathlib.Path(__file__).parent.resolve()
+connex_app: FlaskApp = connexion.App(__name__, specification_dir=basedir)
 
-app = connex_app.app
+app: Flask = connex_app.app # type: ignore
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{basedir / 'component_management.db'}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 

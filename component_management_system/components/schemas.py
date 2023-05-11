@@ -1,12 +1,16 @@
+from typing import Any
+
 from database import db, ma
+from flask_sqlalchemy.session import Session
 from marshmallow import fields
+from sqlalchemy.orm.scoping import scoped_session
 
 from .models import Component
 
 
 class EnumToDictionary(fields.Field):
 
-    def _serialize(self, value, attr, obj, **kwargs):
+    def _serialize(self, value, attr, obj, **kwargs) -> dict[str, int] | None:
         if value is None:
             return None
         return {"name": value.name, "value": value.value}
@@ -18,7 +22,7 @@ class ComponentSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Component
         load_instance = True
-        sqla_session = db.session
+        sqla_session: scoped_session[Session] = db.session
 
 component_schema = ComponentSchema()
 components_schema = ComponentSchema(many=True)

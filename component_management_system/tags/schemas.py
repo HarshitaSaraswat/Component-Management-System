@@ -1,5 +1,7 @@
 from database import db, ma
+from flask_sqlalchemy.session import Session
 from marshmallow import fields
+from sqlalchemy.orm.scoping import scoped_session
 
 from .models import Tag
 
@@ -9,7 +11,7 @@ class TagSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Tag
         load_instance = True
-        sqla_session = db.session
+        sqla_session: scoped_session[Session] = db.session
 
 tag_schema = TagSchema()
 tags_schema = TagSchema(many=True)

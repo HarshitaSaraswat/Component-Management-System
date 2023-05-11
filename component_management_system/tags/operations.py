@@ -1,39 +1,40 @@
+from typing import Literal
+
 from database import db
-from flask import abort, make_response
+from flask import Response, abort, make_response
 
 from .models import Tag
 from .schemas import tag_schema, tags_schema
 
 
-def read_all():
-    tags = Tag.query.all()
+def read_all() -> list[dict[str, str]]:
+    tags: list[Tag] = Tag.query.all()
     return tags_schema.dump(tags)
 
 
-def read_one(pk):
-	tag = Tag.query.filter(Tag.id==pk).one_or_none()
+def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
+	tag: Tag | None = Tag.query.filter(Tag.id==pk).one_or_none()
 
 	if tag is None:
 		abort(404, f"Tag with id {pk} not found!")
+	return tag_schema.dump(tag), 200 # type: ignore
 
-	return tag_schema.dump(tag), 200
 
-
-def create(tag):
-	label = tag.get("label")
-	existing_tag = Tag.query.filter(Tag.label==label).one_or_none()
+def create(tag) -> tuple[dict[str, str], Literal[201]]:
+	label: str = tag.get("label")
+	existing_tag: Tag | None = Tag.query.filter(Tag.label==label).one_or_none()
 
 	if existing_tag is not None:
 		abort(406, f"Tag with label {label} already exists")
 
-	new_tag = tag_schema.load(tag, session=db.session)
+	new_tag: Tag = tag_schema.load(tag, session=db.session)
 	db.session.add(new_tag)
 	db.session.commit()
-	return tag_schema.dump(new_tag), 201
+	return tag_schema.dump(new_tag), 201 # type: ignore
 
 
-def delete(pk):
-	existing_tag = Tag.query.filter(Tag.id==pk).one_or_none()
+def delete(pk) -> Response:
+	existing_tag: Tag | None = Tag.query.filter(Tag.id==pk).one_or_none()
 
 	if existing_tag is None:
 		abort(404, f"Tag with id {pk} not found")
