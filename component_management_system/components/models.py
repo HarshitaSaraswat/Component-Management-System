@@ -1,6 +1,6 @@
 from enum import Enum
 
-from database import Base, db, GUID
+from database import GUID, Base, db
 
 
 class ComponentType(Enum):
@@ -20,4 +20,9 @@ class Component(Base):
     type = db.Column(db.Enum(ComponentType), nullable=False)
     metadata_id = db.Column(GUID(), db.ForeignKey("metadatas.id"), nullable=True)
 
-    __table_args__ = db.UniqueConstraint('metadata_id', 'type', name='_metadata_id_type_uc')
+    __table_args__ = (
+        db.UniqueConstraint('metadata_id', 'type', name='_metadata_id_type_uc'),
+    )
+
+    def __repr__(self):
+        return f'<Component "{self.url}", "{self.type}">'

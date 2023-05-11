@@ -1,8 +1,10 @@
-from database import Base, db, GUID
+from database import Base, db
 
 
 class Tag(Base):
 
     __tablename__ = "tags"
     label = db.Column(db.String(32), unique=True)
-    metadata_id = db.Column(GUID(), db.ForeignKey("metadatas.id"), nullable=True)
+
+    def __repr__(self):
+        return f'<Tag "{self.label}">'

@@ -48,6 +48,11 @@ components:
     Metadata:
       type: "object"
 
+    Tags:
+      type: "array"
+      items:
+        type: string
+      uniqueItems: true
 
   parameters:
 
@@ -84,13 +89,13 @@ paths:
         - Tags
       summary: "Create a Tag"
       requestBody:
-          description: "Tag to create"
-          required: True
-          content:
-            application/json:
-              schema:
-                x-body-name: "tag"
-                $ref: "#/components/schemas/Tag"
+        description: "Tag to create"
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "tag"
+              $ref: "#/components/schemas/Tag"
       responses:
         "201":
           description: "Successfully created a tag"
@@ -117,6 +122,7 @@ paths:
       responses:
         "204":
           description: "Successfully deleted tag"
+
 
   /components:
     get:
@@ -168,6 +174,7 @@ paths:
         "204":
           description: "Successfully deleted component"
 
+
   /metadatas:
     get:
       operationId: "metadatas.operations.read_all"
@@ -184,13 +191,13 @@ paths:
         - "Metadatas"
       summary: "Create a Component"
       requestBody:
-          description: "Component to create"
-          required: True
-          content:
-            application/json:
-              schema:
-                x-body-name: "metadata"
-                $ref: "#/components/schemas/Metadata"
+        description: "Component to create"
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "metadata"
+              $ref: "#/components/schemas/Metadata"
       responses:
         "201":
           description: "Successfully created a metadata"
@@ -218,65 +225,48 @@ paths:
         "204":
           description: "Successfully deleted metadata"
 
-  # /people:
-  #   get:
-  #     operationId: "people.read_all"
-  #     tags:
-  #       - "People"
-  #     summary: "Read the list of people"
-  #     responses:
-  #       "200":
-  #         description: "Successfully read people list"
-  #   post:
-  #     operationId: "people.create"
-  #     tags:
-  #       - People
-  #     summary: "Create a person"
-  #     requestBody:
-  #         description: "Person to create"
-  #         required: True
-  #         content:
-  #           application/json:
-  #             schema:
-  #               x-body-name: "person"
-  #               $ref: "#/components/schemas/Person"
-  #     responses:
-  #       "201":
-  #         description: "Successfully created person"
-  # /people/{lname}:
-  #   get:
-  #     operationId: "people.read_one"
-  #     tags:
-  #       - People
-  #     summary: "Read one person"
-  #     parameters:
-  #       - $ref: "#/components/parameters/lname"
-  #     responses:
-  #       "200":
-  #         description: "Successfully read person"
-  #   put:
-  #     tags:
-  #       - People
-  #     operationId: "people.update"
-  #     summary: "Update a person"
-  #     parameters:
-  #       - $ref: "#/components/parameters/lname"
-  #     responses:
-  #       "200":
-  #         description: "Successfully updated person"
-  #     requestBody:
-  #       content:
-  #         application/json:
-  #           schema:
-  #             x-body-name: "person"
-  #             $ref: "#/components/schemas/Person"
-  #   delete:
-  #     tags:
-  #       - People
-  #     operationId: "people.delete"
-  #     summary: "Delete a person"
-  #     parameters:
-  #       - $ref: "#/components/parameters/lname"
-  #     responses:
-  #       "204":
-  #         description: "Successfully deleted person"
+  /metadatas/{pk}/tags:
+    get:
+      operationId: "metadatas.operations.read_tags"
+      tags:
+        - Metadatas
+        - Tags
+      summary: "Read tags of metadata"
+      parameters:
+        - $ref: "#/components/parameters/pk"
+      responses:
+        "200":
+          description: "Successfully read tags"
+
+    put:
+      operationId: "metadatas.operations.add_tags"
+      tags:
+        - Metadatas
+        - Tags
+      summary: "Add tags to a metadata"
+      parameters:
+        - $ref: "#/components/parameters/pk"
+      requestBody:
+        description: "Tags to add"
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "tags"
+              $ref: "#/components/schemas/Tags"
+      responses:
+        "201":
+          description: "Successfully added tags to metadata"
+
+  /metadatas/{pk}/components:
+    get:
+      operationId: "metadatas.operations.read_components"
+      tags:
+        - Metadatas
+        - Components
+      summary: "Read components of metadata"
+      parameters:
+        - $ref: "#/components/parameters/pk"
+      responses:
+        "200":
+          description: "Successfully read components"
