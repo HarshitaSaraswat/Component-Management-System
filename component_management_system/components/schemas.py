@@ -1,6 +1,6 @@
 from config import db, ma
 
-from component_management_system.components.models import Component
+from .models import Component
 
 
 class ComponentSchema(ma.SQLAlchemyAutoSchema):

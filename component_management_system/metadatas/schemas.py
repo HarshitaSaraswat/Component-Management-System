@@ -1,6 +1,6 @@
 from config import db, ma
 
-from component_management_system.metadatas.models import Metadata
+from .models import Metadata
 
 
 class MetadataSchema(ma.SQLAlchemyAutoSchema):

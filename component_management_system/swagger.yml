@@ -28,9 +28,9 @@ components:
         type: "string"
 
 paths:
-  # /tags:
-  #   get:
-  #     operationId: ""
+  /tags:
+    get:
+      operationId: "tags.operations.read_all"
 
   /people:
     get:

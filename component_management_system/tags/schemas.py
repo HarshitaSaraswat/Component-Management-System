@@ -1,6 +1,6 @@
 from config import db, ma
 
-from component_management_system.tags.models import Tag
+from .models import Tag
 
 
 class TagSchema(ma.SQLAlchemyAutoSchema):
@@ -8,3 +8,6 @@ class TagSchema(ma.SQLAlchemyAutoSchema):
         model = Tag
         load_instance = True
         sqla_session = db.session
+
+tag_schema = TagSchema()
+tags_schema = TagSchema(many=True)
