@@ -15,11 +15,8 @@ from components.models import Component
 from metadatas.models import Metadata
 from tags.models import Tag
 
-database.db.init_app(app) # init of db is deferred
+database.db.init_app(app)
 
 
 with app.app_context():
 	database.db.create_all()
-#     print("creating db...")
-#     db.create_all()
-#     db.session.commit()
