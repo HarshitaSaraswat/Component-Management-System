@@ -16,7 +16,7 @@ def read_all() -> list[dict[str, str]]:
 
 
 def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
-	metadata = Metadata.query.filter(Metadata.id==pk).one_or_none()
+	metadata: Metadata | None = Metadata.query.filter(Metadata.id==pk).one_or_none()
 
 	if metadata is None:
 		abort(404, f"Metadata with id {pk} not found!")
@@ -32,14 +32,14 @@ def create(metadata) -> tuple[dict[str, str], Literal[201]]:
 	# if existing_metadata is not None:
 	# 	abort(406, f"Metadata with url:{url} exists")
 
-	new_metadata = metadata_schema.load(metadata, session=db.session)
+	new_metadata: Metadata = metadata_schema.load(metadata, session=db.session)
 	db.session.add(new_metadata)
 	db.session.commit()
 	return metadata_schema.dump(new_metadata), 201 # type: ignore
 
 
 def delete(pk) -> Response:
-	existing_metadata = Metadata.query.filter(Metadata.id==pk).one_or_none()
+	existing_metadata: Metadata | None = Metadata.query.filter(Metadata.id==pk).one_or_none()
 
 	if existing_metadata is None:
 		abort(404, f"Metadata with id {pk} not found")
@@ -50,7 +50,7 @@ def delete(pk) -> Response:
 
 
 def read_tags(pk) -> list[dict[str, str]]:
-	existing_metadata = Metadata.query.filter(Metadata.id==pk).one_or_none()
+	existing_metadata: Metadata | None = Metadata.query.filter(Metadata.id==pk).one_or_none()
 
 	if existing_metadata is None:
 		abort(404, f"Metadata with id {pk} not found")
@@ -59,13 +59,13 @@ def read_tags(pk) -> list[dict[str, str]]:
 
 
 def add_tags(pk, tags) -> Response:
-	existing_metadata = Metadata.query.filter(Metadata.id==pk).one_or_none()
+	existing_metadata: Metadata | None = Metadata.query.filter(Metadata.id==pk).one_or_none()
 
 	if existing_metadata is None:
 		abort(404, f"Metadata with id {pk} not found")
 
 	for tag in tags:
-		existing_tag = Tag.query.filter(Tag.label==tag).one_or_none()
+		existing_tag: Metadata | None = Tag.query.filter(Tag.label==tag).one_or_none()
 
 		if existing_tag is None:
 			print(f"tag {tag} does not exist!")
@@ -77,7 +77,7 @@ def add_tags(pk, tags) -> Response:
 
 
 def read_components(pk) -> list[dict[str, str]]:
-	existing_metadata = Metadata.query.filter(Metadata.id==pk).one_or_none()
+	existing_metadata: Metadata | None = Metadata.query.filter(Metadata.id==pk).one_or_none()
 
 	if existing_metadata is None:
 		abort(404, f"Metadata with id {pk} not found")
