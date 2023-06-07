@@ -1,13 +1,8 @@
 import uuid
 from typing import Any
 
-from flask_marshmallow import Marshmallow
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.types import CHAR, TypeDecorator, TypeEngine
-
-db = SQLAlchemy()
-ma = Marshmallow()
 
 
 class GUID(TypeDecorator):
@@ -43,13 +38,3 @@ class GUID(TypeDecorator):
             if not isinstance(value, uuid.UUID):
                 value = uuid.UUID(value)
             return value
-
-class Base(db.Model):
-
-    __abstract__ = True
-
-    id = db.Column(GUID(), primary_key=True, default=lambda: str(uuid.uuid4()))
-    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-    updated_at = db.Column(db.DateTime,
-                    default=db.func.current_timestamp(),
-                    onupdate=db.func.current_timestamp())

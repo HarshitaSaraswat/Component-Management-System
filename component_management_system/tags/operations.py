@@ -1,8 +1,8 @@
 from typing import Literal
 
-from database import db
 from flask import Response, abort, make_response
 
+from ..database import db
 from .models import Tag
 from .schemas import tag_schema, tags_schema
 

@@ -1,8 +1,8 @@
-from database import db, ma
 from flask_sqlalchemy.session import Session
 from marshmallow import fields
 from sqlalchemy.orm.scoping import scoped_session
 
+from ..database import db, ma
 from .models import Tag
 
 

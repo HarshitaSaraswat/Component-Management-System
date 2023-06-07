@@ -1,4 +1,5 @@
-from database import GUID, Base, db
+from ..database import Base, db
+from ..database.guid import GUID
 
 metadata_tag = db.Table(
     'metadata_tag',

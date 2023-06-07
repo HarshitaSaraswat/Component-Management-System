@@ -2,9 +2,11 @@ from __future__ import annotations
 
 from enum import Enum
 from typing import Any
+
 from sqlalchemy.sql.schema import Column
 
-from database import GUID, Base, db
+from ..database import Base, db
+from ..database.guid import GUID
 
 
 class ComponentType(Enum):

@@ -1,8 +1,8 @@
 from typing import Literal
 
-from database import db
 from flask import Response, abort, make_response
 
+from ..database import db
 from .models import Component, ComponentType
 from .schemas import component_schema, components_schema
 

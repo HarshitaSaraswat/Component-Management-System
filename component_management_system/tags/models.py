@@ -1,5 +1,6 @@
-from database import Base, db
 from sqlalchemy.sql.schema import Column
+
+from ..database import Base, db
 
 
 class Tag(Base):

@@ -1,7 +1,7 @@
 import pathlib
 
 import connexion
-import database
+from component_management_system.database import db
 from connexion import FlaskApp
 from flask.app import Flask
 
@@ -17,8 +17,8 @@ from components.models import Component
 from metadatas.models import Metadata
 from tags.models import Tag
 
-database.db.init_app(app)
+db.init_app(app)
 
 
 with app.app_context():
-	database.db.create_all()
+	db.create_all()
