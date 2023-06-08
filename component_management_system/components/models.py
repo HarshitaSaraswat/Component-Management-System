@@ -15,7 +15,7 @@ from ..database.validation import url_validator
 
 class ComponentType(Enum):
     step = 1
-    fcform = 2
+    fcstd = 2
 
     @classmethod
     def serialize(cls, value) -> ComponentType:
