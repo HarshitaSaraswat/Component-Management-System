@@ -22,7 +22,7 @@ class Component(Base):
 
     __tablename__: str = "components"
 
-    url: Column = db.Column(db.String(2048),unique=True, nullable=False)
+    url: Column = db.Column(db.String(2048),unique=True, nullable=False) #TODO make it url column type
     type: Column = db.Column(db.Enum(ComponentType), nullable=False)
     metadata_id: Column = db.Column(GUID(), db.ForeignKey("metadatas.id"), nullable=True)
 

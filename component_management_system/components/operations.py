@@ -1,6 +1,7 @@
 from typing import Literal
 
 from flask import Response, abort, make_response
+from sqlalchemy.exc import IntegrityError
 
 from ..database import db
 from .models import Component, ComponentType
@@ -23,17 +24,24 @@ def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
 
 def create(component) -> tuple[dict[str, str], Literal[201]]:
 	url = component.get("url")
+	type = component.get("type")
+	metadata = component.get("metadata_id")
 
 	component['type'] = ComponentType.serialize(component.get("type"))
 
 	existing_component: Component | None = Component.query.filter(Component.url == url).one_or_none()
 
 	if existing_component is not None:
-		abort(406, f"Component with url:{url} exists")
+		abort(406, f"Component with url:{url} already exists")
 
 	new_component = component_schema.load(component, session=db.session)
 	db.session.add(new_component)
-	db.session.commit()
+
+	try:
+		db.session.commit()
+	except IntegrityError:
+		abort(406, f"Component on metadata:{metadata} with type:{type} already exists")
+
 	return component_schema.dump(new_component), 201 # type: ignore
 
 

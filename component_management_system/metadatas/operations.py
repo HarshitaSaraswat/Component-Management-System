@@ -1,11 +1,11 @@
 from typing import Literal
 
-from components.schemas import components_schema
 from flask import Response, abort, make_response
-from tags.models import Tag
-from tags.schemas import tags_schema
 
+from ..components.schemas import components_schema
 from ..database import db
+from ..tags.models import Tag
+from ..tags.schemas import tags_schema
 from .models import Metadata
 from .schemas import metadata_schema, metadatas_schema
 

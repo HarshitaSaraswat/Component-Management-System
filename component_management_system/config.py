@@ -1,9 +1,10 @@
 import pathlib
 
 import connexion
-from component_management_system.database import db
 from connexion import FlaskApp
 from flask.app import Flask
+
+from .database import db
 
 basedir: pathlib.Path = pathlib.Path(__file__).parent.resolve()
 connex_app: FlaskApp = connexion.App(__name__, specification_dir=basedir)
@@ -13,9 +14,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{basedir / 'component_manage
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
-from components.models import Component
-from metadatas.models import Metadata
-from tags.models import Tag
+from .components.models import Component
+from .licenses.models import SPDX
+from .metadatas.models import Metadata
+from .tags.models import Tag
 
 db.init_app(app)
 

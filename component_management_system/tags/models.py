@@ -1,11 +1,12 @@
 from sqlalchemy.sql.schema import Column
 
-from ..database import Base, db
+from component_management_system.database import Base, db
 
 
 class Tag(Base):
 
     __tablename__: str = "tags"
+
     label: Column = db.Column(db.String(32), unique=True)
 
     def __repr__(self) -> str:

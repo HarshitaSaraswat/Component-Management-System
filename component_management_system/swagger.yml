@@ -75,7 +75,7 @@ components:
 paths:
   /tags:
     get:
-      operationId: "tags.operations.read_all"
+      operationId: "component_management_system.tags.operations.read_all"
       tags:
         - "Tags"
       summary: "Read the list of all tags"
@@ -84,7 +84,7 @@ paths:
           description: "Successfully read tags list"
 
     post:
-      operationId: "tags.operations.create"
+      operationId: "component_management_system.tags.operations.create"
       tags:
         - Tags
       summary: "Create a Tag"
@@ -102,7 +102,7 @@ paths:
 
   /tags/{pk}:
     get:
-      operationId: "tags.operations.read_one"
+      operationId: "component_management_system.tags.operations.read_one"
       tags:
         - Tags
       summary: "Read one tag"
@@ -115,7 +115,7 @@ paths:
     delete:
       tags:
         - Tags
-      operationId: "tags.operations.delete"
+      operationId: "component_management_system.tags.operations.delete"
       summary: "Delete a tag"
       parameters:
         - $ref: "#/components/parameters/pk"
@@ -126,7 +126,7 @@ paths:
 
   /components:
     get:
-      operationId: "components.operations.read_all"
+      operationId: "component_management_system.components.operations.read_all"
       tags:
         - "Components"
       summary: "Read the list of all components"
@@ -135,7 +135,7 @@ paths:
           description: "Successfully read components list"
 
     post:
-      operationId: "components.operations.create"
+      operationId: "component_management_system.components.operations.create"
       tags:
         - "Components"
       summary: "Create a Component"
@@ -153,7 +153,7 @@ paths:
 
   /components/{pk}:
     get:
-      operationId: "components.operations.read_one"
+      operationId: "component_management_system.components.operations.read_one"
       tags:
         - Components
       summary: "Read one component"
@@ -166,7 +166,7 @@ paths:
     delete:
       tags:
         - Components
-      operationId: "components.operations.delete"
+      operationId: "component_management_system.components.operations.delete"
       summary: "Delete a component"
       parameters:
         - $ref: "#/components/parameters/pk"
@@ -177,7 +177,7 @@ paths:
 
   /metadatas:
     get:
-      operationId: "metadatas.operations.read_all"
+      operationId: "component_management_system.metadatas.operations.read_all"
       tags:
         - "Metadatas"
       summary: "Read the list of all metadatas"
@@ -186,7 +186,7 @@ paths:
           description: "Successfully read metadatas list"
 
     post:
-      operationId: "metadatas.operations.create"
+      operationId: "component_management_system.metadatas.operations.create"
       tags:
         - "Metadatas"
       summary: "Create a Component"
@@ -204,7 +204,7 @@ paths:
 
   /metadatas/{pk}:
     get:
-      operationId: "metadatas.operations.read_one"
+      operationId: "component_management_system.metadatas.operations.read_one"
       tags:
         - Metadatas
       summary: "Read one metadata"
@@ -217,7 +217,7 @@ paths:
     delete:
       tags:
         - Metadatas
-      operationId: "metadatas.operations.delete"
+      operationId: "component_management_system.metadatas.operations.delete"
       summary: "Delete a metadata"
       parameters:
         - $ref: "#/components/parameters/pk"
@@ -227,7 +227,7 @@ paths:
 
   /metadatas/{pk}/tags:
     get:
-      operationId: "metadatas.operations.read_tags"
+      operationId: "component_management_system.metadatas.operations.read_tags"
       tags:
         - Metadatas
         - Tags
@@ -239,7 +239,7 @@ paths:
           description: "Successfully read tags"
 
     put:
-      operationId: "metadatas.operations.add_tags"
+      operationId: "component_management_system.metadatas.operations.add_tags"
       tags:
         - Metadatas
         - Tags
@@ -260,7 +260,7 @@ paths:
 
   /metadatas/{pk}/components:
     get:
-      operationId: "metadatas.operations.read_components"
+      operationId: "component_management_system.metadatas.operations.read_components"
       tags:
         - Metadatas
         - Components
