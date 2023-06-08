@@ -1,28 +1,49 @@
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
+from sqlalchemy.orm import Relationship, relationship, validates
+from sqlalchemy.types import Float, Integer, String
+
 from ..database import Base, db
 from ..database.guid import GUID
+from ..database.validation import email_validator, url_validator
 
 metadata_tag = db.Table(
     'metadata_tag',
-    db.Column('metadata_id', GUID(), db.ForeignKey('metadatas.id')),
-    db.Column('tag_id', GUID(), db.ForeignKey('tags.id')),
+    Column('metadata_id', GUID(), ForeignKey('metadatas.id')),
+    Column('tag_id', GUID(), ForeignKey('tags.id')),
 )
 
 
 class Metadata(Base):
 
     __tablename__: str = "metadatas"
+    __allow_unmapped__ = True
 
-    name:Column = db.Column(db.String(200), nullable=False)
-    size: Column = db.Column(db.Integer, nullable=False)
-    version:Column = db.Column(db.String(50), nullable=False)
-    maintainer:Column = db.Column(db.String(100), nullable=False) #TODO make it a email column Type
+    name = Column(String(200), nullable=False)
+    size = Column(Integer, nullable=False)
+    version = Column(String(50), nullable=False)
+    maintainer = Column(String(100), nullable=False)
 
-    author: Column = db.Column(db.String(100)) #TODO make it a email column Type
-    thumbnail: Column = db.Column(db.String(200), unique=True)
-    description: Column = db.Column(db.String(500)) #TODO make it url column type
-    rating: Column = db.Column(db.Float)
+    author = Column(String(100))
+    thumbnail = Column(String(200), unique=True)
+    description = Column(String(500))
+    rating = Column(Float)
 
-    license:Column = db.Column(db.String(100)) #TODO make it a relationship
-    components = db.relationship("Component", backref="metadata", cascade="all, delete, delete-orphan")
-    tags = db.relationship("Tag", secondary=metadata_tag, backref="metadatas")
+    license: Relationship = relationship("SPDX") # type: ignore
+    components: Relationship = relationship("Component", backref="metadata", cascade="all, delete, delete-orphan") # type: ignore
+    tags: Relationship = relationship("Tag", secondary=metadata_tag, backref="metadatas") # type: ignore
+
+
+    @validates("maintainer")
+    def validate_maintainer(self, key, email):
+        return email_validator(email)
+
+    @validates("author")
+    def validate_author(self, key, email):
+        return email_validator(email)
+
+    @validates("thumbnail")
+    def validate_thumbnail(self, key, url):
+        return url_validator(url)
+
+    def __repr__(self) -> str:
+        return f'<Metadata "{self.name}">'

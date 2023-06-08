@@ -3,10 +3,14 @@ from __future__ import annotations
 from enum import Enum
 from typing import Any
 
-from sqlalchemy.sql.schema import Column
+from sqlalchemy.types import String
+from sqlalchemy.types import Enum as dbEnum
+from sqlalchemy.sql.schema import Column, ForeignKey, UniqueConstraint
+from sqlalchemy.orm import validates
 
-from ..database import Base, db
+from ..database import Base
 from ..database.guid import GUID
+from ..database.validation import url_validator
 
 
 class ComponentType(Enum):
@@ -22,13 +26,17 @@ class Component(Base):
 
     __tablename__: str = "components"
 
-    url: Column = db.Column(db.String(2048),unique=True, nullable=False) #TODO make it url column type
-    type: Column = db.Column(db.Enum(ComponentType), nullable=False)
-    metadata_id: Column = db.Column(GUID(), db.ForeignKey("metadatas.id"), nullable=True)
+    url = Column(String(2048),unique=True, nullable=False)
+    type = Column(dbEnum(ComponentType), nullable=False)
+    metadata_id = Column(GUID(), ForeignKey("metadatas.id"), nullable=True)
 
     __table_args__: tuple[Any] = (
-        db.UniqueConstraint('metadata_id', 'type', name='_metadata_id_type_uc'),
+        UniqueConstraint('metadata_id', 'type', name='_metadata_id_type_uc'),
     )
 
     def __repr__(self) -> str:
         return f'<Component "{self.url}", "{self.type}">'
+
+    @validates("thumbnail")
+    def validate_thumbnail(self, key, url):
+        return url_validator(url)

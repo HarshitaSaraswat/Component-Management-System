@@ -17,6 +17,3 @@ class Base(db.Model):
     updated_at = db.Column(db.DateTime,
                     default=db.func.current_timestamp(),
                     onupdate=db.func.current_timestamp())
-
-# TODO make a email Column type
-# TODO make a url Column type
