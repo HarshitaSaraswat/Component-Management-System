@@ -24,3 +24,5 @@ db.init_app(app)
 
 with app.app_context():
 	db.create_all()
+	# from .licenses.db_entry import make_db_entry
+	# make_db_entry()

@@ -28,7 +28,7 @@ class Metadata(Base):
     description = Column(String(500))
     rating = Column(Float)
 
-    license: Relationship = relationship("SPDX") # type: ignore
+    license_id = Column(GUID(), ForeignKey("spdx_licenses.id"), nullable=True)
     components: Relationship = relationship("Component", backref="metadata", cascade="all, delete, delete-orphan") # type: ignore
     tags: Relationship = relationship("Tag", secondary=metadata_tag, backref="metadatas") # type: ignore
 

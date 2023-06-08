@@ -47,6 +47,32 @@ components:
 
     Metadata:
       type: "object"
+      required:
+        - name
+        - size
+        - version
+        - maintainer
+        - license_id
+      properties:
+        name:
+          type: "string"
+        size:
+          type: "number"
+        version:
+          type: "string"
+        maintainer:
+          type: "string"
+        author:
+          type: "string"
+        thumbnail:
+          type: "string"
+        description:
+          type: "string"
+        rating:
+          type: "number"
+        license_id:
+          type: "string"
+
 
     Tags:
       type: "array"
@@ -270,3 +296,26 @@ paths:
       responses:
         "200":
           description: "Successfully read components"
+
+
+  /licenses:
+    get:
+      operationId: "component_management_system.licenses.operations.read_all"
+      tags:
+        - "Licenses"
+      summary: "Read the list of all licenses"
+      responses:
+        "200":
+          description: "Successfully read licenses list"
+
+  /licenses/{pk}:
+    get:
+      operationId: "component_management_system.licenses.operations.read_one"
+      tags:
+        - "Licenses"
+      summary: "Read one license"
+      parameters:
+        - $ref: "#/components/parameters/pk"
+      responses:
+        "200":
+          description: "Successfully read license"

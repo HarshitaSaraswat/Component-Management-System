@@ -1,4 +1,5 @@
 from flask_sqlalchemy.session import Session
+from marshmallow import fields
 from sqlalchemy.orm.scoping import scoped_session
 
 from ..database import db, ma
@@ -6,6 +7,7 @@ from .models import Metadata
 
 
 class MetadataSchema(ma.SQLAlchemyAutoSchema):
+    license_id = fields.String()
     class Meta:
         model = Metadata
         load_instance = True

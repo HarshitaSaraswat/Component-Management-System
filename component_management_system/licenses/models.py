@@ -1,23 +1,23 @@
-from sqlalchemy.sql.schema import Column, ForeignKey
+from sqlalchemy.orm import Relationship, relationship, validates
+from sqlalchemy.sql.schema import Column
 from sqlalchemy.types import Boolean, String
-from sqlalchemy.orm import validates
-from ..database.validation import url_validator
 
 from component_management_system.database import Base
 
-from ..database.guid import GUID
+from ..database.validation import url_validator
 
 
 class SPDX(Base):
 
     __tablename__: str = "spdx_licenses"
+    __allow_unmapped__ = True
 
     fullname: Column = Column(String(200), unique=True)
     identifier: Column = Column(String(100), unique=True)
     license_page: Column = Column(String(150), unique=True)
     fsf_free: Column = Column(Boolean, default=False, nullable=False)
     osi_approved: Column = Column(Boolean, default=False, nullable=False)
-    metadata_id = Column(GUID(), ForeignKey("metadatas.id"), nullable=True)
+    metadatas: Relationship = relationship("Metadata", backref="license")
 
 
     @validates("license_page")
