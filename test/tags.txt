@@ -1,0 +1,585 @@
+Electronics Parts
+Photoresistor
+Rotatory encoders
+Sockets
+DIP
+IC
+SMD
+Potentiometer
+Piher
+PT-10LH01
+PT-10LV10
+Resistors
+Resistor Array
+Rotary resistors
+Heatsinks
+Transistors
+Mosfet
+SMD
+Crystals
+Ultrasonic Sensors
+MaxSonar
+MB1010
+Jumpers
+Microcontroller
+IntCirc-DIL
+ATMEL
+ATMEGA328P_PU
+Assets
+Buzzers
+Miscellaneous
+Batteries
+Semiconductors
+Switch
+Mini toggle switch 1P2T
+Limit switch
+Box
+THT
+Motors
+DC motor
+Gear-Motor-37mm
+FAULHABER 2342L-012CPR
+Mabuchi-Encoder
+Motors
+Yellow_gearmotor
+L_shape
+straight
+Pololu-Micro
+Yellow_wheel_65mm
+Vacuum Pump
+Stepper
+EM-286
+NEMA
+Old
+Nema-17_Mount_Bracket
+28BYJ-48
+Inductors
+Inductive_sensor
+SMD
+Boards
+Arduino
+Arduino UNO
+Shields
+radio
+Reprap
+Raspberry
+Raspberry Pi 4B
+Raspberry Pi Pico
+Cameras
+Relays
+Capacitors
+603 cap on pad
+SMD
+Headers
+2mm-pitch
+2.54mm-pitch
+male
+straight
+box
+right-angle
+female
+Optical
+Reflective sensor
+SHARP
+0A41SK
+2Y0A02
+Fuses
+Fuse_5x20
+SMD
+THT
+Op Amps
+LMV358
+Fiducials
+Fans
+Buttons
+SMD
+THT
+Diodes
+SMD
+Displays
+Display 7 segmentos
+Imagenes
+Archivos
+TFT
+LCD
+Connectors
+power-connectors
+Telephone connectors
+Terminal block
+female
+Audio-connectors
+SATA-connectors
+USB-connectors
+smd
+Ethernet-connectors
+HDMI-connectors
+dupont-connectors
+LEDs
+Led chip arduino
+Led module Support
+Computing
+Storage
+HDD
+USB&SD Holder
+SD
+Webcam
+Webcam support
+Industrial Design
+Locks
+Beds
+Appliances
+Shelf
+Storage
+Coffee Tables
+Coffee Capsules
+Tables
+Jewelry
+Diamond
+Hinge
+Rustic hinge
+Chairs
+Connectors
+Ironsmith Parts
+Generic objects
+Foundation
+Soporte Spinner
+Imagenes
+Archivos
+LEGO Doll
+SelfieCAT
+pushpins
+KeyChains
+Gallery
+FreeCADpart
+STL
+IMAGESbase
+STEP
+DXF
+Scale Models
+Sol Expert
+1_87
+Bourjault ballpoint
+Simplified model
+Complex model
+Cement mixer truck
+Lac Cans
+Shopping Handle
+Symbols
+Recycling Codes
+Architectural Parts
+Hydro equipment
+Windows
+Maxim-Air
+Sliding
+Glass-skin
+Casement
+Sash
+Fixed
+Tilting
+Garden
+Construction blocks
+Building Construction
+Symbols
+People symbols
+Vegetation symbols
+Doors
+Glass
+Shutter
+Wood
+Metal
+Generic
+Roof
+Solar
+Wikihouse
+Electric equipment
+Sports
+Archery
+thumbnails
+Electro-pneumatic
+Manifolds
+Guss&Roch
+Manifolds
+Assorted Pneumatics
+Cylinders
+Fixings
+FESTO
+Assorted Pneumatics
+Cylinders
+Guss&Roch
+Fixings
+Guss&Roch
+Electrical Parts
+Inverters
+Electrical Switches
+Winch
+Winch-Model1-Parts
+Enclosures
+Lights
+Batteries
+Servos
+Emax-ES08A
+SG-90
+SpringRC-SM-S4303R
+Accesories
+Futaba3003
+Motors
+Breakers
+fans
+Relays
+Plugs
+Capacitors
+Power Supplies
+IRM-60 ST series power supply
+Fuses
+Hotend
+Endstop
+Transformers
+Connectors
+Cable Ties
+LEDs
+Medical Parts
+Pressure Bag
+Hygiene Hand Antimicrobial
+01 Biomedical
+Respirador Frax3D
+MIT E Vent
+DXFs For Website
+Respirador ResistenciaTeam
+AmboVent ventilator
+OpenLung
+Parts
+Vavlula Charolotte
+02 Biotechnology
+Jip Puertas
+AerosolBox
+Surgical mask strap
+images
+files
+Caretas
+Robots
+Quadruped robot
+Spider robot
+other spider
+images
+files
+04 Arduino
+legs_init
+spider_robot
+03 Board
+01 FCStd
+02 STL
+Pipes and tubes
+.git
+info
+logs
+refs
+heads
+remotes
+origin
+objects
+info
+pack
+hooks
+refs
+tags
+heads
+remotes
+origin
+branches
+HVAC
+Ducts
+Circular
+Conections
+Rectangular_circular
+Rectangular
+Conections
+Pipes
+Conections
+Mechanical Parts
+Racor
+Soporte Spinner
+Imagenes
+Archivos
+Chains
+Sprocket
+ISO 606
+Simplex 1¼x¾
+Triplex ⅝x⅜
+Triplex ¾x⁷⁄₁₆
+Simplex 2x1¼
+Simplex 1¾x1¼
+Simplex 6x2,8
+Simplex ⅝x⅜
+Duplex ¾x⁷⁄₁₆
+Triplex ⅜x⁷⁄₃₂
+Simplex ½x⁵⁄₁₆
+Simplex  1½x1
+Duplex 1x17,02
+Triplex ½x⁵⁄₁₆
+Duplex ⅝x⅜
+Simplex ½x⅛
+Duplex 1 ¼x¾
+Simplex ¼x⅛
+Duplex 1 ¾x1 ¼
+Triplex 1 ¼x¾
+Simplex ½x¼
+Duplex ½x⁵⁄₁₆
+Duplex 2x1 ¼
+Triplex 2x1 ¼
+Duplex 1 ½x1
+Duplex ⅜x⁷⁄₃₂
+Triplex 1 ½x1
+Simplex ⅜x⁷⁄₃₂
+Triplex 1 ¾x1 ¼
+Simplex 1x17,02
+Simplex ¾x⁷⁄₁₆
+Simplex 8x3,0
+Simplex 5x2,5
+Plate Wheel
+ISO 606
+Simplex 8x3
+Simplex 2 x 1 ¼
+Simplex ½x³⁄₁₆
+Simplex 6x2,8
+Simplex ⅝x⅜
+Simplex ½x⁵⁄₁₆
+Simplex ½x⅛
+Simplex 1 ½ x 1
+Simplex 1 ¾ x 1 ¼
+Simplex ⅜x⁷⁄₃₂
+Simplex 1x17,02
+Simplex ¾x⁷⁄₁₆
+Simplex 5x2,5
+Pulleys
+Enclosures
+G9
+HBS_tuerca
+PF15
+Waterproof_case
+HJC_040
+PL5
+Wall_anchor
+HBS
+Bearings
+Rolled Bearings
+parametric_axial_bearing
+parametric_ball_bearing
+Linear Bearings
+Glange Bearings
+linear_bearings
+Pillow Block
+Assorted Bearings
+Ball Bearings
+Carpentry iron profile
+Coupling
+Hirth-joint
+Automotive
+cable-chain-links
+Mountings
+2020_V-slot_Al_extrusion
+KP08
+Gantry_plate
+T8_screw_nut
+Flange_nut
+Anti_backlash_nut
+Joining_plate
+LM8UU
+Corner
+T8_leadscrew
+SK08
+Slot_T_nuts
+SC8UU
+SHF08
+T8_housing_bracket
+KFL08
+Fasteners
+Washers
+Metric
+Unified
+Bolt Clearance Hole Cylinders
+Metric
+Loose
+M5
+M3
+M2
+M90
+M6
+M24
+M10
+M12
+M8
+M100
+M36
+M20
+M72
+M30
+M64
+M56
+M4
+M1.6
+M42
+M14
+M2.5
+M80
+M48
+M16
+Normal
+M5
+M3
+M2
+M90
+M6
+M24
+M10
+M12
+M8
+M100
+M36
+M20
+M72
+M30
+M64
+M56
+M4
+M1.6
+M42
+M14
+M2.5
+M80
+M48
+M16
+Close
+M5
+M3
+M2
+M90
+M6
+M24
+M10
+M12
+M8
+M100
+M36
+M20
+M72
+M30
+M64
+M56
+M4
+M1.6
+M42
+M14
+M2.5
+M80
+M48
+M16
+Unified
+Loose
+U_Number_10
+U_1_3s8
+U_Number_2
+U_1_1s2
+U_Number_1
+U_1_1s4
+U_Number_4
+U_1s4
+U_Number_0
+U_5s8
+U_1_1s8
+U_3s4
+U_1
+U_3s8
+U_Number_8
+U_1s2
+U_5s16
+U_Number_3
+U_Number_5
+U_Number_6
+U_7s8
+U_7s16
+Normal
+U_Number_10
+U_1_3s8
+U_Number_2
+U_1_1s2
+U_Number_1
+U_1_1s4
+U_Number_4
+U_1s4
+U_Number_0
+U_5s8
+U_1_1s8
+U_3s4
+U_1
+U_3s8
+U_Number_8
+U_1s2
+U_5s16
+U_Number_3
+U_Number_5
+U_Number_6
+U_7s8
+U_7s16
+Close
+U_Number_10
+U_1_3s8
+U_Number_2
+U_1_1s2
+U_Number_1
+U_1_1s4
+U_Number_4
+U_1s4
+U_Number_0
+U_5s8
+U_1_1s8
+U_1
+U_3s8
+U_Number_8
+U_1s2
+U_5s16
+U_Number_3
+U_Number_5
+U_Number_6
+U_7s8
+U_7s16
+RetainingRings
+Metric
+E_type
+Nuts
+Metric
+Unified
+Standoff
+Bolts & Screws
+Metric
+ISO4762 Hexagon socket head cap screws
+Unified
+Shaft Couplers & Dowel Pins
+Rod
+Z_Axis
+4-wire thread
+Profiles EN
+Misumi_profiles
+EN10219 Square Hollow Sections
+Symmetrical rail
+EN10058 Flat steel bars
+DIN1025-4 HE-M-Profiles
+DIN1025-5 IPE-Profiles
+BOSCH
+EN10059 Square steel bars
+Makerbeam
+EN10219 Rectangular Hollow Sections
+Sigma profiles
+EN10060 Round steel bars
+Motedis
+EN10056 Unequal Angle Bars
+Item_Compatible_Profiles
+DIN1025-3 HE-A-Profiles
+DIN1026-2 UPE-Profiles
+EN10056 Equal Angle Bars
+DIN1025-2 HE-B-Profiles
+Hydraulics
+Pump
+Vertical Pump
+Logistics
+Shipping Containers
+20_Feet_ISO_Container

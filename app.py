@@ -1,8 +1,8 @@
-from component_management_system import config
+from component_management_system import FlaskApp, create_app, db
 
-app: config.FlaskApp = config.connex_app
-app.add_api(config.basedir / "swagger.yml")
+connex_app: FlaskApp = create_app()
 
+with connex_app.app.app_context(): # type: ignore
+	db.create_all()
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=True)
+connex_app.run()
