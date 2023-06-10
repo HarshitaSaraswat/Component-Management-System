@@ -3,7 +3,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Any
 
-from sqlalchemy.types import String
+from sqlalchemy.types import String, Integer
 from sqlalchemy.types import Enum as dbEnum
 from sqlalchemy.sql.schema import Column, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import validates
@@ -28,6 +28,7 @@ class Component(Base):
 
     url = Column(String(2048),unique=True, nullable=False)
     type = Column(dbEnum(ComponentType), nullable=False)
+    size = Column(Integer, nullable=False)
     metadata_id = Column(GUID(), ForeignKey("metadatas.id"), nullable=True)
 
     __table_args__: tuple[Any] = (

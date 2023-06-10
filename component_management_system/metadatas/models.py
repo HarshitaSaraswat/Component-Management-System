@@ -1,6 +1,6 @@
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import Relationship, relationship, validates
-from sqlalchemy.types import Float, Integer, String
+from sqlalchemy.types import Float, String
 
 from ..database import Base, db
 from ..database.guid import GUID
@@ -13,13 +13,15 @@ metadata_tag = db.Table(
 )
 
 
+class InvalidRating(Exception):...
+
+
 class Metadata(Base):
 
     __tablename__: str = "metadatas"
     __allow_unmapped__ = True
 
     name = Column(String(200), nullable=False)
-    size = Column(Integer, nullable=False)
     version = Column(String(50), nullable=False)
     maintainer = Column(String(100), nullable=False)
 
@@ -44,6 +46,12 @@ class Metadata(Base):
     @validates("thumbnail")
     def validate_thumbnail(self, key, url):
         return url_validator(url)
+
+    @validates("rating")
+    def validate_rating(self, key, rating):
+        if rating > 5:
+            raise InvalidRating()
+        return rating
 
     def __repr__(self) -> str:
         return f'<Metadata "{self.name}">'
