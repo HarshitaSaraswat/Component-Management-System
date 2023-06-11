@@ -17,6 +17,7 @@ class SPDX(Base):
     license_page: Column = Column(String(150), unique=True)
     fsf_free: Column = Column(Boolean, default=False, nullable=False)
     osi_approved: Column = Column(Boolean, default=False, nullable=False)
+
     metadatas: Relationship = relationship("Metadata", backref="license")
 
 

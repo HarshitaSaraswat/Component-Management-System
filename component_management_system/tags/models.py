@@ -8,7 +8,7 @@ class Tag(Base):
 
     __tablename__: str = "tags"
 
-    label: Column = Column(String(32), unique=True)
+    label: Column = Column(String(64), unique=True)
 
     def __repr__(self) -> str:
         return f'<Tag "{self.label}">'

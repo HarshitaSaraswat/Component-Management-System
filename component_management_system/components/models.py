@@ -29,6 +29,7 @@ class Component(Base):
     url = Column(String(2048),unique=True, nullable=False)
     type = Column(dbEnum(ComponentType), nullable=False)
     size = Column(Integer, nullable=False)
+
     metadata_id = Column(GUID(), ForeignKey("metadatas.id"), nullable=True)
 
     __table_args__: tuple[Any] = (
