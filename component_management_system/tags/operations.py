@@ -42,3 +42,12 @@ def delete(pk) -> Response:
 	db.session.delete(existing_tag)
 	db.session.commit()
 	return make_response(f"{existing_tag.label}:{pk} successfully deleted", 200)
+
+
+def get_metadatas(tag):
+	existing_tag: Tag | None = Tag.query.filter(Tag.label==tag).one_or_none()
+
+	if existing_tag is not None:
+		print(existing_tag.metadatas)
+	else:
+		print(existing_tag)

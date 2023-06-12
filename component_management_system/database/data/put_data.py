@@ -1,15 +1,15 @@
 import csv
 import json
-import random
 import os
+import random
 
 from werkzeug.exceptions import NotAcceptable
 
-from ..licenses.models import SPDX
-from ..licenses.operations import create as create_license
-from ..tags.operations import create as create_tag
-from ..metadatas.operations import create as create_meatdata
-from ..metadatas.operations import add_tags
+from ...licenses.models import SPDX
+from ...licenses.operations import create as create_license
+from ...metadatas.operations import add_tags
+from ...metadatas.operations import create as create_meatdata
+from ...tags.operations import create as create_tag
 
 
 def db_license_entry(license_csv_path):
@@ -32,7 +32,8 @@ def db_license_entry(license_csv_path):
 				}
 
 				try:
-					create_license(data)
+					new_license, _ = create_license(data)
+					print("created License:", new_license["fullname"])
 				except NotAcceptable:
 					pass
 
@@ -41,22 +42,23 @@ def db_tags_entry(tags_file_path):
 	with open(tags_file_path, "r") as file:
 		tags = file.readlines()
 
-	tags = [t.replace("\n", "") for t in tags]
+	tags = [t.replace("\n", "").lower() for t in tags]
 
 
 	for tag in tags:
 		tag.strip()
 		try:
-			create_tag({"label": tag})
+			new_tag, _ = create_tag({"label": tag})
+			print("created tag:", new_tag["label"])
 		except NotAcceptable:
 			pass
 
 
-def get_tags(components: dict) -> list[str]:
+def _get_tags(components: dict) -> list[str]:
 
 	any_key = list(components.keys())[0]
 	url = components[any_key]["url"]
-	url = url.removeprefix("https://github.com/FreeCAD/FreeCAD-library/blob/master/").replace("%20", " ")
+	url = url.removeprefix("https://github.com/FreeCAD/FreeCAD-library/blob/master/").replace("%20", " ").lower()
 	return url.split('/')[:-1]
 
 
@@ -78,7 +80,7 @@ def _traverse(_dict: dict, traversed_names: set):
 					continue
 
 				metadata_data = {
-					"name": comp,
+					"name": comp.lower(),
 					"version": "1",
 					"maintainer": "FreeCAD@gmail.com",
 					"author": "FreeCAD@gmail.com",
@@ -90,9 +92,9 @@ def _traverse(_dict: dict, traversed_names: set):
 				try:
 					new_metadata, _ = create_meatdata(metadata_data)
 					traversed_names.add(comp)
-					tags = get_tags(data["components"])
+					tags = _get_tags(data["components"])
 					add_tags(new_metadata['id'], tags)
-					print(new_metadata["name"], tags)
+					print("created Metadata:", new_metadata["name"], "with tags:", tags)
 
 				except NotAcceptable:
 					pass

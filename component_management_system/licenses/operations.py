@@ -21,7 +21,7 @@ def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
 
 	return spdx_schema.dump(license), 200 # type: ignore
 
-def create(spdx_license):
+def create(spdx_license) -> tuple[dict[str, str], Literal[201]]:
 	if SPDX.query.filter(SPDX.fullname == spdx_license["fullname"]).one_or_none() is not None:
 		abort(406, f"License {spdx_license['fullname']} already exists")
 

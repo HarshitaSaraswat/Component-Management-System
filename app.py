@@ -8,5 +8,8 @@ with connex_app.app.app_context(): # type: ignore
 	# db_metadata_entry("component_management_system/data/files.json")
 	# pre_entry()
 	reset_db()
+	# from component_management_system.tags.operations import get_metadatas
+	# get_metadatas('Electronics Parts')
+
 
 connex_app.run()
