@@ -25,12 +25,10 @@ def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
 
 
 def create(metadata) -> tuple[dict[str, str], Literal[201]]:
-	# url = metadata.get("url")
+	existing_metadata = Metadata.query.filter(Metadata.thumbnail == metadata.get("thumbnail")).one_or_none()
 
-	# existing_metadata = Metadata.query.filter(Metadata.url == url).one_or_none()
-
-	# if existing_metadata is not None:
-	# 	abort(406, f"Metadata with url:{url} exists")
+	if existing_metadata is not None:
+		abort(406, f"This Metadata already exists")
 
 	new_metadata: Metadata = metadata_schema.load(metadata, session=db.session)
 	db.session.add(new_metadata)
@@ -68,7 +66,7 @@ def add_tags(pk, tags) -> Response:
 		existing_tag: Metadata | None = Tag.query.filter(Tag.label==tag).one_or_none()
 
 		if existing_tag is None:
-			print(f"tag {tag} does not exist!")
+			abort(404, f"tag {tag} does not exist!")
 
 		existing_metadata.tags.append(existing_tag)
 		db.session.commit()
