@@ -25,7 +25,7 @@ def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
 
 
 def create(metadata) -> tuple[dict[str, str], Literal[201]]:
-	existing_metadata = Metadata.query.filter(Metadata.thumbnail == metadata.get("thumbnail")).one_or_none()
+	existing_metadata = Metadata.query.filter(Metadata.name == metadata.get("name")).one_or_none()
 
 	if existing_metadata is not None:
 		abort(406, f"This Metadata already exists")

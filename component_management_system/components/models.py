@@ -16,6 +16,9 @@ from ..database.validation import url_validator
 class ComponentType(Enum):
     step = 1
     fcstd = 2
+    fcstd1 = 3
+    stl = 4
+    stp = 5
 
     @classmethod
     def serialize(cls, value) -> ComponentType:
@@ -30,11 +33,11 @@ class Component(Base):
     type = Column(dbEnum(ComponentType), nullable=False)
     size = Column(Integer, nullable=False)
 
-    metadata_id = Column(GUID(), ForeignKey("metadatas.id"), nullable=True)
+    metadata_id = Column(GUID(), ForeignKey("metadatas.id"), nullable=False)
 
-    __table_args__: tuple[Any] = (
-        UniqueConstraint('metadata_id', 'type', name='_metadata_id_type_uc'),
-    )
+    # __table_args__: tuple[Any] = (
+    #     UniqueConstraint('metadata_id', 'type', name='_metadata_id_type_uc'),
+    # )
 
     def __repr__(self) -> str:
         return f'<Component "{self.url}", "{self.type}">'

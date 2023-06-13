@@ -21,7 +21,7 @@ class Metadata(Base):
     __tablename__: str = "metadatas"
     __allow_unmapped__ = True
 
-    name = Column(String(200), nullable=False)
+    name = Column(String(200), nullable=False, unique=True)
     version = Column(String(50), nullable=False)
     maintainer = Column(String(100), nullable=False)
 

@@ -1,15 +1,14 @@
+from werkzeug.serving import is_running_from_reloader
+
 from component_management_system import FlaskApp, create_app
-from component_management_system.database.utils import pre_entry, reset_db
+from component_management_system.database.utils import reset_db
 
 connex_app: FlaskApp = create_app()
 
 with connex_app.app.app_context(): # type: ignore
-	# from component_management_system.data.put_data import db_metadata_entry
-	# db_metadata_entry("component_management_system/data/files.json")
-	# pre_entry()
-	reset_db()
-	# from component_management_system.tags.operations import get_metadatas
-	# get_metadatas('Electronics Parts')
+	if is_running_from_reloader():
+		# reset_db()
+		pass
 
 
 connex_app.run()

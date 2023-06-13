@@ -14,7 +14,8 @@ other_exts = set()
 
 def build_url(path: str):
 	sub_path = path.removeprefix(base_path).replace(" ", "%20")
-	return base_url + sub_path
+	raw_url = f"https://raw.githubusercontent.com/FreeCAD/FreeCAD-library/master{sub_path}"
+	return raw_url
 
 
 def data_extraction(node, file_list, path):
@@ -87,7 +88,7 @@ def get_files(path: str):
 
 get_files(base_path)
 # print(file_store_dict)
-with open("test/files.json", "w") as file:
+with open("component_management_system/database/data/files.json", "w") as file:
 	json.dump(file_store_dict, file)
 
 print(other_exts)
