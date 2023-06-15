@@ -6,23 +6,14 @@ info:
 
 servers:
   - url: "http://127.0.0.1:8000/api"
+    description: Local Testing Server
 
 components:
   schemas:
-    Person:
-      type: "object"
-      required:
-        - lname
-      properties:
-        fname:
-          type: "string"
-        lname:
-          type: "string"
-        metadata_id:
-          type: "string"
 
     Tag:
       type: "object"
+      additionalProperties: false
       required:
         - label
       properties:
@@ -31,6 +22,7 @@ components:
 
     Component:
       type: "object"
+      additionalProperties: false
       required:
         - url
         - type
@@ -50,6 +42,7 @@ components:
 
     Metadata:
       type: "object"
+      additionalProperties: false
       required:
         - name
         - size
@@ -76,11 +69,17 @@ components:
         license_id:
           type: "string"
 
-
     Tags:
       type: "array"
+      additionalProperties: false
       items:
-        type: string
+        type: "object"
+        required:
+        - label
+      properties:
+        label:
+          type: "string"
+      example: ["laptop", "monitor"]
       uniqueItems: true
 
   parameters:
@@ -92,6 +91,8 @@ components:
       required: True
       schema:
         type: "string"
+        example: "cable"
+
 
     pk:
       name: "pk"
@@ -108,6 +109,7 @@ components:
       required: False
       schema:
         type: "integer"
+        example: 2
 
     page_size:
       name: "page_size"
@@ -116,26 +118,18 @@ components:
       required: False
       schema:
         type: "integer"
-
-    all_data:
-      name: "all_data"
-      description: "give all data"
-      in: query
-      required: False
-      schema:
-        type: "boolean"
+        example: 4
 
 paths:
-  /tags:
+  /tag:
     get:
-      operationId: "component_management_system.tags.operations.read"
+      operationId: "component_management_system.tags.operations.read_page"
       tags:
         - "Tags"
-      summary: "Read the list of all tags"
+      summary: "Gives a paginated list of all tags"
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/page_size"
-        - $ref: "#/components/parameters/all_data"
       responses:
         "200":
           description: "Successfully read tags list"
@@ -157,7 +151,17 @@ paths:
         "201":
           description: "Successfully created a tag"
 
-  /tags/{pk}:
+  /tag/all:
+    get:
+      operationId: "component_management_system.tags.operations.read_all"
+      tags:
+        - "Tags"
+      summary: "Read the list of all tags"
+      responses:
+        "200":
+          description: "Successfully read tags list"
+
+  /tag/{pk}:
     get:
       operationId: "component_management_system.tags.operations.read_one"
       tags:
@@ -180,7 +184,7 @@ paths:
         "204":
           description: "Successfully deleted tag"
 
-  /tags/search:
+  /tag/search:
     get:
       operationId: "component_management_system.tags.operations.search"
       tags:
@@ -194,16 +198,15 @@ paths:
           description: "Successfully searched tags"
 
 
-  /components:
+  /component:
     get:
-      operationId: "component_management_system.components.operations.read"
+      operationId: "component_management_system.components.operations.read_page"
       tags:
         - "Components"
-      summary: "Read the list of all components"
+      summary: "Gives a paginated list of all components"
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/page_size"
-        - $ref: "#/components/parameters/all_data"
       responses:
         "200":
           description: "Successfully read components list"
@@ -225,7 +228,17 @@ paths:
         "201":
           description: "Successfully created a component"
 
-  /components/{pk}:
+  /component/ALL:
+    get:
+      operationId: "component_management_system.components.operations.read_all"
+      tags:
+        - "Components"
+      summary: "Read the list of all components"
+      responses:
+        "200":
+          description: "Successfully read components list"
+
+  /component/{pk}:
     get:
       operationId: "component_management_system.components.operations.read_one"
       tags:
@@ -249,16 +262,15 @@ paths:
           description: "Successfully deleted component"
 
 
-  /metadatas:
+  /metadata:
     get:
-      operationId: "component_management_system.metadatas.operations.read"
+      operationId: "component_management_system.metadatas.operations.read_page"
       tags:
         - "Metadatas"
-      summary: "Read the list of all metadatas"
+      summary: "Gives a paginated list of all metadatas"
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/page_size"
-        - $ref: "#/components/parameters/all_data"
       responses:
         "200":
           description: "Successfully read metadatas list"
@@ -280,7 +292,17 @@ paths:
         "201":
           description: "Successfully created a metadata"
 
-  /metadatas/{pk}:
+  /metadata/all:
+    get:
+      operationId: "component_management_system.metadatas.operations.read_all"
+      tags:
+        - "Metadatas"
+      summary: "Read the list of all metadatas"
+      responses:
+        "200":
+          description: "Successfully read metadatas list"
+
+  /metadata/{pk}:
     get:
       operationId: "component_management_system.metadatas.operations.read_one"
       tags:
@@ -303,7 +325,7 @@ paths:
         "204":
           description: "Successfully deleted metadata"
 
-  /metadatas/{pk}/tags:
+  /metadata/{pk}/tags:
     get:
       operationId: "component_management_system.metadatas.operations.read_tags"
       tags:
@@ -336,7 +358,7 @@ paths:
         "201":
           description: "Successfully added tags to metadata"
 
-  /metadatas/{pk}/components:
+  /metadata/{pk}/components:
     get:
       operationId: "component_management_system.metadatas.operations.read_components"
       tags:
@@ -350,7 +372,7 @@ paths:
           description: "Successfully read components"
 
 
-  /licenses:
+  /license/all:
     get:
       operationId: "component_management_system.licenses.operations.read_all"
       tags:
@@ -360,7 +382,7 @@ paths:
         "200":
           description: "Successfully read licenses list"
 
-  /licenses/{pk}:
+  /license/{pk}:
     get:
       operationId: "component_management_system.licenses.operations.read_one"
       tags:

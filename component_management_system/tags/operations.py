@@ -2,17 +2,16 @@ from typing import Literal
 
 from flask import Response, abort, make_response
 
-from ..database import db
-from ..utils import search_query, paginated_schema
+from ..utils import paginated_schema, search_query
 from .models import Tag
 from .schemas import tag_schema, tags_schema
 
 
-def read(page=None, page_size=None, all_data=False):
-	if all_data:
-		query: list[Tag] = Tag.query.all()
-		return tags_schema.dump(query)
+def read_all():
+	query: list[Tag] = Tag.query.all()
+	return tags_schema.dump(query)
 
+def read_page(page=None, page_size=None):
 	query = Tag.query.paginate(page=page, per_page=page_size, max_per_page=50)
 	return paginated_schema(tags_schema).dump(query)
 
@@ -32,9 +31,8 @@ def create(tag) -> tuple[dict[str, str], Literal[201]]:
 	if existing_tag is not None:
 		abort(406, f"Tag with label {label} already exists")
 
-	new_tag: Tag = tag_schema.load(tag, session=db.session)
-	db.session.add(new_tag)
-	db.session.commit()
+	new_tag: Tag = tag_schema.load(tag)
+	new_tag.save_to_db()
 	return tag_schema.dump(new_tag), 201 # type: ignore
 
 
@@ -44,8 +42,7 @@ def delete(pk) -> Response:
 	if existing_tag is None:
 		abort(404, f"Tag with id {pk} not found")
 
-	db.session.delete(existing_tag)
-	db.session.commit()
+	existing_tag.remove_from_db()
 	return make_response(f"{existing_tag.label}:{pk} successfully deleted", 200)
 
 

@@ -17,3 +17,11 @@ class Base(db.Model):
     updated_at = db.Column(db.DateTime,
                     default=db.func.current_timestamp(),
                     onupdate=db.func.current_timestamp())
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def remove_from_db(self):
+        db.session.delete(self)
+        db.session.commit()

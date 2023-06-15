@@ -1,18 +1,18 @@
 from typing import Literal
 
 from flask import Response, abort, make_response
-from sqlalchemy.exc import IntegrityError
 
-from ..database import db
 from ..utils import paginated_schema
 from .models import Component, ComponentType
 from .schemas import component_schema, components_schema
 
 
-def read(page=None, page_size=None, all_data=False) -> list[dict[str, str]]:
-	if all_data:
-		query: list[Component] = Component.query.all()
-		return components_schema.dump(query)
+def read_all():
+	query: list[Component] = Component.query.all()
+	return components_schema.dump(query)
+
+
+def read_page(page=None, page_size=None, all_data=False) -> list[dict[str, str]]:
 	query = Component.query.paginate(page=page, per_page=page_size, max_per_page=50)
 	return paginated_schema(components_schema).dump(query)
 
@@ -38,13 +38,8 @@ def create(component) -> tuple[dict[str, str], Literal[201]]:
 	if existing_component is not None:
 		abort(406, f"Component with url:{url} already exists")
 
-	new_component = component_schema.load(component, session=db.session)
-	db.session.add(new_component)
-
-	try:
-		db.session.commit()
-	except IntegrityError:
-		abort(406, f"Component on metadata:{metadata} with type:{type} already exists")
+	new_component: Component = component_schema.load(component)
+	new_component.save_to_db()
 
 	return component_schema.dump(new_component), 201 # type: ignore
 
@@ -55,6 +50,5 @@ def delete(pk) -> Response:
 	if existing_component is None:
 		abort(404, f"Component with id {pk} not found")
 
-	db.session.delete(existing_component)
-	db.session.commit()
+	existing_component.remove_from_db()
 	return make_response(f"{existing_component.url}:{pk} successfully deleted", 200)

@@ -1,10 +1,8 @@
 from typing import Literal
 
 from flask import Response, abort, make_response
-from flask_sqlalchemy.query import Query
 
 from ..components.schemas import components_schema
-from ..database import db
 from ..tags.models import Tag
 from ..tags.schemas import tags_schema
 from ..utils import paginated_schema
@@ -12,11 +10,12 @@ from .models import Metadata
 from .schemas import metadata_schema, metadatas_schema
 
 
-def read(page=None, page_size=None, all_data=False):
-	if all_data:
-		query: list[Metadata] = Metadata.query.all()
-		return metadatas_schema.dump(query)
+def read_all():
+	query: list[Metadata] = Metadata.query.all()
+	return metadatas_schema.dump(query)
 
+
+def read_page(page=None, page_size=None, all_data=False):
 	query = Metadata.query.paginate(page=page, per_page=page_size, max_per_page=50)
 	return paginated_schema(metadatas_schema).dump(query)
 
@@ -36,9 +35,8 @@ def create(metadata) -> tuple[dict[str, str], Literal[201]]:
 	if existing_metadata is not None:
 		abort(406, f"This Metadata already exists")
 
-	new_metadata: Metadata = metadata_schema.load(metadata, session=db.session)
-	db.session.add(new_metadata)
-	db.session.commit()
+	new_metadata: Metadata = metadata_schema.load(metadata)
+	new_metadata.save_to_db()
 	return metadata_schema.dump(new_metadata), 201 # type: ignore
 
 
@@ -48,8 +46,7 @@ def delete(pk) -> Response:
 	if existing_metadata is None:
 		abort(404, f"Metadata with id {pk} not found")
 
-	db.session.delete(existing_metadata)
-	db.session.commit()
+	existing_metadata.remove_from_db()
 	return make_response(f"metadata:{pk} successfully deleted", 200)
 
 
@@ -74,8 +71,7 @@ def add_tags(pk, tags) -> Response:
 		if existing_tag is None:
 			abort(404, f"tag {tag} does not exist!")
 
-		existing_metadata.tags.append(existing_tag)
-		db.session.commit()
+		existing_metadata.add_tag(existing_tag)
 
 	return make_response(f"tags added successfully", 200)
 

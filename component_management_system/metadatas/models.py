@@ -54,5 +54,9 @@ class Metadata(Base):
             raise InvalidRating()
         return rating
 
+    def add_tag(self, tag):
+        self.tags.append(tag)
+        db.session.commit()
+
     def __repr__(self) -> str:
         return f'<Metadata "{self.name}">'
