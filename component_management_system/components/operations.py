@@ -4,13 +4,17 @@ from flask import Response, abort, make_response
 from sqlalchemy.exc import IntegrityError
 
 from ..database import db
+from ..utils import paginated_schema
 from .models import Component, ComponentType
 from .schemas import component_schema, components_schema
 
 
-def read_all() -> list[dict[str, str]]:
-	components: list[Component] = Component.query.all()
-	return components_schema.dump(components)
+def read(page=None, page_size=None, all_data=False) -> list[dict[str, str]]:
+	if all_data:
+		query: list[Component] = Component.query.all()
+		return components_schema.dump(query)
+	query = Component.query.paginate(page=page, per_page=page_size, max_per_page=50)
+	return paginated_schema(components_schema).dump(query)
 
 
 def read_one(pk) -> tuple[dict[str, str], Literal[200]]:

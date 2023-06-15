@@ -3,13 +3,18 @@ from typing import Literal
 from flask import Response, abort, make_response
 
 from ..database import db
+from ..utils import search_query, paginated_schema
 from .models import Tag
 from .schemas import tag_schema, tags_schema
 
 
-def read_all() -> list[dict[str, str]]:
-    tags: list[Tag] = Tag.query.all()
-    return tags_schema.dump(tags)
+def read(page=None, page_size=None, all_data=False):
+	if all_data:
+		query: list[Tag] = Tag.query.all()
+		return tags_schema.dump(query)
+
+	query = Tag.query.paginate(page=page, per_page=page_size, max_per_page=50)
+	return paginated_schema(tags_schema).dump(query)
 
 
 def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
@@ -51,3 +56,9 @@ def get_metadatas(tag):
 		print(existing_tag.metadatas)
 	else:
 		print(existing_tag)
+
+
+def search(label):
+	tags = search_query(Tag, Tag.label, label)
+
+	return tags_schema.dump(tags)

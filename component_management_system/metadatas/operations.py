@@ -1,18 +1,24 @@
 from typing import Literal
 
 from flask import Response, abort, make_response
+from flask_sqlalchemy.query import Query
 
 from ..components.schemas import components_schema
 from ..database import db
 from ..tags.models import Tag
 from ..tags.schemas import tags_schema
+from ..utils import paginated_schema
 from .models import Metadata
 from .schemas import metadata_schema, metadatas_schema
 
 
-def read_all() -> list[dict[str, str]]:
-	metadatas: list[Metadata] = Metadata.query.all()
-	return metadatas_schema.dump(metadatas)
+def read(page=None, page_size=None, all_data=False):
+	if all_data:
+		query: list[Metadata] = Metadata.query.all()
+		return metadatas_schema.dump(query)
+
+	query = Metadata.query.paginate(page=page, per_page=page_size, max_per_page=50)
+	return paginated_schema(metadatas_schema).dump(query)
 
 
 def read_one(pk) -> tuple[dict[str, str], Literal[200]]:

@@ -5,7 +5,7 @@ info:
   version: "1.0.0"
 
 servers:
-  - url: "/api"
+  - url: "http://127.0.0.1:8000/api"
 
 components:
   schemas:
@@ -88,7 +88,7 @@ components:
     label:
       name: "label"
       description: "Label of the tag to get"
-      in: path
+      in: query
       required: True
       schema:
         type: "string"
@@ -101,13 +101,41 @@ components:
       schema:
         type: "string"
 
+    page:
+      name: "page"
+      description: "page number"
+      in: query
+      required: False
+      schema:
+        type: "integer"
+
+    page_size:
+      name: "page_size"
+      description: "size of page"
+      in: query
+      required: False
+      schema:
+        type: "integer"
+
+    all_data:
+      name: "all_data"
+      description: "give all data"
+      in: query
+      required: False
+      schema:
+        type: "boolean"
+
 paths:
   /tags:
     get:
-      operationId: "component_management_system.tags.operations.read_all"
+      operationId: "component_management_system.tags.operations.read"
       tags:
         - "Tags"
       summary: "Read the list of all tags"
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/page_size"
+        - $ref: "#/components/parameters/all_data"
       responses:
         "200":
           description: "Successfully read tags list"
@@ -152,13 +180,30 @@ paths:
         "204":
           description: "Successfully deleted tag"
 
+  /tags/search:
+    get:
+      operationId: "component_management_system.tags.operations.search"
+      tags:
+        - Tags
+        - Search
+      summary: "search for the lags maching label"
+      parameters:
+        - $ref: "#/components/parameters/label"
+      responses:
+        "200":
+          description: "Successfully searched tags"
+
 
   /components:
     get:
-      operationId: "component_management_system.components.operations.read_all"
+      operationId: "component_management_system.components.operations.read"
       tags:
         - "Components"
       summary: "Read the list of all components"
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/page_size"
+        - $ref: "#/components/parameters/all_data"
       responses:
         "200":
           description: "Successfully read components list"
@@ -206,10 +251,14 @@ paths:
 
   /metadatas:
     get:
-      operationId: "component_management_system.metadatas.operations.read_all"
+      operationId: "component_management_system.metadatas.operations.read"
       tags:
         - "Metadatas"
       summary: "Read the list of all metadatas"
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/page_size"
+        - $ref: "#/components/parameters/all_data"
       responses:
         "200":
           description: "Successfully read metadatas list"

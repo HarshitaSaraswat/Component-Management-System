@@ -8,6 +8,7 @@ connex_app: FlaskApp = create_app()
 with connex_app.app.app_context(): # type: ignore
 	if is_running_from_reloader():
 		# reset_db()
+
 		pass
 
 
