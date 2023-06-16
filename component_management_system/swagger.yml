@@ -84,8 +84,8 @@ components:
 
   parameters:
 
-    label:
-      name: "label"
+    search_item:
+      name: "search_item"
       description: "Label of the tag to get"
       in: query
       required: True
@@ -192,7 +192,7 @@ paths:
         - Search
       summary: "search for the lags maching label"
       parameters:
-        - $ref: "#/components/parameters/label"
+        - $ref: "#/components/parameters/search_item"
       responses:
         "200":
           description: "Successfully searched tags"
@@ -301,6 +301,19 @@ paths:
       responses:
         "200":
           description: "Successfully read metadatas list"
+
+  /metadata/search:
+    get:
+      operationId: "component_management_system.metadatas.operations.search"
+      tags:
+        - "Metadatas"
+        - "Search"
+      summary: "Read the list of all metadatas"
+      parameters:
+        - $ref: "#/components/parameters/search_item"
+      responses:
+        "200":
+          description: "Successfully searched metadata"
 
   /metadata/{pk}:
     get:

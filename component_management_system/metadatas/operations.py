@@ -5,7 +5,7 @@ from flask import Response, abort, make_response
 from ..components.schemas import components_schema
 from ..tags.models import Tag
 from ..tags.schemas import tags_schema
-from ..utils import paginated_schema
+from ..utils import paginated_schema, search_query
 from .models import Metadata
 from .schemas import metadata_schema, metadatas_schema
 
@@ -83,3 +83,8 @@ def read_components(pk) -> list[dict[str, str]]:
 		abort(404, f"Metadata with id {pk} not found")
 
 	return components_schema.dump(existing_metadata.components)
+
+
+def search(search_item):
+	metadatas = search_query(Metadata, Metadata.name, search_item)
+	return metadatas_schema.dump(metadatas)
