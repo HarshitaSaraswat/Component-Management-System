@@ -2,17 +2,21 @@ from typing import Literal
 
 from flask import Response, abort, make_response
 
-from ..utils import paginated_schema
+from ..utils import paginated_schema, PsudoPagination
 from .models import File, FileType
 from .schemas import file_schema, files_schema
 
 
 def read_all():
 	query: list[File] = File.query.all()
-	return files_schema.dump(query)
+	psudo_paged_query = PsudoPagination(0, None, query, len(query))
+	return paginated_schema(files_schema).dump(psudo_paged_query)
 
 
-def read_page(page=None, page_size=None, all_data=False) -> list[dict[str, str]]:
+def read_page(page=None, page_size=None) -> list[dict[str, str]]:
+	if not all((page, page_size)):
+		return read_all()
+
 	query = File.query.paginate(page=page, per_page=page_size, max_per_page=50)
 	return paginated_schema(files_schema).dump(query)
 
@@ -28,8 +32,6 @@ def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
 
 def create(file) -> tuple[dict[str, str], Literal[201]]:
 	url = file.get("url")
-	type = file.get("type")
-	metadata = file.get("metadata_id")
 
 	file['type'] = FileType.serialize(file.get("type"))
 

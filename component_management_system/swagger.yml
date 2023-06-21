@@ -151,15 +151,6 @@ paths:
         "201":
           description: "Successfully created a tag"
 
-  /tag/all:
-    get:
-      operationId: "component_management_system.tags.operations.read_all"
-      tags:
-        - "Tags"
-      summary: "Read the list of all tags"
-      responses:
-        "200":
-          description: "Successfully read tags list"
 
   /tag/{pk}:
     get:
@@ -228,15 +219,6 @@ paths:
         "201":
           description: "Successfully created a file"
 
-  /file/ALL:
-    get:
-      operationId: "component_management_system.files.operations.read_all"
-      tags:
-        - "Files"
-      summary: "Read the list of all files"
-      responses:
-        "200":
-          description: "Successfully read files list"
 
   /file/{pk}:
     get:
@@ -292,15 +274,6 @@ paths:
         "201":
           description: "Successfully created a metadata"
 
-  /metadata/all:
-    get:
-      operationId: "component_management_system.metadatas.operations.read_all"
-      tags:
-        - "Metadatas"
-      summary: "Read the list of all metadatas"
-      responses:
-        "200":
-          description: "Successfully read metadatas list"
 
   /metadata/search:
     get:

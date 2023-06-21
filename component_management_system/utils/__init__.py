@@ -1,5 +1,15 @@
+from dataclasses import dataclass
+
 from flask_sqlalchemy.query import Query
 from marshmallow import Schema, fields
+
+
+@dataclass()
+class PsudoPagination:
+	page: int
+	per_page: int | None
+	items: list
+	total: int
 
 
 def paginated_schema(schema):

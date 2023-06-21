@@ -1,3 +1,4 @@
+from os import read
 from typing import Literal
 
 from flask import Response, abort, make_response
@@ -5,6 +6,7 @@ from flask import Response, abort, make_response
 from ..files.schemas import files_schema
 from ..tags.models import Tag
 from ..tags.schemas import tags_schema
+from ..utils import PsudoPagination, paginated_schema, search_query
 from ..utils import paginated_schema, search_query
 from .models import Metadata
 from .schemas import metadata_schema, metadatas_schema
@@ -12,10 +14,14 @@ from .schemas import metadata_schema, metadatas_schema
 
 def read_all():
 	query: list[Metadata] = Metadata.query.all()
-	return metadatas_schema.dump(query)
+	psudo_paged_query = PsudoPagination(0, None, query, len(query))
+	return paginated_schema(metadatas_schema).dump(psudo_paged_query)
 
 
-def read_page(page=None, page_size=None, all_data=False):
+def read_page(page=None, page_size=None):
+	if not all((page, page_size)):
+		return read_all()
+
 	query = Metadata.query.paginate(page=page, per_page=page_size, max_per_page=50)
 	return paginated_schema(metadatas_schema).dump(query)
 
