@@ -5,7 +5,7 @@ from sqlite3 import IntegrityError
 
 from werkzeug.exceptions import NotAcceptable
 
-from ...components.operations import create as create_component
+from ...files.operations import create as create_file
 from ...licenses.models import SPDX
 from ...licenses.operations import create as create_license
 from ...metadatas.models import Metadata
@@ -56,10 +56,10 @@ def db_tags_entry(tags_file_path):
 			pass
 
 
-def _get_tags(components: dict) -> list[str]:
+def _get_tags(files: dict) -> list[str]:
 
-	any_key = list(components.keys())[0]
-	url = components[any_key]["url"]
+	any_key = list(files.keys())[0]
+	url = files[any_key]["url"]
 	*_, file_path = url.split('/', 6)
 	file_path = file_path.replace("%20", " ").lower()
 	return file_path.split('/')[:-1]
@@ -88,7 +88,7 @@ def _make_metadata(comp, data):
 		pass
 
 
-def _make_component(comp_name, data):
+def _make_file(comp_name, data):
 
 	for type_, info in data["components"].items():
 
@@ -103,8 +103,8 @@ def _make_component(comp_name, data):
 		}
 
 		try:
-			new_comp, _ = create_component(comp_data)
-			print("created Component:", metadata.name, "of type:", new_comp["type"])
+			new_comp, _ = create_file(comp_data)
+			print("created File:", metadata.name, "of type:", new_comp["type"])
 
 		except NotAcceptable:
 			pass
@@ -143,16 +143,16 @@ def db_metadata_entry(metadata_file_oath):
 	_traverse(data, traversed_names, [_make_metadata])
 
 
-def db_component_entry(file_path):
+def db_file_entry(file_path):
 	with open(file_path, 'r') as file:
 		data = json.load(file)
 
 	traversed_names = set()
-	_traverse(data, traversed_names, [_make_component])
+	_traverse(data, traversed_names, [_make_file])
 
-def db_metadata_component_entry(file_path):
+def db_metadata_file_entry(file_path):
 	with open(file_path, 'r') as file:
 		data = json.load(file)
 
 	traversed_names = set()
-	_traverse(data, traversed_names, (_make_metadata, _make_component))
+	_traverse(data, traversed_names, (_make_metadata, _make_file))

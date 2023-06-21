@@ -22,7 +22,7 @@ def create_app(host="0.0.0.0", port=8000, debug=True) -> FlaskApp:
 	app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{basedir / 'component_management.db'}"
 	app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-	from .components.models import Component
+	from .files.models import File
 	from .licenses.models import SPDX
 	from .metadatas.models import Metadata
 	from .tags.models import Tag

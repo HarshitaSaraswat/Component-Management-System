@@ -2,7 +2,7 @@ from typing import Literal
 
 from flask import Response, abort, make_response
 
-from ..components.schemas import components_schema
+from ..files.schemas import files_schema
 from ..tags.models import Tag
 from ..tags.schemas import tags_schema
 from ..utils import paginated_schema, search_query
@@ -76,13 +76,13 @@ def add_tags(pk, tags) -> Response:
 	return make_response(f"tags added successfully", 200)
 
 
-def read_components(pk) -> list[dict[str, str]]:
+def read_files(pk) -> list[dict[str, str]]:
 	existing_metadata: Metadata | None = Metadata.query.filter(Metadata.id==pk).one_or_none()
 
 	if existing_metadata is None:
 		abort(404, f"Metadata with id {pk} not found")
 
-	return components_schema.dump(existing_metadata.components)
+	return files_schema.dump(existing_metadata.files)
 
 
 def search(search_item):

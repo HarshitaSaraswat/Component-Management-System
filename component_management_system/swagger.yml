@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: "RP Flask REST API"
-  description: "An API for Component Management System Database"
+  description: "An API for File Management System Database"
   version: "1.0.0"
 
 servers:
@@ -20,7 +20,7 @@ components:
         label:
           type: "string"
 
-    Component:
+    File:
       type: "object"
       additionalProperties: false
       required:
@@ -198,68 +198,68 @@ paths:
           description: "Successfully searched tags"
 
 
-  /component:
+  /file:
     get:
-      operationId: "component_management_system.components.operations.read_page"
+      operationId: "component_management_system.files.operations.read_page"
       tags:
-        - "Components"
-      summary: "Gives a paginated list of all components"
+        - "Files"
+      summary: "Gives a paginated list of all files"
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/page_size"
       responses:
         "200":
-          description: "Successfully read components list"
+          description: "Successfully read files list"
 
     post:
-      operationId: "component_management_system.components.operations.create"
+      operationId: "component_management_system.files.operations.create"
       tags:
-        - "Components"
-      summary: "Create a Component"
+        - "Files"
+      summary: "Create a File"
       requestBody:
-          description: "Component to create"
+          description: "File to create"
           required: True
           content:
             application/json:
               schema:
-                x-body-name: "component"
-                $ref: "#/components/schemas/Component"
+                x-body-name: "file"
+                $ref: "#/components/schemas/File"
       responses:
         "201":
-          description: "Successfully created a component"
+          description: "Successfully created a file"
 
-  /component/ALL:
+  /file/ALL:
     get:
-      operationId: "component_management_system.components.operations.read_all"
+      operationId: "component_management_system.files.operations.read_all"
       tags:
-        - "Components"
-      summary: "Read the list of all components"
+        - "Files"
+      summary: "Read the list of all files"
       responses:
         "200":
-          description: "Successfully read components list"
+          description: "Successfully read files list"
 
-  /component/{pk}:
+  /file/{pk}:
     get:
-      operationId: "component_management_system.components.operations.read_one"
+      operationId: "component_management_system.files.operations.read_one"
       tags:
-        - Components
-      summary: "Read one component"
+        - Files
+      summary: "Read one file"
       parameters:
         - $ref: "#/components/parameters/pk"
       responses:
         "200":
-          description: "Successfully read component"
+          description: "Successfully read file"
 
     delete:
       tags:
-        - Components
-      operationId: "component_management_system.components.operations.delete"
-      summary: "Delete a component"
+        - Files
+      operationId: "component_management_system.files.operations.delete"
+      summary: "Delete a file"
       parameters:
         - $ref: "#/components/parameters/pk"
       responses:
         "204":
-          description: "Successfully deleted component"
+          description: "Successfully deleted file"
 
 
   /metadata:
@@ -279,9 +279,9 @@ paths:
       operationId: "component_management_system.metadatas.operations.create"
       tags:
         - "Metadatas"
-      summary: "Create a Component"
+      summary: "Create a File"
       requestBody:
-        description: "Component to create"
+        description: "File to create"
         required: True
         content:
           application/json:
@@ -371,18 +371,18 @@ paths:
         "201":
           description: "Successfully added tags to metadata"
 
-  /metadata/{pk}/components:
+  /metadata/{pk}/files:
     get:
-      operationId: "component_management_system.metadatas.operations.read_components"
+      operationId: "component_management_system.metadatas.operations.read_files"
       tags:
         - Metadatas
-        - Components
-      summary: "Read components of metadata"
+        - Files
+      summary: "Read files of metadata"
       parameters:
         - $ref: "#/components/parameters/pk"
       responses:
         "200":
-          description: "Successfully read components"
+          description: "Successfully read files"
 
 
   /license/all:
