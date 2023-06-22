@@ -2,8 +2,8 @@ import re
 from difflib import SequenceMatcher
 from typing import Literal, Optional
 
+from flask_sqlalchemy.query import Query
 from sqlalchemy import or_
-from sqlalchemy.orm import Query
 
 from ..files.models import File, FileType
 from ..metadatas.models import Metadata
@@ -57,18 +57,12 @@ def read(
 			*(Metadata.name.ilike(word) for word in words),
 		))
 
-
-	if not search_key:
-		order_exp = eval(f"Metadata.{sort_by}.{sort_ord}()")
-		query = query.order_by(order_exp)
-
-	elif search_key:
 		queried_list = sorted(query.all(), key=lambda x:_string_comparision(search_key, x.name), reverse=True)
 		paginated_query = QueryPagination(page=page, per_page=page_size, max_per_page=50, queried_list=queried_list)
-		return paginated_schema(metadatas_schema).dump(paginated_query)
 
-
-	# else:
-	paginated_query = query.paginate(page=page, per_page=page_size, max_per_page=50) # type: ignore
+	else:
+		order_exp = eval(f"Metadata.{sort_by}.{sort_ord}()")
+		query = query.order_by(order_exp)
+		paginated_query = query.paginate(page=page, per_page=page_size, max_per_page=50)
 
 	return paginated_schema(metadatas_schema).dump(paginated_query)
