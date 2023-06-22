@@ -1,6 +1,7 @@
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import Relationship, relationship, validates
 from sqlalchemy.types import Float, String
+from sqlalchemy.ext.hybrid import hybrid_method
 
 from ..database import Base, db
 from ..database.guid import GUID

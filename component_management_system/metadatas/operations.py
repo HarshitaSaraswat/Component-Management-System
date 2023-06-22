@@ -91,6 +91,6 @@ def read_files(pk) -> list[dict[str, str]]:
 	return files_schema.dump(existing_metadata.files)
 
 
-def search(search_item):
-	metadatas = search_query(Metadata, Metadata.name, search_item)
+def search(search_key):
+	metadatas = search_query(Metadata, Metadata.name, search_key)
 	return metadatas_schema.dump(metadatas)

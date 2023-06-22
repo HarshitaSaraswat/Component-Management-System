@@ -59,6 +59,6 @@ def get_metadatas(tag):
 		print(existing_tag)
 
 
-def search(search_item):
-	tags = search_query(Tag, Tag.label, search_item)
+def search(search_key):
+	tags = search_query(Tag, Tag.label, search_key)
 	return tags_schema.dump(tags)

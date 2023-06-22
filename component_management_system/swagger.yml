@@ -84,15 +84,14 @@ components:
 
   parameters:
 
-    search_item:
-      name: "search_item"
+    search_key:
+      name: "search_key"
       description: "Label of the tag to get"
       in: query
       required: True
       schema:
         type: "string"
         example: "cable"
-
 
     pk:
       name: "pk"
@@ -119,6 +118,60 @@ components:
       schema:
         type: "integer"
         example: 4
+
+    sort_by:
+      name: "sort_by"
+      description: "by what column to sort"
+      in: query
+      required: False
+      schema:
+        type: "string"
+        example: "name"
+
+    sort_ord:
+      name: "sort_ord"
+      description: "sort in ascending or descending order"
+      in: query
+      required: False
+      schema:
+        type: "string"
+        enum:
+          - asc
+          - desc
+        example: "desc"
+
+    tags:
+      name: "tags[]"
+      description: "list of tags"
+      in: query
+      required: False
+      schema:
+        type: "array"
+        items:
+          type: string
+      # collectionFormat: multi
+
+    columns:
+      name: "columns[]"
+      description: "list of columns"
+      in: query
+      required: False
+      schema:
+        type: "array"
+        items:
+          type: string
+      # collectionFormat: multi
+
+    file_types:
+      name: "file_types[]"
+      description: "list of filetypes"
+      in: query
+      required: False
+      schema:
+        type: "array"
+        items:
+          type: string
+      # collectionFormat: multi
 
 paths:
   /tag:
@@ -183,7 +236,7 @@ paths:
         - Search
       summary: "search for the lags maching label"
       parameters:
-        - $ref: "#/components/parameters/search_item"
+        - $ref: "#/components/parameters/search_key"
       responses:
         "200":
           description: "Successfully searched tags"
@@ -283,7 +336,7 @@ paths:
         - "Search"
       summary: "Read the list of all metadatas"
       parameters:
-        - $ref: "#/components/parameters/search_item"
+        - $ref: "#/components/parameters/search_key"
       responses:
         "200":
           description: "Successfully searched metadata"
@@ -379,3 +432,19 @@ paths:
       responses:
         "200":
           description: "Successfully read license"
+  /component:
+    get:
+      operationId: "component_management_system.components.operations.read"
+      description: 'To search, filter, sort components'
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/page_size"
+        - $ref: "#/components/parameters/search_key"
+        - $ref: "#/components/parameters/sort_by"
+        - $ref: "#/components/parameters/sort_ord"
+        - $ref: "#/components/parameters/file_types"
+        - $ref: "#/components/parameters/tags"
+        - $ref: "#/components/parameters/columns"
+      responses:
+        '200':
+          description: OK
