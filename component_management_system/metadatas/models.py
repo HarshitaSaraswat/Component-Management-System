@@ -1,9 +1,8 @@
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import Relationship, relationship, validates
 from sqlalchemy.types import Float, String
-from sqlalchemy.ext.hybrid import hybrid_method
 
-from ..database import Base, db
+from ..database import ElasticSearchBase, db
 from ..database.guid import GUID
 from ..database.validation import email_validator, url_validator
 
@@ -17,7 +16,7 @@ metadata_tag = db.Table(
 class InvalidRating(Exception):...
 
 
-class Metadata(Base):
+class Metadata(ElasticSearchBase):
 
     __tablename__: str = "metadatas"
     __allow_unmapped__ = True

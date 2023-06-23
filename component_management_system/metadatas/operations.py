@@ -1,4 +1,3 @@
-from os import read
 from typing import Literal
 
 from flask import Response, abort, make_response
@@ -7,7 +6,6 @@ from ..files.schemas import files_schema
 from ..tags.models import Tag
 from ..tags.schemas import tags_schema
 from ..utils import PsudoPagination, paginated_schema, search_query
-from ..utils import paginated_schema, search_query
 from .models import Metadata
 from .schemas import metadata_schema, metadatas_schema
 
@@ -42,7 +40,7 @@ def create(metadata) -> tuple[dict[str, str], Literal[201]]:
 		abort(406, f"This Metadata already exists")
 
 	new_metadata: Metadata = metadata_schema.load(metadata)
-	new_metadata.save_to_db()
+	new_metadata.create()
 	return metadata_schema.dump(new_metadata), 201 # type: ignore
 
 
@@ -52,7 +50,7 @@ def delete(pk) -> Response:
 	if existing_metadata is None:
 		abort(404, f"Metadata with id {pk} not found")
 
-	existing_metadata.remove_from_db()
+	existing_metadata.delete()
 	return make_response(f"metadata:{pk} successfully deleted", 200)
 
 

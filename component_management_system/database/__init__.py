@@ -1,1 +1,1 @@
-from .db import Base, db, ma
+from .db import Base, db, ma, ElasticSearchBase

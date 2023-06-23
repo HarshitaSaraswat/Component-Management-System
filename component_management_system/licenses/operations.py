@@ -1,9 +1,7 @@
 from typing import Literal
 
 from flask import abort
-from sqlalchemy.exc import IntegrityError
 
-from ..database import db
 from .models import SPDX
 from .schemas import spdx_schema, spdxs_schema
 
@@ -22,15 +20,11 @@ def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
 	return spdx_schema.dump(license), 200 # type: ignore
 
 def create(spdx_license) -> tuple[dict[str, str], Literal[201]]:
-	if SPDX.query.filter(SPDX.fullname == spdx_license["fullname"]).one_or_none() is not None:
+	existing_license = SPDX.query.filter(SPDX.fullname == spdx_license["fullname"]).one_or_none()
+
+	if existing_license is not None:
 		abort(406, f"License {spdx_license['fullname']} already exists")
 
-	new_license = spdx_schema.load(spdx_license, session=db.session)
-	db.session.add(new_license)
-
-	try:
-		db.session.commit()
-	except IntegrityError:
-		abort(406, f"License {spdx_license['fullname']} already exists")
-
+	new_license: SPDX = spdx_schema.load(spdx_license)
+	new_license.create()
 	return spdx_schema.dump(new_license), 201 # type: ignore

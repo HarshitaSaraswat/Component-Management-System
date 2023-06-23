@@ -2,7 +2,7 @@ from typing import Literal
 
 from flask import Response, abort, make_response
 
-from ..utils import paginated_schema, PsudoPagination
+from ..utils import PsudoPagination, paginated_schema
 from .models import File, FileType
 from .schemas import file_schema, files_schema
 
@@ -41,7 +41,7 @@ def create(file) -> tuple[dict[str, str], Literal[201]]:
 		abort(406, f"File with url:{url} already exists")
 
 	new_file: File = file_schema.load(file)
-	new_file.save_to_db()
+	new_file.create()
 
 	return file_schema.dump(new_file), 201 # type: ignore
 
@@ -52,5 +52,5 @@ def delete(pk) -> Response:
 	if existing_file is None:
 		abort(404, f"File with id {pk} not found")
 
-	existing_file.remove_from_db()
+	existing_file.delete()
 	return make_response(f"{existing_file.url}:{pk} successfully deleted", 200)

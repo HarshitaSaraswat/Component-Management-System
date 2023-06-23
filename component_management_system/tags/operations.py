@@ -36,7 +36,7 @@ def create(tag) -> tuple[dict[str, str], Literal[201]]:
 		abort(406, f"Tag with label {label} already exists")
 
 	new_tag: Tag = tag_schema.load(tag)
-	new_tag.save_to_db()
+	new_tag.create()
 	return tag_schema.dump(new_tag), 201 # type: ignore
 
 
@@ -46,7 +46,7 @@ def delete(pk) -> Response:
 	if existing_tag is None:
 		abort(404, f"Tag with id {pk} not found")
 
-	existing_tag.remove_from_db()
+	existing_tag.delete()
 	return make_response(f"{existing_tag.label}:{pk} successfully deleted", 200)
 
 
