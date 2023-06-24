@@ -1,19 +1,7 @@
 #!.venv/bin/python
 
-from werkzeug.serving import is_running_from_reloader
+from component_management_system.app.main import create_app
 
-from component_management_system import FlaskApp, create_app
-from component_management_system.database.utils import reset_db
-
-connex_app: FlaskApp = create_app()
-
-with connex_app.app.app_context(): # type: ignore
-	if is_running_from_reloader():
-		# reset_db()
-
-		pass
-	# from component_management_system.metadatas.models import Metadata
-	# x = Metadata.elasticsearch("glass window")
-	# print(x)
-
-connex_app.run()
+if __name__ == "__main__":
+	app = create_app()
+	app.run(host="127.0.0.1", port=5000, debug=True)
