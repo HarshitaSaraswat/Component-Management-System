@@ -6,6 +6,7 @@ from ..files.schemas import files_schema
 from ..tags.models import Tag
 from ..tags.schemas import tags_schema
 from ..utils import PsudoPagination, paginated_schema, search_query
+from ..utils.pagination import MAX_PER_PAGE
 from .models import Metadata
 from .schemas import metadata_schema, metadatas_schema
 
@@ -20,7 +21,7 @@ def read_page(page=None, page_size=None):
 	if not all((page, page_size)):
 		return read_all()
 
-	query = Metadata.query.paginate(page=page, per_page=page_size, max_per_page=50)
+	query = Metadata.query.paginate(page=page, per_page=page_size, max_per_page=MAX_PER_PAGE)
 	return paginated_schema(metadatas_schema).dump(query)
 
 

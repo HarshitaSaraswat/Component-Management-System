@@ -34,8 +34,7 @@ def db_license_entry(license_csv_path):
 				}
 
 				try:
-					new_license, _ = create_license(data)
-					print("created License:", new_license["fullname"])
+					create_license(data)
 				except NotAcceptable:
 					pass
 
@@ -50,8 +49,7 @@ def db_tags_entry(tags_file_path):
 	for tag in tags:
 		tag.strip()
 		try:
-			new_tag, _ = create_tag({"label": tag})
-			print("created tag:", new_tag["label"])
+			create_tag({"label": tag})
 		except NotAcceptable:
 			pass
 
@@ -82,7 +80,6 @@ def _make_metadata(comp, data):
 		new_metadata, _ = create_meatdata(metadata_data)
 		tags = _get_tags(data["components"])
 		add_tags(new_metadata['id'], tags)
-		print("created Metadata:", new_metadata["name"], "with tags:", tags)
 
 	except NotAcceptable:
 		pass
@@ -104,7 +101,6 @@ def _make_file(comp_name, data):
 
 		try:
 			new_comp, _ = create_file(comp_data)
-			print("created File:", metadata.name, "of type:", new_comp["type"])
 
 		except NotAcceptable:
 			pass

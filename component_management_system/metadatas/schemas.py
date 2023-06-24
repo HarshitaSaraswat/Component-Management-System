@@ -15,3 +15,5 @@ class MetadataSchema(ma.SQLAlchemyAutoSchema):
 
 metadata_schema = MetadataSchema()
 metadatas_schema = MetadataSchema(many=True)
+
+Metadata.set_schemas(metadata_schema, metadatas_schema)

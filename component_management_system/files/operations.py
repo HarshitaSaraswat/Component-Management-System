@@ -3,6 +3,7 @@ from typing import Literal
 from flask import Response, abort, make_response
 
 from ..utils import PsudoPagination, paginated_schema
+from ..utils.pagination import MAX_PER_PAGE
 from .models import File, FileType
 from .schemas import file_schema, files_schema
 
@@ -17,7 +18,7 @@ def read_page(page=None, page_size=None) -> list[dict[str, str]]:
 	if not all((page, page_size)):
 		return read_all()
 
-	query = File.query.paginate(page=page, per_page=page_size, max_per_page=50)
+	query = File.query.paginate(page=page, per_page=page_size, max_per_page=MAX_PER_PAGE)
 	return paginated_schema(files_schema).dump(query)
 
 

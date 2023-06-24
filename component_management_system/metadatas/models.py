@@ -58,5 +58,11 @@ class Metadata(ElasticSearchBase):
         self.tags.append(tag)
         db.session.commit()
 
+    def delete(self):
+        return super().delete("name", self.name)
+
+    def update(self):
+        return super().update("name", self.name)
+
     def __repr__(self) -> str:
         return f'<Metadata "{self.name}">'

@@ -1,8 +1,9 @@
-from .db import db
+from .base import db, es
 
 
 def clear_db():
 	db.drop_all()
+	es.options(ignore_status=[400,404]).indices.delete(index='metadatas')
 
 
 def clear_data():

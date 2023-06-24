@@ -12,6 +12,8 @@ with connex_app.app.app_context(): # type: ignore
 		# reset_db()
 
 		pass
-	# from component_management_system.elastic_search import elastify
+	from component_management_system.metadatas.models import Metadata
+	x = Metadata.elasticsearch("glass window")
+	print(x)
 
 connex_app.run()

@@ -3,6 +3,7 @@ from typing import Literal
 from flask import Response, abort, make_response
 
 from ..utils import PsudoPagination, paginated_schema, search_query
+from ..utils.pagination import MAX_PER_PAGE
 from .models import Tag
 from .schemas import tag_schema, tags_schema
 
@@ -16,7 +17,7 @@ def read_all():
 def read_page(page=None, page_size=None):
 	if not all((page, page_size)):
 		return read_all()
-	query = Tag.query.paginate(page=page, per_page=page_size, max_per_page=50)
+	query = Tag.query.paginate(page=page, per_page=page_size, max_per_page=MAX_PER_PAGE)
 	return paginated_schema(tags_schema).dump(query)
 
 
