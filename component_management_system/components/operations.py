@@ -22,10 +22,10 @@ def read(
 
 	query: Query = Metadata.query
 
+	print(columns)
+
 	if columns:
-		entities = set(columns)
-		entities.add("name")
-		query = query.with_entities(*[eval(f"Metadata.{col}") for col in entities])
+		query = query.with_entities(*[eval(f"Metadata.{col}") for col in columns])
 
 	if tags:
 		query = query.filter(Metadata.tags.any(Tag.label.in_(tags)))
@@ -33,12 +33,22 @@ def read(
 	query = query.filter(Metadata.files.any(File.type.in_(file_types)))
 
 	if search_key:
-		queried_list = Metadata.elasticsearch(search_key.lower())
+		queried_list: list[dict[str, str]] = Metadata.elasticsearch(search_key.lower())
 		paginated_query = QueryPagination(page=page, per_page=page_size, queried_list=queried_list)
+		response = paginated_schema(metadatas_schema).dump(paginated_query)
+
+		if columns == None:
+			return response
+
+		for data in response["items"]: # type: ignore
+			to_pop = [key for key in data if key not in columns]
+			for key in to_pop:
+				data.pop(key)
+		return response
 
 	else:
 		order_exp = eval(f"Metadata.{sort_by}.{sort_ord}()")
 		query = query.order_by(order_exp)
 		paginated_query = query.paginate(page=page, per_page=page_size, max_per_page=MAX_PER_PAGE)
 
-	return paginated_schema(metadatas_schema).dump(paginated_query)
+		return paginated_schema(metadatas_schema).dump(paginated_query)
