@@ -3,11 +3,14 @@ from typing import Literal, Optional
 from flask_sqlalchemy.query import Query
 
 from ..files.models import File, FileType
+from ..licenses.schemas import spdx_schema
 from ..metadatas.models import Metadata
-from ..metadatas.schemas import metadatas_schema
+from ..metadatas.operations import read_files, read_tags
 from ..tags.models import Tag
 from ..utils import QueryPagination, paginated_schema
 from ..utils.pagination import MAX_PER_PAGE
+from .schema import ComponentSchema
+
 
 def read(
 	page: Optional[int] = None,
@@ -33,17 +36,25 @@ def read(
 	query = query.filter(Metadata.files.any(File.type.in_(file_types)))
 
 	if search_key:
-		queried_list: list[dict[str, str]] = Metadata.elasticsearch(search_key.lower())
+		queried_list: list[Metadata] = Metadata.elasticsearch(search_key.lower())
 		paginated_query = QueryPagination(page=page, per_page=page_size, queried_list=queried_list)
-		response = paginated_schema(metadatas_schema).dump(paginated_query)
+		response = paginated_schema(ComponentSchema).dump(paginated_query)
 
-		if columns == None:
-			return response
 
-		for data in response["items"]: # type: ignore
-			to_pop = [key for key in data if key not in columns]
-			for key in to_pop:
-				data.pop(key)
+		for data in response.get("items"): # type: ignore
+			metadata = Metadata.query.filter(Metadata.name==data.get("name")).one_or_none()
+			data["files"] = read_files(metadata.id)
+			data["license"] = spdx_schema.dump(metadata.license)
+			data["tags"] = read_tags(metadata.id)
+			data["id"] = metadata.id
+
+
+		if columns != None:
+			for data in response["items"]: # type: ignore
+				to_pop = [key for key in data if key not in columns]
+				for key in to_pop:
+					data.pop(key)
+
 		return response
 
 	else:
@@ -51,4 +62,4 @@ def read(
 		query = query.order_by(order_exp)
 		paginated_query = query.paginate(page=page, per_page=page_size, max_per_page=MAX_PER_PAGE)
 
-		return paginated_schema(metadatas_schema).dump(paginated_query)
+		return paginated_schema(ComponentSchema).dump(paginated_query)

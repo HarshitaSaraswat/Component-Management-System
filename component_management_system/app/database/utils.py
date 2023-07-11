@@ -1,6 +1,8 @@
-from .base import db, es
-from ...config import basedir
 from os import path
+
+from ...config import basedir
+from .base import db, es
+
 
 def clear_db():
 	db.drop_all()
@@ -13,9 +15,8 @@ def clear_data():
 
 
 def pre_entry():
-	from .data.put_data import (
-	    db_license_entry, db_metadata_entry, db_metadata_file_entry,
-	    db_tags_entry)
+	from .data.put_data import (db_license_entry, db_metadata_entry,
+	                            db_metadata_file_entry, db_tags_entry)
 
 	print("creating license entries...")
 	db_license_entry(path.join(basedir,"app/database/data/spdx_license.csv"))

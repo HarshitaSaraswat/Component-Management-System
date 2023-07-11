@@ -12,5 +12,6 @@ ma = Marshmallow()
 es = Elasticsearch(
     "https://elasticsearch.localhost:9200/",
     basic_auth=(os.environ.get("ELASTICSEARCH_USERNAME", ""), os.environ.get("ELASTICSEARCH_PASSWORD", "")),
-    ca_certs=certifi.where(),
+    #ca_certs=certifi.where(),
+    verify_certs=False,
 )

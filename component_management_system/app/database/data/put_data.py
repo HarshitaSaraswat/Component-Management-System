@@ -73,7 +73,7 @@ def _make_metadata(comp, data):
 		"thumbnail": data["images"][0] if len(data["images"])!=0 else None,
 		"description": None,
 		"rating": random.randint(1, 5),
-		"license_id" : "b89cd6361d7c446f85a5eb4de75534d5",
+		"license_id" : str(SPDX.query.filter(SPDX.identifier=="apache-1.0").one_or_none().id),
 	}
 
 	try:

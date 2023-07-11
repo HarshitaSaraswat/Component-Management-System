@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 
-from flask_sqlalchemy.pagination import QueryPagination as BaseQueryPagination
+from flask_sqlalchemy.pagination import Pagination
 from marshmallow import Schema, fields
+from marshmallow_sqlalchemy.schema import SQLAlchemyAutoSchemaMeta
 
 MAX_PER_PAGE = 50
 
@@ -13,7 +14,7 @@ class PsudoPagination:
 	total: int
 
 
-class QueryPagination(BaseQueryPagination):
+class QueryPagination(Pagination):
 	def __init__(
 		self,
 		queried_list: list,
@@ -44,7 +45,7 @@ class QueryPagination(BaseQueryPagination):
 		return len(self.queried_list)
 
 
-def paginated_schema(schema):
+def paginated_schema(schema: SQLAlchemyAutoSchemaMeta):
 
 	class PaginationSchema(Schema):
 		page = fields.Integer()

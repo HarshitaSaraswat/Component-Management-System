@@ -91,8 +91,7 @@ class ElasticSearchBase(Base):
             query=make_elasticsearch_query(search_key),
         )
         data = [hit["_source"] for hit in response["hits"]["hits"]]
-        objs = cls.__schema_many.load(data)
-        return objs
+        return cls.__schema_many.load(data)
 
     @classmethod
     def set_schemas(cls, schema: SQLAlchemyAutoSchema, schema_many: SQLAlchemyAutoSchema):
