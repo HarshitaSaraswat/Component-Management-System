@@ -176,7 +176,7 @@ components:
 paths:
   /tag:
     get:
-      operationId: "component_management_system.app.tags.operations.read_page"
+      operationId: "src.app.tags.operations.read_page"
       tags:
         - "Tags"
       summary: "Gives a paginated list of all tags"
@@ -188,7 +188,7 @@ paths:
           description: "Successfully read tags list"
 
     post:
-      operationId: "component_management_system.app.tags.operations.create"
+      operationId: "src.app.tags.operations.create"
       tags:
         - Tags
       summary: "Create a Tag"
@@ -207,7 +207,7 @@ paths:
 
   /tag/{pk}:
     get:
-      operationId: "component_management_system.app.tags.operations.read_one"
+      operationId: "src.app.tags.operations.read_one"
       tags:
         - Tags
       summary: "Read one tag"
@@ -220,7 +220,7 @@ paths:
     delete:
       tags:
         - Tags
-      operationId: "component_management_system.app.tags.operations.delete"
+      operationId: "src.app.tags.operations.delete"
       summary: "Delete a tag"
       parameters:
         - $ref: "#/components/parameters/pk"
@@ -230,7 +230,7 @@ paths:
 
   /tag/search:
     get:
-      operationId: "component_management_system.app.tags.operations.search"
+      operationId: "src.app.tags.operations.search"
       tags:
         - Tags
         - Search
@@ -244,7 +244,7 @@ paths:
 
   /file:
     get:
-      operationId: "component_management_system.app.files.operations.read_page"
+      operationId: "src.app.files.operations.read_page"
       tags:
         - "Files"
       summary: "Gives a paginated list of all files"
@@ -256,7 +256,7 @@ paths:
           description: "Successfully read files list"
 
     post:
-      operationId: "component_management_system.app.files.operations.create"
+      operationId: "src.app.files.operations.create"
       tags:
         - "Files"
       summary: "Create a File"
@@ -275,7 +275,7 @@ paths:
 
   /file/{pk}:
     get:
-      operationId: "component_management_system.app.files.operations.read_one"
+      operationId: "src.app.files.operations.read_one"
       tags:
         - Files
       summary: "Read one file"
@@ -288,7 +288,7 @@ paths:
     delete:
       tags:
         - Files
-      operationId: "component_management_system.app.files.operations.delete"
+      operationId: "src.app.files.operations.delete"
       summary: "Delete a file"
       parameters:
         - $ref: "#/components/parameters/pk"
@@ -299,7 +299,7 @@ paths:
 
   /metadata:
     get:
-      operationId: "component_management_system.app.metadatas.operations.read_page"
+      operationId: "src.app.metadatas.operations.read_page"
       tags:
         - "Metadatas"
       summary: "Gives a paginated list of all metadatas"
@@ -311,7 +311,7 @@ paths:
           description: "Successfully read metadatas list"
 
     post:
-      operationId: "component_management_system.app.metadatas.operations.create"
+      operationId: "src.app.metadatas.operations.create"
       tags:
         - "Metadatas"
       summary: "Create a File"
@@ -330,7 +330,7 @@ paths:
 
   /metadata/search:
     get:
-      operationId: "component_management_system.app.metadatas.operations.search"
+      operationId: "src.app.metadatas.operations.search"
       tags:
         - "Metadatas"
         - "Search"
@@ -343,7 +343,7 @@ paths:
 
   /metadata/{pk}:
     get:
-      operationId: "component_management_system.app.metadatas.operations.read_one"
+      operationId: "src.app.metadatas.operations.read_one"
       tags:
         - Metadatas
       summary: "Read one metadata"
@@ -356,7 +356,7 @@ paths:
     delete:
       tags:
         - Metadatas
-      operationId: "component_management_system.app.metadatas.operations.delete"
+      operationId: "src.app.metadatas.operations.delete"
       summary: "Delete a metadata"
       parameters:
         - $ref: "#/components/parameters/pk"
@@ -366,7 +366,7 @@ paths:
 
   /metadata/{pk}/tags:
     get:
-      operationId: "component_management_system.app.metadatas.operations.read_tags"
+      operationId: "src.app.metadatas.operations.read_tags"
       tags:
         - Metadatas
         - Tags
@@ -378,7 +378,7 @@ paths:
           description: "Successfully read tags"
 
     put:
-      operationId: "component_management_system.app.metadatas.operations.add_tags"
+      operationId: "src.app.metadatas.operations.add_tags"
       tags:
         - Metadatas
         - Tags
@@ -399,7 +399,7 @@ paths:
 
   /metadata/{pk}/files:
     get:
-      operationId: "component_management_system.app.metadatas.operations.read_files"
+      operationId: "src.app.metadatas.operations.read_files"
       tags:
         - Metadatas
         - Files
@@ -413,7 +413,7 @@ paths:
 
   /license/all:
     get:
-      operationId: "component_management_system.app.licenses.operations.read_all"
+      operationId: "src.app.licenses.operations.read_all"
       tags:
         - "Licenses"
       summary: "Read the list of all licenses"
@@ -423,7 +423,7 @@ paths:
 
   /license/{pk}:
     get:
-      operationId: "component_management_system.app.licenses.operations.read_one"
+      operationId: "src.app.licenses.operations.read_one"
       tags:
         - "Licenses"
       summary: "Read one license"
@@ -434,7 +434,9 @@ paths:
           description: "Successfully read license"
   /component:
     get:
-      operationId: "component_management_system.app.components.operations.read"
+      operationId: "src.app.components.operations.read"
+      tags:
+        - "Component"
       description: 'To search, filter, sort components'
       parameters:
         - $ref: "#/components/parameters/page"

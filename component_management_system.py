@@ -2,7 +2,7 @@
 
 from dotenv import load_dotenv
 
-from component_management_system.app.main import create_app
+from src.app.main import create_app
 
 load_dotenv()
 

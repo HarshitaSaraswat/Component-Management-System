@@ -63,3 +63,6 @@ def read(
 		paginated_query = query.paginate(page=page, per_page=page_size, max_per_page=MAX_PER_PAGE)
 
 		return paginated_schema(ComponentSchema).dump(paginated_query)
+
+
+def create():...
