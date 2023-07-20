@@ -13,6 +13,7 @@ flask-marshmallow = {version = "0.14.0", extras = ["sqlalchemy"]}
 connexion = {extras = ["swagger-ui"], version = "^2.14.2"}
 flask = "2.2.2"
 elasticsearch = "^8.8.0"
+python-dotenv = "^1.0.0"
 
 
 [build-system]
