@@ -82,6 +82,22 @@ components:
       example: ["laptop", "monitor"]
       uniqueItems: true
 
+    Component:
+      type: "object"
+      additionalProperties: false
+      required:
+        - metadata
+        - file
+        - tags
+      properties:
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+        file:
+          $ref: "#/components/schemas/File"
+        tags:
+          $ref: "#/components/schemas/Tags"
+
+
   parameters:
 
     search_key:
@@ -450,3 +466,20 @@ paths:
       responses:
         '200':
           description: OK
+
+    post:
+      operationId: "src.app.components.operations.create"
+      tags:
+        - "Component"
+      summary: "To create a new component from the given data"
+      requestBody:
+        description: "Data to create Component"
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "component"
+              $ref: "#/components/schemas/Component"
+      responses:
+        "201":
+          description: "Successfully created a Component"
