@@ -20,7 +20,7 @@ components:
         label:
           type: "string"
 
-    File:
+    Filedata:
       type: "object"
       additionalProperties: false
       required:
@@ -32,6 +32,7 @@ components:
           type: "string"
         metadata_id:
           type: "string"
+          format: uuid
         type:
           type: "string"
           enum:
@@ -112,10 +113,31 @@ components:
           type: array
           additionalProperties: false
           items:
-            $ref: "#/components/schemas/File"
+            $ref: "#/components/schemas/Filedata"
         tags:
           $ref: "#/components/schemas/Tags"
 
+    ComponentFiles:
+      type: object
+      additionalProperties: false
+      required:
+        - "file"
+        - "repository"
+        - "branch"
+        - "metadata_id"
+      properties:
+        file:
+          type: array
+          items:
+            type: string
+            format: binary
+        repository:
+          type: string
+        branch:
+          type: string
+        metadata_id:
+          type: string
+          format: uuid
 
   parameters:
 
@@ -301,12 +323,33 @@ paths:
           content:
             application/json:
               schema:
-                x-body-name: "file"
-                $ref: "#/components/schemas/File"
+                x-body-name: "file_data"
+                $ref: "#/components/schemas/Filedata"
       responses:
         "201":
           description: "Successfully created a file"
 
+  /file/upload:
+    post:
+      operationId: "src.app.files.operations.upload_to_github"
+      tags:
+        - "Files"
+      summary: "Create a File"
+      parameters:
+        - in: header
+          name: X-Access-Token
+          description: "github access token"
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              x-body-name: "upload_info"
+              $ref: "#/components/schemas/ComponentFiles"
+      responses:
+        "201":
+          description: "Successfully created a file"
 
   /file/{pk}:
     get:
