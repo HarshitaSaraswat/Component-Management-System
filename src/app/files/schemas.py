@@ -9,9 +9,7 @@ from .models import File
 class EnumToDictionary(fields.Field):
 
     def _serialize(self, value, attr, obj, **kwargs) -> dict[str, int] | None:
-        if value is None:
-            return None
-        return {"name": value.name, "value": value.value}
+        return None if value is None else {"name": value.name, "value": value.value}
 
 
 class FileSchema(ma.SQLAlchemyAutoSchema):

@@ -1,3 +1,4 @@
+import contextlib
 import csv
 import json
 import random
@@ -26,17 +27,15 @@ def db_license_entry(license_csv_path):
 					continue
 
 				data = {
-					"fullname" : row[0],
-					"identifier" : row[1].lower(),
-					"fsf_free" : True if row[2] == "Y" else False,
-					"osi_approved" : True if row[3] == "Y" else False,
-					"license_page" : row[4],
+					"fullname": row[0],
+					"identifier": row[1].lower(),
+					"fsf_free": row[2] == "Y",
+					"osi_approved": row[3] == "Y",
+					"license_page": row[4],
 				}
 
-				try:
+				with contextlib.suppress(NotAcceptable):
 					create_license(data)
-				except NotAcceptable:
-					pass
 
 
 def db_tags_entry(tags_file_path):
@@ -48,10 +47,8 @@ def db_tags_entry(tags_file_path):
 
 	for tag in tags:
 		tag.strip()
-		try:
+		with contextlib.suppress(NotAcceptable):
 			create_tag({"label": tag})
-		except NotAcceptable:
-			pass
 
 
 def _get_tags(files: dict) -> list[str]:
@@ -76,13 +73,10 @@ def _make_metadata(comp, data):
 		"license_id" : str(SPDX.query.filter(SPDX.identifier=="apache-1.0").one_or_none().id),
 	}
 
-	try:
+	with contextlib.suppress(NotAcceptable):
 		new_metadata, _ = create_meatdata(metadata_data)
 		tags = _get_tags(data["components"])
 		add_tags(new_metadata['id'], tags)
-
-	except NotAcceptable:
-		pass
 
 
 def _make_file(comp_name, data):
@@ -100,7 +94,7 @@ def _make_file(comp_name, data):
 		}
 
 		try:
-			new_comp, _ = create_file(comp_data)
+			new_comp, _ = create_file(str(metadata.id), comp_data)
 
 		except NotAcceptable:
 			pass

@@ -39,7 +39,7 @@ def create(metadata) -> tuple[dict[str, str], Literal[201]]:
 	existing_metadata = Metadata.query.filter(Metadata.name == metadata.get("name")).one_or_none()
 
 	if existing_metadata is not None:
-		abort(406, f"This Metadata already exists")
+		abort(406, "This Metadata already exists")
 
 	new_metadata: Metadata = metadata_schema.load(metadata)
 	new_metadata.create()
@@ -79,7 +79,7 @@ def add_tags(pk, tags) -> Response:
 
 		existing_metadata.add_tag(existing_tag)
 
-	return make_response(f"tags added successfully", 200)
+	return make_response("tags added successfully", 200)
 
 
 def add_files(pk, file_ids: list) -> Response:
@@ -96,7 +96,7 @@ def add_files(pk, file_ids: list) -> Response:
 
 		existing_metadata.add_file(existing_file)
 
-	return make_response(f"file added successfully", 200)
+	return make_response("file added successfully", 200)
 
 
 def read_files(pk) -> list[dict[str, str]]:

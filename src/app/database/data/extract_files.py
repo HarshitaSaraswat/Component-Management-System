@@ -1,10 +1,11 @@
+import contextlib
 import json
 import os
 
 base_path = "/home/encryptedbee/tesla/projects/GSOC/FreeCAD-library"
 base_url = "https://github.com/FreeCAD/FreeCAD-library/blob/master"
 
-file_store_dict = dict()
+file_store_dict = {}
 
 component_exts = ["stl", "fcstd", "fcstd1", "step", "stp"]
 image_exts = ["jpeg", "jpg", "png", "svg"]
@@ -14,8 +15,7 @@ other_exts = set()
 
 def build_url(path: str):
 	sub_path = path.removeprefix(base_path).replace(" ", "%20")
-	raw_url = f"https://raw.githubusercontent.com/FreeCAD/FreeCAD-library/master{sub_path}"
-	return raw_url
+	return f"https://raw.githubusercontent.com/FreeCAD/FreeCAD-library/master{sub_path}"
 
 
 def data_extraction(node, file_list, path):
@@ -54,7 +54,7 @@ def data_extraction(node, file_list, path):
 
 
 def place_node(nodes_itter, store: dict, path):
-	try:
+	with contextlib.suppress(Exception):
 		node = next(nodes_itter)
 
 		if '.' in node:
@@ -66,11 +66,9 @@ def place_node(nodes_itter, store: dict, path):
 			return
 
 		if node not in store:
-			store[node] = dict()
+			store[node] = {}
 
 		place_node(nodes_itter, store[node], path)
-	except:
-		pass
 
 
 def get_files(path: str):

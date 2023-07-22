@@ -1,22 +1,20 @@
 from copy import copy
 from typing import Literal, Optional
 
-from flask import Response, abort, make_response
 from flask_sqlalchemy.query import Query
 
 from ..files.models import File, FileType
 from ..files.operations import create as create_file
-from ..files.schemas import file_schema
 from ..licenses.schemas import spdx_schema
 from ..metadatas.models import Metadata
 from ..metadatas.operations import add_files, add_tags
 from ..metadatas.operations import create as create_meatdata
 from ..metadatas.operations import read_files, read_tags
-from ..metadatas.schemas import MetadataSchema, metadata_schema
+from ..metadatas.schemas import MetadataSchema
 from ..tags.models import Tag
 from ..utils import QueryPagination, paginated_schema
 from ..utils.pagination import MAX_PER_PAGE
-from .schema import ComponentSchema, component_schema
+from .schema import ComponentSchema
 
 
 def read(
@@ -80,6 +78,7 @@ def read(
 			comp["metadata"] = metadata
 			comp["id"] = metadata["id"]
 		return components_resp
+
 
 def create(component_data):
 	print(component_data)
