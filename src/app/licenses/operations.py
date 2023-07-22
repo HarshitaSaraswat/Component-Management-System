@@ -1,14 +1,16 @@
 from typing import Literal
 
 from flask import abort
+from ..utils import PsudoPagination, paginated_schema
 
 from .models import SPDX
 from .schemas import spdx_schema, spdxs_schema
 
 
-def read_all() -> list[dict[str, str]]:
-	licenses: list[SPDX] = SPDX.query.all()
-	return spdxs_schema.dump(licenses)
+def read_all():
+	query: list[SPDX] = SPDX.query.all()
+	psudo_paged_query = PsudoPagination(0, None, query, len(query))
+	return paginated_schema(spdxs_schema).dump(psudo_paged_query)
 
 
 def read_one(pk) -> tuple[dict[str, str], Literal[200]]:

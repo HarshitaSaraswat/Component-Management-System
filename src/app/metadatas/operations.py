@@ -2,8 +2,8 @@ from typing import Literal
 
 from flask import Response, abort, make_response
 
-from ..files.schemas import files_schema
 from ..files.models import File
+from ..files.schemas import files_schema
 from ..tags.models import Tag
 from ..tags.schemas import tags_schema
 from ..utils import PsudoPagination, paginated_schema, search_query
