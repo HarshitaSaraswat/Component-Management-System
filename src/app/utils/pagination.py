@@ -45,7 +45,7 @@ class QueryPagination(Pagination):
 		return len(self.queried_list)
 
 
-def paginated_schema(schema: SQLAlchemyAutoSchemaMeta):
+def paginated_schema(schema: SQLAlchemyAutoSchemaMeta|Schema):
 
 	class PaginationSchema(Schema):
 		page = fields.Integer()

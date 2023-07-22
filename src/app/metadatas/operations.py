@@ -3,6 +3,7 @@ from typing import Literal
 from flask import Response, abort, make_response
 
 from ..files.schemas import files_schema
+from ..files.models import File
 from ..tags.models import Tag
 from ..tags.schemas import tags_schema
 from ..utils import PsudoPagination, paginated_schema, search_query
@@ -79,6 +80,22 @@ def add_tags(pk, tags) -> Response:
 		existing_metadata.add_tag(existing_tag)
 
 	return make_response(f"tags added successfully", 200)
+
+
+def add_file(pk, file_id) -> Response:
+	existing_metadata: Metadata | None = Metadata.query.filter(Metadata.id==pk).one_or_none()
+
+	if existing_metadata is None:
+		abort(404, f"Metadata with id {pk} not found")
+
+	existing_file: Metadata | None = File.query.filter(File.id==file_id).one_or_none()
+
+	if existing_file is None:
+		abort(404, f"file with id {file_id} does not exist!")
+
+	existing_metadata.add_file(existing_file)
+
+	return make_response(f"file added successfully", 200)
 
 
 def read_files(pk) -> list[dict[str, str]]:

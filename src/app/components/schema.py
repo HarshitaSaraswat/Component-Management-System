@@ -1,4 +1,4 @@
-from marshmallow import fields, Schema
+from marshmallow import Schema, fields
 
 from ..files.schemas import FileSchema
 from ..licenses.schemas import SPDXSchema

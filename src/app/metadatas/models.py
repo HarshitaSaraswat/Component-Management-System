@@ -58,6 +58,10 @@ class Metadata(ElasticSearchBase):
         self.tags.append(tag)
         db.session.commit()
 
+    def add_file(self, file):
+        self.files.append(file)
+        db.session.commit()
+
     def delete(self):
         return super().delete("name", self.name)
 

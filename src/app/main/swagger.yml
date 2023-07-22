@@ -26,6 +26,7 @@ components:
       required:
         - url
         - type
+        - size
       properties:
         url:
           type: "string"
@@ -39,21 +40,20 @@ components:
             - fcstd1
             - stl
             - stp
+        size:
+          type: number
 
     Metadata:
       type: "object"
       additionalProperties: false
       required:
         - name
-        - size
         - version
         - maintainer
         - license_id
       properties:
         name:
           type: "string"
-        size:
-          type: "number"
         version:
           type: "string"
         maintainer:
@@ -73,12 +73,7 @@ components:
       type: "array"
       additionalProperties: false
       items:
-        type: "object"
-        required:
-        - label
-      properties:
-        label:
-          type: "string"
+        type: "string"
       example: ["laptop", "monitor"]
       uniqueItems: true
 
@@ -453,6 +448,7 @@ paths:
       operationId: "src.app.components.operations.read"
       tags:
         - "Component"
+      summary: "Gives Paginated list of all components"
       description: 'To search, filter, sort components'
       parameters:
         - $ref: "#/components/parameters/page"
@@ -471,14 +467,14 @@ paths:
       operationId: "src.app.components.operations.create"
       tags:
         - "Component"
-      summary: "To create a new component from the given data"
+      summary: "Create a new component from the given data"
       requestBody:
         description: "Data to create Component"
         required: True
         content:
           application/json:
             schema:
-              x-body-name: "component"
+              x-body-name: "component_data"
               $ref: "#/components/schemas/Component"
       responses:
         "201":
