@@ -82,18 +82,19 @@ def add_tags(pk, tags) -> Response:
 	return make_response(f"tags added successfully", 200)
 
 
-def add_file(pk, file_id) -> Response:
+def add_files(pk, file_ids: list) -> Response:
 	existing_metadata: Metadata | None = Metadata.query.filter(Metadata.id==pk).one_or_none()
 
 	if existing_metadata is None:
 		abort(404, f"Metadata with id {pk} not found")
 
-	existing_file: Metadata | None = File.query.filter(File.id==file_id).one_or_none()
+	for id in file_ids:
+		existing_file: Metadata | None = File.query.filter(File.id==id).one_or_none()
 
-	if existing_file is None:
-		abort(404, f"file with id {file_id} does not exist!")
+		if existing_file is None:
+			abort(404, f"file with id {id} does not exist!")
 
-	existing_metadata.add_file(existing_file)
+		existing_metadata.add_file(existing_file)
 
 	return make_response(f"file added successfully", 200)
 

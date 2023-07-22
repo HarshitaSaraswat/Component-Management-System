@@ -88,7 +88,10 @@ components:
         metadata:
           $ref: "#/components/schemas/Metadata"
         file:
-          $ref: "#/components/schemas/File"
+          type: array
+          additionalProperties: false
+          items:
+            $ref: "#/components/schemas/File"
         tags:
           $ref: "#/components/schemas/Tags"
 

@@ -31,7 +31,7 @@ def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
 	return file_schema.dump(file), 200 # type: ignore
 
 
-def create(metadataa_id, file) -> tuple[dict[str, str], Literal[201]]:
+def create(metadata_id, file) -> tuple[dict[str, str], Literal[201]]:
 	url = file.get("url")
 
 	file['type'] = FileType.serialize(file.get("type"))
@@ -41,7 +41,7 @@ def create(metadataa_id, file) -> tuple[dict[str, str], Literal[201]]:
 	if existing_file is not None:
 		abort(406, f"File with url:{url} already exists")
 
-	file["metadata_id"] = metadataa_id
+	file["metadata_id"] = metadata_id
 
 	new_file: File = file_schema.load(file)
 	new_file.create()

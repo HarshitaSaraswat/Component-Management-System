@@ -1,15 +1,18 @@
+from copy import copy
 from typing import Literal, Optional
 
+from flask import Response, abort, make_response
 from flask_sqlalchemy.query import Query
-from copy import copy
+
 from ..files.models import File, FileType
 from ..files.operations import create as create_file
 from ..files.schemas import file_schema
 from ..licenses.schemas import spdx_schema
 from ..metadatas.models import Metadata
+from ..metadatas.operations import add_files, add_tags
 from ..metadatas.operations import create as create_meatdata
-from ..metadatas.operations import read_files, read_tags, add_tags, add_file
-from ..metadatas.schemas import MetadataSchema
+from ..metadatas.operations import read_files, read_tags
+from ..metadatas.schemas import MetadataSchema, metadata_schema
 from ..tags.models import Tag
 from ..utils import QueryPagination, paginated_schema
 from ..utils.pagination import MAX_PER_PAGE
@@ -70,10 +73,10 @@ def read(
 		query = query.order_by(order_exp)
 		paginated_query = query.paginate(page=page, per_page=page_size, max_per_page=MAX_PER_PAGE)
 
-		components_resp = paginated_schema(ComponentSchema).dump(paginated_query)
+		components_resp = paginated_schema(ComponentSchema).dump(paginated_query) # type: ignore
 		metadata_resp = paginated_schema(MetadataSchema).dump(paginated_query)
 
-		for comp, metadata in zip(components_resp.get("items"), metadata_resp.get("items")):
+		for comp, metadata in zip(components_resp.get("items"), metadata_resp.get("items")): # type: ignore
 			comp["metadata"] = metadata
 			comp["id"] = metadata["id"]
 		return components_resp
@@ -81,12 +84,16 @@ def read(
 def create(component_data):
 	print(component_data)
 	metadata_data: dict = component_data.get("metadata")
-	file_data: dict = component_data.get("file")
+	files_data: dict = component_data.get("file")
 	tags: list[str] = component_data.get("tags")
 
 	metadata, _ = create_meatdata(metadata_data)
 	add_tags(metadata["id"], tags)
-	file, _ = create_file(metadata["id"], file_data)
-	add_file(metadata["id"], file["id"])
+	files_id = []
+	for fd in files_data:
+		new_file, _ = create_file(metadata["id"], fd)
+		files_id.append(new_file["id"])
+
+	add_files(metadata["id"], files_id)
 
 	return metadata, 201
