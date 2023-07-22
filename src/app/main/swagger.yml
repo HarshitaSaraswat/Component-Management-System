@@ -391,7 +391,7 @@ paths:
         "200":
           description: "Successfully read tags"
 
-    put:
+    patch:
       operationId: "src.app.metadatas.operations.add_tags"
       tags:
         - Metadatas
@@ -425,7 +425,7 @@ paths:
           description: "Successfully read files"
 
 
-  /license/all:
+  /license:
     get:
       operationId: "src.app.licenses.operations.read_all"
       tags:

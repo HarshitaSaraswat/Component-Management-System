@@ -1,8 +1,8 @@
 from typing import Literal
 
 from flask import abort
-from ..utils import PsudoPagination, paginated_schema
 
+from ..utils import PsudoPagination, paginated_schema
 from .models import SPDX
 from .schemas import spdx_schema, spdxs_schema
 
