@@ -86,7 +86,28 @@ components:
         - tags
       properties:
         metadata:
-          $ref: "#/components/schemas/Metadata"
+          type: "object"
+          additionalProperties: false
+          required:
+            - name
+            - version
+            - maintainer
+            - license_id
+          properties:
+            name:
+              type: "string"
+            version:
+              type: "string"
+            maintainer:
+              type: "string"
+            author:
+              type: "string"
+            thumbnail:
+              type: "string"
+            description:
+              type: "string"
+            license_id:
+              type: "string"
         file:
           type: array
           additionalProperties: false
