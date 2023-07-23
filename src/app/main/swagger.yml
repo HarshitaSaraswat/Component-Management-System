@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: "RP Flask REST API"
-  description: "An API for File Management System Database"
+  title: "FreeCad Component Management API"
+  description: "An API for Component-filesanf their Metadata Database"
   version: "1.0.0"
 
 servers:
@@ -32,7 +32,6 @@ components:
           type: "string"
         metadata_id:
           type: "string"
-          format: uuid
         type:
           type: "string"
           enum:
@@ -117,27 +116,32 @@ components:
         tags:
           $ref: "#/components/schemas/Tags"
 
+    File:
+      type: string
+      additionalProperties: false
+      format: binary
+
     ComponentFiles:
       type: object
       additionalProperties: false
       required:
-        - "file"
+        - "component_files"
         - "repository"
         - "branch"
         - "metadata_id"
       properties:
-        file:
+        component_files:
           type: array
           items:
-            type: string
-            format: binary
+            $ref: "#/components/schemas/File"
+        thumbnail_image:
+          $ref: "#/components/schemas/File"
         repository:
           type: string
         branch:
           type: string
         metadata_id:
           type: string
-          format: uuid
 
   parameters:
 

@@ -1,11 +1,16 @@
 from typing import Literal
-from werkzeug.datastructures import FileStorage
+
 from flask import Response, abort, make_response, request
+from werkzeug.datastructures import FileStorage
+
+from ..metadatas.models import Metadata
+from ..metadatas.schemas import metadata_schema
 from ..utils import PsudoPagination, paginated_schema
 from ..utils.pagination import MAX_PER_PAGE
+from .github import get_repository, upload_new_file
 from .models import File, FileType
 from .schemas import file_schema, files_schema
-from .github import upload_new_file
+
 
 def read_all():
 	query: list[File] = File.query.all()
@@ -60,17 +65,44 @@ def delete(pk) -> Response:
 
 
 def upload_to_github(upload_info):
-	files = request.files.getlist('file')
+	files = request.files.getlist('component_files')
+	thumbnail_file: FileStorage = request.files.get('thumbnail_image') # type: ignore
 	access_token = request.headers.get("X-Access-Token", "")
 
+	metadata: Metadata | None = Metadata.query.filter(Metadata.id==upload_info.get("metadata_id")).one_or_none()
+	if metadata is None:
+		abort(404, f"Metadata with id {upload_info.get('metadata_id')} not found")
+
+	repo = get_repository(access_token, upload_info.get("repository"))
+
+	response = {
+		"files" : [],
+		"metadata" : None,
+	}
 	for file in files:
-		content_file= upload_new_file(
-			access_token,
-			upload_info.get("repository"),
+		content = upload_new_file(
+			repo,
 			upload_info.get("branch"),
 			file.stream.read(),
-			file.filename,
+			f"{metadata.name}/{file.filename}",
 		)
-		print(f"{content_file.download_url=}; {content_file.size=}")
 
-	return make_response("recirved files", 201)
+		resp, _ = create({
+			"metadata_id": str(metadata.id),
+			"size": content.size,
+			"type": file.filename.rsplit('.', 1)[-1],
+			"url": content.download_url,
+		})
+		response["files"].append(resp)
+
+	content = upload_new_file(
+		repo,
+		upload_info.get("branch"),
+		thumbnail_file.stream.read(),
+		f"{metadata.name}/thumbnail.{thumbnail_file.filename.rsplit('.', 1)[-1]}",
+	)
+	metadata.thumbnail = content.download_url # type: ignore
+	metadata.commit()
+	response["metadata"] = metadata_schema.dump(metadata)
+
+	return response, 201

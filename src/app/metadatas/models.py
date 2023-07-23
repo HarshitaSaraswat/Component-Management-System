@@ -5,6 +5,7 @@ from sqlalchemy.types import Float, String
 from ..database import ElasticSearchBase, db
 from ..database.guid import GUID
 from ..database.validation import email_validator, url_validator
+from ..files.models import File
 
 metadata_tag = db.Table(
     'metadata_tag',
@@ -56,11 +57,11 @@ class Metadata(ElasticSearchBase):
 
     def add_tag(self, tag):
         self.tags.append(tag)
-        db.session.commit()
+        self.commit()
 
     def add_file(self, file):
         self.files.append(file)
-        db.session.commit()
+        self.commit()
 
     def delete(self):
         return super().delete("name", self.name)

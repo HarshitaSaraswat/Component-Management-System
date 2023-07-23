@@ -22,16 +22,16 @@ class Base(db.Model):
 
     def create(self):
         self.__session.add(self)
-        self.__commit()
+        self.commit()
 
     def update(self):
-        self.__commit()
+        self.commit()
 
     def delete(self):
         self.__session.delete(self)
-        self.__commit()
+        self.commit()
 
-    def __commit(self):
+    def commit(self):
         self.__session.commit()
 
 
