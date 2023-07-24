@@ -41,30 +41,22 @@ def read(
 	query = query.filter(Metadata.files.any(File.type.in_(file_types)))
 
 	if search_key:
-		queried_list: list[Metadata] = Metadata.elasticsearch(search_key.lower())
+		queried_list = [Metadata.query.filter(Metadata.name==md_name).one_or_none()
+		  							for md_name in Metadata.elasticsearch(search_key.lower())]
 		paginated_query = QueryPagination(page=page, per_page=page_size, queried_list=queried_list)
-		response = paginated_schema(MetadataSchema).dump(paginated_query)
+		components_resp = paginated_schema(ComponentSchema).dump(paginated_query) # type: ignore
+		metadata_resp = paginated_schema(MetadataSchema).dump(paginated_query)
 
 
-		for data in response.get("items"): # type: ignore
-			temp_data = copy(data)
-			metadata = Metadata.query.filter(Metadata.name==temp_data.get("name")).one_or_none()
-			temp_data["id"] = metadata.id
-			data.clear()
-			data["id"] = metadata.id
-			data["metadata"] = temp_data
-			data["files"] = read_files(metadata.id)
-			data["license"] = spdx_schema.dump(metadata.license)
-			data["tags"] = read_tags(metadata.id)
-
-
-		if columns != None:
-			for data in response["items"]: # type: ignore
-				to_pop = [key for key in data if key not in columns]
+		for comp, metadata in zip(components_resp.get("items"), metadata_resp.get("items")): # type: ignore
+			if columns is not None:
+				to_pop = [key for key in metadata if key not in columns]
 				for key in to_pop:
-					data.pop(key)
+					metadata.pop(key)
+			comp["metadata"] = metadata
+			comp["id"] = metadata["id"]
 
-		return response
+		return components_resp
 
 	else:
 		order_exp = eval(f"Metadata.{sort_by}.{sort_ord}()")
