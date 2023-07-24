@@ -6,7 +6,7 @@ from ..database import ElasticSearchBase, db
 from ..database.guid import GUID
 from ..database.validation import email_validator, url_validator
 from ..files.models import File
-
+from ...config import Config
 metadata_tag = db.Table(
     'metadata_tag',
     Column('metadata_id', GUID(), ForeignKey('metadatas.id')),
@@ -39,15 +39,18 @@ class Metadata(ElasticSearchBase):
 
     @validates("maintainer")
     def validate_maintainer(self, key, email):
-        return email_validator(email)
+# sourcery skip: swap-if-expression
+        return email_validator(email) if not Config.DEBUG else email
 
     @validates("author")
-    def validate_author(self, key, email):
-        return email_validator(email)
+    def validate_author(self, key, author):
+# sourcery skip: swap-if-expression
+        return email_validator(author) if not Config.DEBUG else author
 
     @validates("thumbnail")
     def validate_thumbnail(self, key, url):
-        return url_validator(url)
+# sourcery skip: swap-if-expression
+        return url_validator(url) if not Config.DEBUG else url
 
     @validates("rating")
     def validate_rating(self, key, rating):

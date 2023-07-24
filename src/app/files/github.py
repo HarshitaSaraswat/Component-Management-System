@@ -44,16 +44,3 @@ def upload_new_file(repository: Repository.Repository, branch, raw_file_data, de
         raw_file_data,
         branch=branch,
     )["content"] # type: ignore
-
-
-# def upload_components(access_token: str, repo_name: str, branch: str, component_name: str, files: list[FileStorage], thumbnail: FileStorage|None):
-#     repo = get_repository(access_token, repo_name)
-#     response = []
-#     for file in files:
-#         # upload_new_file(
-#         #     repo,
-#         #     branch,
-#         #     file.stream.read(),
-#         #     f"{component_name}/{component_name}.{file.filename.rsplit('.', 1)[-1]}",
-#         # )
-#         print(f"{component_name}/{file.filename}")
