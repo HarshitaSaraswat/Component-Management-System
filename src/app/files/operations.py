@@ -1,4 +1,5 @@
 from typing import Literal
+from pathlib import Path
 
 from flask import Response, abort, make_response, request
 from werkzeug.datastructures import FileStorage
@@ -99,7 +100,7 @@ def upload_to_github(upload_info):
 		repo,
 		upload_info.get("branch"),
 		thumbnail_file.stream.read(),
-		f"{metadata.name}/thumbnail.{thumbnail_file.filename.rsplit('.', 1)[-1]}",
+		f"{metadata.name}/thumbnail{Path(thumbnail_file.filename).suffix}",
 	)
 	metadata.thumbnail = content.download_url # type: ignore
 	metadata.commit()

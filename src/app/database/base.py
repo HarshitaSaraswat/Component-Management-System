@@ -85,13 +85,12 @@ class ElasticSearchBase(Base):
         self.__es.delete_by_query(index=self.__tablename__, q={field_name : value}) # type: ignore
 
     @classmethod
-    def elasticsearch(cls, search_key: str) -> list[str]:
+    def elasticsearch(cls, search_key: str) -> set[str]:
         response = cls.__es.search(
             index="metadatas",
             query=make_elasticsearch_query(search_key),
         )
-        metadatas = [hit["_source"] for hit in response["hits"]["hits"]]
-        return [data["name"] for data in metadatas]
+        return {hit["_source"]["name"] for hit in response["hits"]["hits"]}
 
     @classmethod
     def set_schemas(cls, schema: SQLAlchemyAutoSchema, schema_many: SQLAlchemyAutoSchema):
