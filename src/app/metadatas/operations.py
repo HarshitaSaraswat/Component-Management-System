@@ -32,7 +32,7 @@ def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
 	if metadata is None:
 		abort(404, f"Metadata with id {pk} not found!")
 
-	return metadata_schema.dump(metadata), 200 # type: ignore
+	return metadata_schema.dump(metadata), 200
 
 
 def create(metadata) -> tuple[dict[str, str], Literal[201]]:
@@ -43,7 +43,7 @@ def create(metadata) -> tuple[dict[str, str], Literal[201]]:
 
 	new_metadata: Metadata = metadata_schema.load(metadata)
 	new_metadata.create()
-	return metadata_schema.dump(new_metadata), 201 # type: ignore
+	return metadata_schema.dump(new_metadata), 201
 
 
 def delete(pk) -> Response:

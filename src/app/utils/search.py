@@ -57,7 +57,7 @@ def make_should_query_list(search_key: str):
 	            "min_term_freq" : 1,
 	            "max_query_terms" : 12
 	        }
-	    } # type: ignore
+	    }
 	)
 
 	return query_list

@@ -28,7 +28,7 @@ def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
 	if file is None:
 		abort(404, f"File with id {pk} not found!")
 
-	return file_schema.dump(file), 200 # type: ignore
+	return file_schema.dump(file), 200
 
 
 def create(metadata_id, file) -> tuple[dict[str, str], Literal[201]]:
@@ -46,7 +46,7 @@ def create(metadata_id, file) -> tuple[dict[str, str], Literal[201]]:
 	new_file: File = file_schema.load(file)
 	new_file.create()
 
-	return file_schema.dump(new_file), 201 # type: ignore
+	return file_schema.dump(new_file), 201
 
 
 def delete(pk) -> Response:

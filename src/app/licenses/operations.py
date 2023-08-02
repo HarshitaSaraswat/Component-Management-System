@@ -19,7 +19,7 @@ def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
 	if license is None:
 		abort(404, f"License with id {pk} not found!")
 
-	return spdx_schema.dump(license), 200 # type: ignore
+	return spdx_schema.dump(license), 200
 
 def create(spdx_license) -> tuple[dict[str, str], Literal[201]]:
 	existing_license = SPDX.query.filter(SPDX.fullname == spdx_license["fullname"]).one_or_none()
@@ -29,4 +29,4 @@ def create(spdx_license) -> tuple[dict[str, str], Literal[201]]:
 
 	new_license: SPDX = spdx_schema.load(spdx_license)
 	new_license.create()
-	return spdx_schema.dump(new_license), 201 # type: ignore
+	return spdx_schema.dump(new_license), 201

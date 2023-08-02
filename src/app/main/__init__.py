@@ -15,7 +15,7 @@ def create_app(config_class=Config) -> Flask:
 	connex_app: FlaskApp = connexion.FlaskApp(__name__, specification_dir=basedir)
 	connex_app.add_api(path.join(basedir,"app/main/swagger.yml"))
 
-	app: Flask = connex_app.app # type: ignore
+	app: Flask = connex_app.app
 	app.config.from_object(config_class)
 
 	from ..files.models import File

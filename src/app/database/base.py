@@ -54,7 +54,7 @@ class ElasticSearchBase(Base):
             raise
 
         doc = self.__schema.dump(self)
-        self.__es.index(index=self.__tablename__, document=doc) # type: ignore
+        self.__es.index(index=self.__tablename__, document=doc)
 
     def update(self, field_name, value):
         try:
@@ -74,7 +74,7 @@ class ElasticSearchBase(Base):
         self.__es.update(
             index = 'index_name',
             id = sq["hits"]["hits"]["_id"],
-            doc = self.__schema.dump(self), # type: ignore
+            doc = self.__schema.dump(self),
         )
 
     def delete(self, field_name: str, value: Any):
@@ -82,7 +82,7 @@ class ElasticSearchBase(Base):
             super().delete()
         except:
             raise
-        self.__es.delete_by_query(index=self.__tablename__, q={field_name : value}) # type: ignore
+        self.__es.delete_by_query(index=self.__tablename__, q={field_name : value})
 
     @classmethod
     def elasticsearch(cls, search_key: str):

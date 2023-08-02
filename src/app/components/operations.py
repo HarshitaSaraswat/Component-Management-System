@@ -46,7 +46,7 @@ def read(
 		response = paginated_schema(MetadataSchema).dump(paginated_query)
 
 
-		for data in response.get("items"): # type: ignore
+		for data in response.get("items"):
 			temp_data = copy(data)
 			metadata = Metadata.query.filter(Metadata.name==temp_data.get("name")).one_or_none()
 			temp_data["id"] = metadata.id
@@ -59,7 +59,7 @@ def read(
 
 
 		if columns != None:
-			for data in response["items"]: # type: ignore
+			for data in response["items"]:
 				to_pop = [key for key in data if key not in columns]
 				for key in to_pop:
 					data.pop(key)
@@ -71,10 +71,10 @@ def read(
 		query = query.order_by(order_exp)
 		paginated_query = query.paginate(page=page, per_page=page_size, max_per_page=MAX_PER_PAGE)
 
-		components_resp = paginated_schema(ComponentSchema).dump(paginated_query) # type: ignore
+		components_resp = paginated_schema(ComponentSchema).dump(paginated_query)
 		metadata_resp = paginated_schema(MetadataSchema).dump(paginated_query)
 
-		for comp, metadata in zip(components_resp.get("items"), metadata_resp.get("items")): # type: ignore
+		for comp, metadata in zip(components_resp.get("items"), metadata_resp.get("items")):
 			comp["metadata"] = metadata
 			comp["id"] = metadata["id"]
 		return components_resp

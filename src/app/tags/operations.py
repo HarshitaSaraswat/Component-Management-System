@@ -26,7 +26,7 @@ def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
 
 	if tag is None:
 		abort(404, f"Tag with id {pk} not found!")
-	return tag_schema.dump(tag), 200 # type: ignore
+	return tag_schema.dump(tag), 200
 
 
 def create(tag) -> tuple[dict[str, str], Literal[201]]:
@@ -38,7 +38,7 @@ def create(tag) -> tuple[dict[str, str], Literal[201]]:
 
 	new_tag: Tag = tag_schema.load(tag)
 	new_tag.create()
-	return tag_schema.dump(new_tag), 201 # type: ignore
+	return tag_schema.dump(new_tag), 201
 
 
 def delete(pk) -> Response:

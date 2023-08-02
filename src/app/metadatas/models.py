@@ -32,8 +32,8 @@ class Metadata(ElasticSearchBase):
 
     license_id = Column(GUID(), ForeignKey("spdx_licenses.id"), nullable=True)
 
-    files: Relationship = relationship("File", backref="metadata", cascade="all, delete, delete-orphan") # type: ignore
-    tags: Relationship = relationship("Tag", secondary=metadata_tag, backref="metadatas") # type: ignore
+    files: Relationship = relationship("File", backref="metadata", cascade="all, delete, delete-orphan")
+    tags: Relationship = relationship("Tag", secondary=metadata_tag, backref="metadatas")
 
 
     @validates("maintainer")
