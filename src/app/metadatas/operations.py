@@ -49,7 +49,7 @@ def _create(metadata: dict) -> Metadata:
 
 
 def create(metadata) -> tuple[dict[str, str], Literal[201]]:
-	return metadata_schema.dump(_create(metadata)), 201 # type: ignore
+	return metadata_schema.dump(_create(metadata)), 201
 
 
 def delete(pk) -> Response:
