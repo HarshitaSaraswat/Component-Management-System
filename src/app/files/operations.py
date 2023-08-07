@@ -1,5 +1,5 @@
-from typing import Literal
 from pathlib import Path
+from typing import Literal
 
 from flask import Response, abort, make_response, request
 from werkzeug.datastructures import FileStorage
@@ -8,9 +8,9 @@ from ..metadatas.models import Metadata
 from ..metadatas.schemas import metadata_schema
 from ..utils import PsudoPagination, paginated_schema
 from ..utils.pagination import MAX_PER_PAGE
-from .github import get_repository, upload_new_file
 from .models import File, FileType
 from .schemas import file_schema, files_schema
+from .utils import get_repository, upload_new_file
 
 
 def read_all():
