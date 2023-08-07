@@ -35,15 +35,21 @@ def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
 	return metadata_schema.dump(metadata), 200
 
 
-def create(metadata) -> tuple[dict[str, str], Literal[201]]:
+def _create(metadata: dict) -> Metadata:
 	existing_metadata = Metadata.query.filter(Metadata.name == metadata.get("name")).one_or_none()
 
 	if existing_metadata is not None:
 		abort(406, "This Metadata already exists")
 
+	print(metadata)
+
 	new_metadata: Metadata = metadata_schema.load(metadata)
 	new_metadata.create()
-	return metadata_schema.dump(new_metadata), 201
+	return new_metadata
+
+
+def create(metadata) -> tuple[dict[str, str], Literal[201]]:
+	return metadata_schema.dump(_create(metadata)), 201 # type: ignore
 
 
 def delete(pk) -> Response:

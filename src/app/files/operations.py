@@ -1,9 +1,14 @@
 from typing import Literal
+from pathlib import Path
 
-from flask import Response, abort, make_response
+from flask import Response, abort, make_response, request
+from werkzeug.datastructures import FileStorage
 
+from ..metadatas.models import Metadata
+from ..metadatas.schemas import metadata_schema
 from ..utils import PsudoPagination, paginated_schema
 from ..utils.pagination import MAX_PER_PAGE
+from .github import get_repository, upload_new_file
 from .models import File, FileType
 from .schemas import file_schema, files_schema
 
@@ -31,19 +36,20 @@ def read_one(pk) -> tuple[dict[str, str], Literal[200]]:
 	return file_schema.dump(file), 200
 
 
-def create(metadata_id, file) -> tuple[dict[str, str], Literal[201]]:
-	url = file.get("url")
+def create(file_data, metadata_id=None) -> tuple[dict[str, str], Literal[201]]:
+	url = file_data.get("url")
 
-	file['type'] = FileType.serialize(file.get("type"))
+	file_data['type'] = FileType.serialize(file_data.get("type"))
 
 	existing_file: File | None = File.query.filter(File.url == url).one_or_none()
 
 	if existing_file is not None:
 		abort(406, f"File with url:{url} already exists")
 
-	file["metadata_id"] = metadata_id
+	if metadata_id is not None:
+		file_data["metadata_id"] = metadata_id
 
-	new_file: File = file_schema.load(file)
+	new_file: File = file_schema.load(file_data)
 	new_file.create()
 
 	return file_schema.dump(new_file), 201
@@ -57,3 +63,47 @@ def delete(pk) -> Response:
 
 	existing_file.delete()
 	return make_response(f"{existing_file.url}:{pk} successfully deleted", 200)
+
+
+def upload_to_github(upload_info):
+	files = request.files.getlist('component_files')
+	thumbnail_file: FileStorage = request.files.get('thumbnail_image') # type: ignore
+	access_token = request.headers.get("X-Access-Token", "")
+
+	metadata: Metadata | None = Metadata.query.filter(Metadata.id==upload_info.get("metadata_id")).one_or_none()
+	if metadata is None:
+		abort(404, f"Metadata with id {upload_info.get('metadata_id')} not found")
+
+	repo = get_repository(access_token, upload_info.get("repository"))
+
+	response = {
+		"files" : [],
+		"metadata" : None,
+	}
+	for file in files:
+		content = upload_new_file(
+			repo,
+			upload_info.get("branch"),
+			file.stream.read(),
+			f"{metadata.name}/{file.filename}",
+		)
+
+		resp, _ = create({
+			"metadata_id": str(metadata.id),
+			"size": content.size,
+			"type": file.filename.rsplit('.', 1)[-1],
+			"url": content.download_url,
+		})
+		response["files"].append(resp)
+
+	content = upload_new_file(
+		repo,
+		upload_info.get("branch"),
+		thumbnail_file.stream.read(),
+		f"{metadata.name}/thumbnail{Path(thumbnail_file.filename).suffix}",
+	)
+	metadata.thumbnail = content.download_url # type: ignore
+	metadata.commit()
+	response["metadata"] = metadata_schema.dump(metadata)
+
+	return response, 201

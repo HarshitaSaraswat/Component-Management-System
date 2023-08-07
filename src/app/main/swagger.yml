@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: "RP Flask REST API"
-  description: "An API for File Management System Database"
+  title: "FreeCad Component Management API"
+  description: "An API for Component-filesanf their Metadata Database"
   version: "1.0.0"
 
 servers:
@@ -20,7 +20,7 @@ components:
         label:
           type: "string"
 
-    File:
+    Filedata:
       type: "object"
       additionalProperties: false
       required:
@@ -81,41 +81,66 @@ components:
       type: "object"
       additionalProperties: false
       required:
-        - metadata
-        - file
-        - tags
+        - "tags"
+        - "component_files"
+        - "repository"
+        - "branch"
+        - "name"
+        - "version"
+        - "maintainer"
+        - "license_id"
       properties:
-        metadata:
-          type: "object"
-          additionalProperties: false
-          required:
-            - name
-            - version
-            - maintainer
-            - license_id
-          properties:
-            name:
-              type: "string"
-            version:
-              type: "string"
-            maintainer:
-              type: "string"
-            author:
-              type: "string"
-            thumbnail:
-              type: "string"
-            description:
-              type: "string"
-            license_id:
-              type: "string"
-        file:
+        component_files:
           type: array
-          additionalProperties: false
           items:
             $ref: "#/components/schemas/File"
+        thumbnail_image:
+          $ref: "#/components/schemas/File"
+        repository:
+          type: string
+        branch:
+          type: string
         tags:
           $ref: "#/components/schemas/Tags"
+        name:
+          type: "string"
+        version:
+          type: "string"
+        maintainer:
+          type: "string"
+        author:
+          type: "string"
+        description:
+          type: "string"
+        license_id:
+          type: "string"
 
+    File:
+      type: string
+      additionalProperties: false
+      format: binary
+
+    ComponentFiles:
+      type: object
+      additionalProperties: false
+      required:
+        - "component_files"
+        - "repository"
+        - "branch"
+        - "metadata_id"
+      properties:
+        component_files:
+          type: array
+          items:
+            $ref: "#/components/schemas/File"
+        thumbnail_image:
+          $ref: "#/components/schemas/File"
+        repository:
+          type: string
+        branch:
+          type: string
+        metadata_id:
+          type: string
 
   parameters:
 
@@ -301,12 +326,33 @@ paths:
           content:
             application/json:
               schema:
-                x-body-name: "file"
-                $ref: "#/components/schemas/File"
+                x-body-name: "file_data"
+                $ref: "#/components/schemas/Filedata"
       responses:
         "201":
           description: "Successfully created a file"
 
+  /file/upload:
+    post:
+      operationId: "src.app.files.operations.upload_to_github"
+      tags:
+        - "Files"
+      summary: "Create a File"
+      parameters:
+        - in: header
+          name: X-Access-Token
+          description: "github access token"
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              x-body-name: "upload_info"
+              $ref: "#/components/schemas/ComponentFiles"
+      responses:
+        "201":
+          description: "Successfully created a file"
 
   /file/{pk}:
     get:
@@ -492,11 +538,17 @@ paths:
       tags:
         - "Component"
       summary: "Create a new component from the given data"
+      parameters:
+        - in: header
+          name: X-Access-Token
+          description: "github access token"
+          schema:
+            type: string
       requestBody:
-        description: "Data to create Component"
-        required: True
+        # description: "Data to create Component"
+        # required: True
         content:
-          application/json:
+          multipart/form-data:
             schema:
               x-body-name: "component_data"
               $ref: "#/components/schemas/Component"
