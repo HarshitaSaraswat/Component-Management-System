@@ -86,7 +86,7 @@ def get_files(path: str):
 
 get_files(base_path)
 # print(file_store_dict)
-with open("component_management_system/database/data/files.json", "w") as file:
+with open("component_management_system/database/data/files.json", "w", encoding="utf-8") as file:
 	json.dump(file_store_dict, file)
 
 print(other_exts)

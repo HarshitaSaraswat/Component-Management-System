@@ -16,7 +16,7 @@ from ...tags.operations import create as create_tag
 
 
 def db_license_entry(license_csv_path):
-	with open(license_csv_path) as csv_file:
+	with open(license_csv_path, encoding="utf-8") as csv_file:
 		csv_reader = csv.reader(csv_file, delimiter=',')
 		line_count = 0
 		for row in csv_reader:
@@ -39,7 +39,7 @@ def db_license_entry(license_csv_path):
 
 
 def db_tags_entry(tags_file_path):
-	with open(tags_file_path, "r") as file:
+	with open(tags_file_path, "r", encoding="utf-8") as file:
 		tags = file.readlines()
 
 	tags = [t.replace("\n", "").lower() for t in tags]
@@ -126,7 +126,7 @@ def _traverse(_dict: dict, traversed_names: set, funcs):
 
 
 def db_metadata_entry(metadata_file_oath):
-	with open(metadata_file_oath, 'r') as file:
+	with open(metadata_file_oath, 'r', encoding="utf-8") as file:
 		data = json.load(file)
 
 	traversed_names = set()
@@ -134,14 +134,14 @@ def db_metadata_entry(metadata_file_oath):
 
 
 def db_file_entry(file_path):
-	with open(file_path, 'r') as file:
+	with open(file_path, 'r', encoding="utf-8") as file:
 		data = json.load(file)
 
 	traversed_names = set()
 	_traverse(data, traversed_names, [_make_file])
 
 def db_metadata_file_entry(file_path):
-	with open(file_path, 'r') as file:
+	with open(file_path, 'r', encoding="utf-8") as file:
 		data = json.load(file)
 
 	traversed_names = set()

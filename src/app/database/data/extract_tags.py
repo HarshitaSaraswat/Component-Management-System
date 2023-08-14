@@ -15,7 +15,7 @@ def extract_tags(path, save_path):
 	get_directories(path, tags)
 	tags.remove("FreeCAD-library")
 
-	with open(save_path, "w") as file:
+	with open(save_path, "w", encoding="utf-8") as file:
 		for tag in tags:
 			file.write(tag+'\n')
 
