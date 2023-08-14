@@ -60,10 +60,10 @@ def _get_tags(files: dict) -> list[str]:
 	return file_path.split('/')[:-1]
 
 
-def _make_metadata(comp, data):
+def _make_metadata(component, data):
 
 	metadata_data = {
-		"name": comp.lower(),
+		"name": component.lower(),
 		"version": "1",
 		"maintainer": "FreeCAD@gmail.com",
 		"author": "FreeCAD@gmail.com",
@@ -110,19 +110,19 @@ def _traverse(_dict: dict, traversed_names: set, funcs):
 			_traverse(value, traversed_names, funcs)
 
 		else:
-			for comp, data in value.items():
+			for component, data in value.items():
 
-				if comp == "files": continue
+				if component == "files": continue
 
-				if comp in traversed_names: continue
+				if component in traversed_names: continue
 
 				if len(data["components"].keys()) == 0:
-					traversed_names.add(comp)
+					traversed_names.add(component)
 					continue
 
-				traversed_names.add(comp)
+				traversed_names.add(component)
 				for func in funcs:
-					func(comp, data)
+					func(component, data)
 
 
 def db_metadata_entry(metadata_file_oath):

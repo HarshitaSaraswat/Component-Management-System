@@ -48,9 +48,9 @@ def read(
 	components_resp = paginated_schema(ComponentSchema).dump(paginated_query) # type: ignore
 	metadata_resp = metadatas_schema.dump(paginated_query)
 
-	for comp, metadata in zip(components_resp.get("items"), metadata_resp): # type: ignore
-		comp["metadata"] = metadata
-		comp["id"] = metadata["id"]
+	for component, metadata in zip(components_resp.get("items"), metadata_resp): # type: ignore
+		component["metadata"] = metadata
+		component["id"] = metadata["id"]
 	return components_resp, 200
 
 
