@@ -24,6 +24,20 @@ from ..database import db
 
 
 def create_app(config_class=Config) -> Flask:
+	"""
+	Creates and configures the Flask application.
+
+	Args:
+		config_class (Config): The configuration class to use for the application.
+
+	Returns:
+		Flask: The configured Flask application.
+
+	Example:
+		```python
+		app = create_app()
+		```
+	"""
 
 	connex_app: FlaskApp = connexion.FlaskApp(__name__, specification_dir=basedir)
 	connex_app.add_api(path.join(basedir,"app/main/swagger.yml"))
