@@ -18,6 +18,17 @@ from ..database import Base
 
 
 class Tag(Base):
+    """
+    Represents a Tag object.
+
+    Attributes:
+        __tablename__ (str): The name of the database table.
+        label (Column): The label of the tag.
+
+    Methods:
+        __repr__(): Returns a string representation of the Tag object.
+
+    """
 
     __tablename__: str = "tags"
 

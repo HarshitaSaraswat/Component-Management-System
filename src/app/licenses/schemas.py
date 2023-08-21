@@ -19,7 +19,20 @@ from .models import SPDX
 
 
 class SPDXSchema(ma.SQLAlchemyAutoSchema):
-    # metadata_id = fields.String()
+    """
+    Schema class for serializing and deserializing SPDX licenses.
+
+    This class inherits from `ma.SQLAlchemyAutoSchema` and defines the schema for the SPDX model.
+    The `Meta` class specifies the model, load_instance setting, and the SQLAlchemy session.
+
+    Example:
+        ```python
+        schema = SPDXSchema()
+        license_data = {"fullname": "MIT License", "identifier": "MIT", "license_page": "https://opensource.org/licenses/MIT"}
+        result = schema.load(license_data)
+        print(result)
+        ```
+    """
     class Meta:
         model = SPDX
         load_instance = True

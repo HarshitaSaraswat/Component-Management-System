@@ -20,6 +20,18 @@ from .models import Tag
 
 
 class TagSchema(ma.SQLAlchemyAutoSchema):
+    """
+    Schema for serializing and deserializing Tag objects.
+
+    Attributes:
+        metadata_id (str): The ID of the metadata.
+
+    Example:
+        ```python
+        tag_schema = TagSchema()
+        ```
+    """
+
     metadata_id = fields.String()
     class Meta:
         model = Tag

@@ -20,6 +20,19 @@ from .models import Metadata
 
 
 class MetadataSchema(ma.SQLAlchemyAutoSchema):
+    """
+    A Marshmallow schema for serializing and deserializing Metadata objects.
+
+    Attributes:
+        license_id (str): The license ID field.
+
+    Meta:
+        model (Metadata): The Metadata model class.
+        load_instance (bool): Whether to load instances of the model.
+        sqla_session (scoped_session[Session]): The SQLAlchemy session.
+
+    """
+
     license_id = fields.String()
     class Meta:
         model = Metadata

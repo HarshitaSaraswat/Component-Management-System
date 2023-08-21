@@ -17,6 +17,22 @@ from flask_sqlalchemy.query import Query
 
 
 def search_query(model, model_attribute, search_str: str):
+	"""
+	Searches for tags in the given model based on a search string.
+
+	Args:
+		model: The model to search in.
+		model_attribute: The attribute of the model to search in.
+		search_str (str): The search string.
+
+	Returns:
+		list[model]: The list of tags matching the search criteria.
+
+	Example:
+		```python
+		tags = search_query(Tag, Tag.name, "python")
+		```
+	"""
 
 	tags: list[model] = model.query.filter(model_attribute.contains(search_str)).all()
 
@@ -28,6 +44,21 @@ def search_query(model, model_attribute, search_str: str):
 
 
 def make_fuzzy_query(value: str):
+	"""
+	Creates a fuzzy query for the given value.
+
+	Args:
+		value (str): The value to be used in the fuzzy query.
+
+	Returns:
+		dict: The fuzzy query.
+
+	Example:
+		```python
+		query = make_fuzzy_query("example")
+		```
+	"""
+
 	return {
 		"fuzzy": {
 			"name": {
@@ -42,6 +73,13 @@ def make_fuzzy_query(value: str):
 
 
 def make_regexp_query(value: str):
+	"""
+	Creates a fuzzy query.
+
+	Returns:
+		dict: The fuzzy query.
+	"""
+
 	return {
 		"regexp": {
 			"name": {
@@ -54,11 +92,41 @@ def make_regexp_query(value: str):
 
 
 def make_must_query_list(search_key: str):
+	"""
+	Creates a list of fuzzy queries based on the given search key.
+
+	Args:
+		search_key (str): The search key.
+
+	Returns:
+		list[dict]: The list of fuzzy queries.
+
+	Example:
+		```python
+		query_list = make_must_query_list("example, test")
+		```
+	"""
+
 	value_list = re.split(r" |,|\||-|_|\.", search_key)
 	return [make_fuzzy_query(value) for value in value_list]
 
 
 def make_should_query_list(search_key: str):
+	"""
+	Creates a list of queries based on the given search key.
+
+	Args:
+		search_key (str): The search key.
+
+	Returns:
+		list[dict]: The list of queries.
+
+	Example:
+		```python
+		query_list = make_should_query_list("example, test")
+		```
+	"""
+
 	value_list = re.split(r" |,|\||-|_|\.", search_key)
 	query_list = [make_fuzzy_query(value) for value in value_list]
 	query_list.extend(make_regexp_query(value) for value in value_list)
@@ -77,6 +145,21 @@ def make_should_query_list(search_key: str):
 
 
 def make_elasticsearch_query(search_key: str):
+	"""
+	Creates an Elasticsearch query based on the given search key.
+
+	Args:
+		search_key (str): The search key.
+
+	Returns:
+		dict: The Elasticsearch query.
+
+	Example:
+		```python
+		query = make_elasticsearch_query("example, test")
+		```
+	"""
+
 	return {
 		"bool": {
 			# "must": make_must_query_list(search_key),

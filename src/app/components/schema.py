@@ -20,6 +20,28 @@ from ..tags.schemas import TagSchema
 
 
 class ComponentSchema(Schema):
+	"""
+	Represents the schema for a component.
+
+	Parameters
+	----------
+	Schema : class
+		The base class for defining a schema.
+
+	Attributes
+	----------
+	id : str
+		The ID of the component.
+	metadata : MetadataSchema
+		The metadata of the component.
+	license : SPDXSchema
+		The license of the component.
+	files : List[FileSchema]
+		The files associated with the component.
+	tags : List[TagSchema]
+		The tags associated with the component.
+	"""
+
 	id = fields.String()
 	metadata = fields.Nested(MetadataSchema)
 	license = fields.Nested(SPDXSchema)
