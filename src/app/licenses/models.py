@@ -20,6 +20,25 @@ from ..database.validation import url_validator
 
 
 class SPDX(Base):
+    """
+    Represents an SPDX license in the database.
+
+    This class inherits from the `Base` class and defines the structure of the `spdx_licenses` table in the database.
+    It includes columns for the fullname, identifier, license_page, fsf_free, and osi_approved attributes of the SPDX license.
+    The `metadatas` relationship defines the relationship between SPDX licenses and metadata.
+    The `validate_license_page` method is a validator for the `license_page` column.
+    The `__repr__` method returns a string representation of the SPDX license.
+
+    Attributes:
+        __tablename__ (str): The name of the table in the database.
+        __allow_unmapped__ (bool): Flag indicating whether unmapped attributes are allowed.
+
+    Example:
+        ```python
+        license = SPDX(fullname="MIT License", identifier="MIT", license_page="https://opensource.org/licenses/MIT")
+        print(license)
+        ```
+    """
 
     __tablename__: str = "spdx_licenses"
     __allow_unmapped__ = True
@@ -35,6 +54,26 @@ class SPDX(Base):
 
     @validates("license_page")
     def validate_license_page(self, key, url):
+        """
+        Validator for the 'license_page' column of the SPDX class.
+
+        This validator method takes the key and URL as arguments and applies the 'url_validator' function to validate the URL.
+
+        Args:
+            key (str): The key of the column being validated.
+            url (str): The URL to be validated.
+
+        Returns:
+            str: The validated URL.
+
+        Example:
+            ```python
+            spdx = SPDX()
+            validated_url = spdx.validate_license_page("license_page", "https://opensource.org/licenses/MIT")
+            print(validated_url)
+            ```
+        """
+
         return url_validator(url)
 
 
