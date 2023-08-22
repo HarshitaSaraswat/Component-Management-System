@@ -1,7 +1,7 @@
 # Component Management System
 
 ## Project Description:
-The Component Management System is a utility application designed to manage FreeCAD models from different online repositories. It provides features to seamlessly browse, download, and organize individual models while avoiding the need to download the entire library. The system is built using Flask, SQLite, and SQLAlchemy, and it serves as the backend API for the **Component Library Plugin**.
+The Component Management System is a utility application designed to manage FreeCAD models from different online repositories. It provides features to seamlessly browse, download, and organize individual models while avoiding the need to download the entire library. The system is built using Flask, SQLite, and SQLAlchemy, and it serves as the backend API for the **[Component Library Plugin](https://github.com/AmulyaParitosh/Component_Library_Plugin)**.
 
 ## Features:
 
