@@ -23,6 +23,7 @@ from ..utils import PsudoPagination, paginated_schema, search_query
 from ..utils.pagination import MAX_PER_PAGE
 from .models import Metadata
 from .schemas import metadata_schema, metadatas_schema
+from ...logger import logger
 
 
 def read_all():
@@ -136,7 +137,7 @@ def _create(metadata: dict) -> Metadata:
 	if existing_metadata is not None:
 		abort(406, "This Metadata already exists")
 
-	print(metadata)
+	logger.info(metadata)
 
 	new_metadata: Metadata = metadata_schema.load(metadata)
 	new_metadata.create()

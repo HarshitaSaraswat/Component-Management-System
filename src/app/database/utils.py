@@ -14,6 +14,7 @@
 from os import path
 
 from ...config import basedir
+from ...logger import logger
 from .base import db, es
 
 
@@ -52,21 +53,21 @@ def pre_entry() -> None:
 	from .data.put_data import (db_license_entry, db_metadata_entry,
 	                            db_metadata_file_entry, db_tags_entry)
 
-	print("creating license entries...")
+	logger.info("creating license entries...")
 	db_license_entry(path.join(basedir,"app/database/data/spdx_license.csv"))
-	print("licnses entry complete")
+	logger.info("licnses entry complete")
 
-	print("creating Tag entries...")
+	logger.info("creating Tag entries...")
 	db_tags_entry(path.join(basedir,"app/database/data/tags.txt"))
-	print("Tags entry complete")
+	logger.info("Tags entry complete")
 
-	print("creating Metadata and Files entries...")
+	logger.info("creating Metadata and Files entries...")
 	db_metadata_file_entry(path.join(basedir,"app/database/data/files.json"))
-	print("Metadatas and Files entry complete")
+	logger.info("Metadatas and Files entry complete")
 
-	# print("creating Component entries...")
+	# logger.info("creating Component entries...")
 	# db_component_entry(basedir+"app/database/data/files.json")
-	# print("Components entry complete")
+	# logger.info("Components entry complete")
 
 
 def reset_db() -> None:

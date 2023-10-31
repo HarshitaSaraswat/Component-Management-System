@@ -19,7 +19,7 @@ from ..utils import PsudoPagination, paginated_schema, search_query
 from ..utils.pagination import MAX_PER_PAGE
 from .models import Tag
 from .schemas import tag_schema, tags_schema
-
+from ...logger import logger
 
 def read_all():
 	"""
@@ -171,9 +171,9 @@ def get_metadatas(tag):
 	existing_tag: Tag | None = Tag.query.filter(Tag.label==tag).one_or_none()
 
 	if existing_tag is not None:
-		print(existing_tag.metadatas)
+		logger.info(existing_tag.metadatas)
 	else:
-		print(existing_tag)
+		logger.info(existing_tag)
 
 
 def search(search_key):
