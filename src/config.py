@@ -56,6 +56,6 @@ class Config:
             FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
         class STREAM:
-            STREAM = sys.stderr
+            STREAM = sys.stdout
             LEVEL: int = logging.DEBUG
             FORMAT = "%(name)s - %(levelname)s - %(message)s"
