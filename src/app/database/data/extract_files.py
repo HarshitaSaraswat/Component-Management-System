@@ -14,6 +14,7 @@
 import contextlib
 import json
 import os
+from ....logger import logger
 
 base_path = "/home/encryptedbee/tesla/projects/GSOC/FreeCAD-library"
 base_url = "https://github.com/FreeCAD/FreeCAD-library/blob/master"
@@ -98,8 +99,8 @@ def get_files(path: str):
 			get_files(os.path.join(path, file))
 
 get_files(base_path)
-# print(file_store_dict)
+# logger.debug(file_store_dict)
 with open("component_management_system/database/data/files.json", "w", encoding="utf-8") as file:
 	json.dump(file_store_dict, file)
 
-print(other_exts)
+logger.debug(other_exts)
