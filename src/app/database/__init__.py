@@ -13,3 +13,4 @@
 
 from .base import Base, ElasticSearchBase
 from .definations import db, es, ma
+from .app_setup import setup_db

@@ -1,6 +1,7 @@
 import logging
+from logging.config import dictConfig
 
-from config import Config
+from .config import Config
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -24,3 +25,23 @@ __file_handler.setLevel(Config.LOG.FILE.LEVEL)
 __file_formatter = logging.Formatter(Config.LOG.FILE.FORMAT)
 __file_handler.setFormatter(__file_formatter)
 logger.addHandler(__file_handler)
+
+def setup_logger():
+	dictConfig(
+    {
+        "version": 1,
+        "formatters": {
+            "default": {
+                "format": "[%(asctime)s] %(levelname)s in %(module)s: %(message)s",
+            }
+        },
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "stream": "ext://sys.stdout",
+                "formatter": "default",
+            }
+        },
+        "root": {"level": "DEBUG", "handlers": ["console"]},
+    }
+)
