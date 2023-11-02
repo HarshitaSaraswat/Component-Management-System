@@ -49,6 +49,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI: str = f"sqlite:///{basedir}/app.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+# TODO: remove this logging config class
     class LOG:
         class FILE:
             PATH = Path("test/component_management_system.log")
