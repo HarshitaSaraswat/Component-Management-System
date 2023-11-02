@@ -69,6 +69,8 @@ def read(
 	This function reads components from the database based on the specified parameters. It applies filters, sorting, and pagination to the query.
 	"""
 
+	# ! if the given page number is greater that available, there is an unhandled error(404)
+
 	query: Query = Metadata.query
 
 	if tags:

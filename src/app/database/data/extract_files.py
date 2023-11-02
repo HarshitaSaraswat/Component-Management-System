@@ -14,7 +14,7 @@
 import contextlib
 import json
 import os
-from ....logger import logger
+from ...logger import logger
 
 base_path = "/home/encryptedbee/tesla/projects/GSOC/FreeCAD-library"
 base_url = "https://github.com/FreeCAD/FreeCAD-library/blob/master"

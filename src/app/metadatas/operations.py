@@ -23,7 +23,7 @@ from ..utils import PsudoPagination, paginated_schema, search_query
 from ..utils.pagination import MAX_PER_PAGE
 from .models import Metadata
 from .schemas import metadata_schema, metadatas_schema
-from ...logger import logger
+from ..logger import logger
 
 
 def read_all():
