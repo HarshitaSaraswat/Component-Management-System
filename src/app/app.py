@@ -14,9 +14,9 @@ import connexion
 from connexion import FlaskApp
 from flask import Flask
 
-from ...config import Config, basedir
-from ...logger import setup_logger
-from ..database import setup_db
+from ..config import Config, basedir
+from .database import setup_db
+from .logger.handlers import FlaskHandler
 from .routes import create_routes
 
 
@@ -37,13 +37,14 @@ def create_app(config_class=Config) -> Flask:
 	"""
 
 	connex_app: FlaskApp = connexion.FlaskApp(__name__, specification_dir=basedir)
-	connex_app.add_api(path.join(basedir,"app/main/swagger.yml"))
+	connex_app.add_api(path.join(basedir,"app/swagger.yml"))
 
 	app: Flask = connex_app.app
 	app.config.from_object(config_class)
 
 	setup_db(app)
 	create_routes(app)
-	setup_logger()
+	app.logger.addHandler(FlaskHandler.StreamHandler())
+	app.logger.addHandler(FlaskHandler.RotatingFileHandler())
 
 	return app
