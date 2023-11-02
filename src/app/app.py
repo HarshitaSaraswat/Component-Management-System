@@ -6,9 +6,6 @@
 #|																|
 #|  This file is part of Component Library Plugin for FreeCAD.	|
 #|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
 # --------------------------------------------------------------
 
 from os import path
@@ -17,10 +14,10 @@ import connexion
 from connexion import FlaskApp
 from flask import Flask
 
-from ...config import Config, basedir
-from ..database import db
-
-# basedir: pathlib.Path = pathlib.Path(__file__).parent.resolve()
+from ..config import Config, basedir
+from .database import setup_db
+from .logger.handlers import FlaskHandler
+from .routes import create_routes
 
 
 def create_app(config_class=Config) -> Flask:
@@ -40,16 +37,14 @@ def create_app(config_class=Config) -> Flask:
 	"""
 
 	connex_app: FlaskApp = connexion.FlaskApp(__name__, specification_dir=basedir)
-	connex_app.add_api(path.join(basedir,"app/main/swagger.yml"))
+	connex_app.add_api(path.join(basedir,"app/swagger.yml"))
 
 	app: Flask = connex_app.app
 	app.config.from_object(config_class)
 
-	from ..files.models import File
-	from ..licenses.models import SPDX
-	from ..metadatas.models import Metadata
-	from ..tags.models import Tag
-
-	db.init_app(app)
+	setup_db(app)
+	create_routes(app)
+	app.logger.addHandler(FlaskHandler.StreamHandler())
+	app.logger.addHandler(FlaskHandler.RotatingFileHandler())
 
 	return app

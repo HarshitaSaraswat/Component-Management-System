@@ -15,7 +15,7 @@
 
 from dotenv import load_dotenv
 
-from src.app.main import create_app
+from src import create_app
 
 load_dotenv()
 

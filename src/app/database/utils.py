@@ -14,7 +14,7 @@
 from os import path
 
 from ...config import basedir
-from ...logger import logger
+from ..logger import logger
 from .base import db, es
 
 

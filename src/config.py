@@ -14,7 +14,6 @@
 import os
 import sys
 import logging
-from pathlib import Path
 
 basedir: str = os.path.abspath(os.path.dirname(__file__))
 
@@ -48,14 +47,3 @@ class Config:
 
     SQLALCHEMY_DATABASE_URI: str = f"sqlite:///{basedir}/app.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
-    class LOG:
-        class FILE:
-            PATH = Path("test/component_management_system.log")
-            LEVEL: int = logging.DEBUG
-            FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-
-        class STREAM:
-            STREAM = sys.stderr
-            LEVEL: int = logging.DEBUG
-            FORMAT = "%(name)s - %(levelname)s - %(message)s"

@@ -15,11 +15,12 @@ from typing import Literal
 
 from flask import Response, abort, make_response
 
+from ..logger import logger
 from ..utils import PsudoPagination, paginated_schema, search_query
 from ..utils.pagination import MAX_PER_PAGE
 from .models import Tag
 from .schemas import tag_schema, tags_schema
-from ...logger import logger
+
 
 def read_all():
 	"""
