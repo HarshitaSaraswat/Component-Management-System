@@ -1,10 +1,10 @@
 import logging
+from elasticsearch import logger as es_logger
+from .handlers import BaseStreamHandler, BaseRotatingFileHandler
 
-from .handlers import RootHandler
-
-# logging.getLogger('werkzeug').addHandler(WerkzeugHandler.StreamHandler())
-# logging.getLogger('werkzeug').addHandler(WerkzeugHandler.RotatingFileHandler())
+es_logger.addHandler(BaseStreamHandler())
+es_logger.addHandler(BaseRotatingFileHandler())
 
 logger: logging.Logger = logging.getLogger("root")
-logger.addHandler(RootHandler.StreamHandler())
-logger.addHandler(RootHandler.RotatingFileHandler())
+logger.addHandler(BaseStreamHandler())
+logger.addHandler(BaseRotatingFileHandler())

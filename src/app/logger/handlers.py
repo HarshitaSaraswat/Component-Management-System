@@ -17,61 +17,33 @@ class RequestFormatter(logging.Formatter):
         return super().format(record)
 
 
-# class WerkzeugHandler:
-# 	class StreamHandler(logging.StreamHandler):
-# 		def __init__(self) -> None:
-# 			super().__init__()
-# 			self.formatter = logging.Formatter("[%(levelname)s] - %(name)s : %(message)s")
-# 			self.level = logging.DEBUG
-# 			self.stream = sys.stderr
-
-# 	class RotatingFileHandler(logging.handlers.RotatingFileHandler):
-# 		def __init__(self) -> None:
-# 			super().__init__(
-# 				filename="test/component_management_system.log",
-# 				mode='a',
-# 				maxBytes=1024*1024,
-# 				encoding='utf-8',
-# 			)
-# 			self.level = logging.DEBUG
-# 			self.formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] - %(name)s in {%(module)s}\n%(message)s")
+class BaseStreamHandler(logging.StreamHandler):
+    def __init__(self) -> None:
+        super().__init__()
+        self.formatter = logging.Formatter("[%(levelname)s] - %(name)s : %(message)s")
+        self.level = logging.DEBUG
+        self.stream = sys.stderr
 
 
-class RootHandler:
-	class StreamHandler(logging.StreamHandler):
-		def __init__(self) -> None:
-			super().__init__()
-			self.formatter = logging.Formatter("[%(levelname)s] - %(name)s : %(message)s")
-			self.level = logging.DEBUG
-			self.stream = sys.stderr
-
-	class RotatingFileHandler(logging.handlers.RotatingFileHandler):
-		def __init__(self) -> None:
-			super().__init__(
-				filename="test/component_management_system.log",
-				mode='a',
-				maxBytes=1024*1024,
-				encoding='utf-8',
-			)
-			self.level = logging.DEBUG
-			self.formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] - %(name)s in {%(module)s}\n%(message)s")
+class BaseRotatingFileHandler(logging.handlers.RotatingFileHandler):
+    def __init__(self) -> None:
+        super().__init__(
+            filename="test/component_management_system.log",
+            mode="a",
+            maxBytes=1024 * 1024,
+            encoding="utf-8",
+        )
+        self.level = logging.DEBUG
+        self.formatter = logging.Formatter(
+            "[%(asctime)s] [%(levelname)s] - %(name)s in {%(module)s}\n%(message)s"
+        )
 
 
 class FlaskHandler:
-	class StreamHandler(logging.StreamHandler):
-		def __init__(self) -> None:
-			super().__init__()
-			self.formatter = logging.Formatter("[%(levelname)s] - %(name)s : %(message)s")
-			self.level = logging.DEBUG
-			self.stream = sys.stderr
+    class StreamHandler(BaseStreamHandler):
+        ...
 
-	class RotatingFileHandler(logging.handlers.RotatingFileHandler):
-		def __init__(self) -> None:
-			super().__init__(
-				filename="test/component_management_system.log",
-				mode='a',
-				maxBytes=1024*1024,
-				encoding='utf-8',
-			)
-			self.level = logging.DEBUG
-			self.formatter = RequestFormatter("[%(asctime)s] [%(levelname)s] - %(name)s - %(url)s in {%(module)s}\n%(message)s")
+    class RotatingFileHandler(BaseRotatingFileHandler):
+        formatter = RequestFormatter(
+            "[%(asctime)s] [%(levelname)s] - %(name)s - %(url)s in {%(module)s}\n%(message)s"
+        )
