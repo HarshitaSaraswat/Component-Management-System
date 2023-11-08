@@ -83,6 +83,9 @@ class Metadata(ElasticSearchBase):
     tags: Relationship = relationship(
         "Tag", secondary=metadata_tag, backref="metadatas"
     )
+    attributes: Relationship = relationship(
+        "Attribute", backref="metadata", cascade="all, delete, delete-orphan"
+    )
 
     @validates("maintainer")
     def validate_maintainer(self, key, email):
