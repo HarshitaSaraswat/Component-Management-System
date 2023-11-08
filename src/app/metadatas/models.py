@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from sqlalchemy import Column, ForeignKey
@@ -19,12 +18,12 @@ from ...config import Config
 from ..database import ElasticSearchBase, db
 from ..database.guid import GUID
 from ..database.validation import email_validator, url_validator
-from ..files.models import File # * Never remove this import.
+from ..files import File  # * Never remove this import.
 
 metadata_tag = db.Table(
-    'metadata_tag',
-    Column('metadata_id', GUID(), ForeignKey('metadatas.id')),
-    Column('tag_id', GUID(), ForeignKey('tags.id')),
+    "metadata_tag",
+    Column("metadata_id", GUID(), ForeignKey("metadatas.id")),
+    Column("tag_id", GUID(), ForeignKey("tags.id")),
 )
 
 
@@ -39,7 +38,6 @@ class InvalidRating(Exception):
         raise InvalidRating("Invalid rating value: 5.5")
         ```
     """
-
 
 
 class Metadata(ElasticSearchBase):
@@ -79,9 +77,12 @@ class Metadata(ElasticSearchBase):
 
     license_id = Column(GUID(), ForeignKey("spdx_licenses.id"), nullable=True)
 
-    files: Relationship = relationship("File", backref="metadata", cascade="all, delete, delete-orphan")
-    tags: Relationship = relationship("Tag", secondary=metadata_tag, backref="metadatas")
-
+    files: Relationship = relationship(
+        "File", backref="metadata", cascade="all, delete, delete-orphan"
+    )
+    tags: Relationship = relationship(
+        "Tag", secondary=metadata_tag, backref="metadatas"
+    )
 
     @validates("maintainer")
     def validate_maintainer(self, key, email):
