@@ -1,14 +1,13 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from __future__ import annotations
@@ -20,9 +19,9 @@ from sqlalchemy.sql.schema import Column, ForeignKey
 from sqlalchemy.types import Enum as dbEnum
 from sqlalchemy.types import Integer, String
 
-from ..database import Base
-from ..database.guid import GUID
-from ..database.validation import url_validator
+from ...database import Base
+from ...database.guid import GUID
+from ...validation import url_validator
 
 
 class FileType(Enum):
@@ -92,12 +91,11 @@ class File(Base):
 
     __tablename__: str = "files"
 
-    url = Column(String(2048),unique=True, nullable=False)
+    url = Column(String(2048), unique=True, nullable=False)
     type = Column(dbEnum(FileType), nullable=False)
     size = Column(Integer, nullable=False)
 
     metadata_id = Column(GUID(), ForeignKey("metadatas.id"), nullable=False)
-
 
     def __repr__(self) -> str:
         return f'<File "{self.url}", "{self.type}">'
@@ -105,23 +103,23 @@ class File(Base):
     @validates("thumbnail")
     def validate_thumbnail(self, key, url):
         """
-    Validator for the 'thumbnail' column of the File class.
+        Validator for the 'thumbnail' column of the File class.
 
-    This validator method takes the key and URL as arguments and applies the 'url_validator' function to validate the URL.
+        This validator method takes the key and URL as arguments and applies the 'url_validator' function to validate the URL.
 
-    Args:
-        key (str): The key of the column being validated.
-        url (str): The URL to be validated.
+        Args:
+            key (str): The key of the column being validated.
+            url (str): The URL to be validated.
 
-    Returns:
-        str: The validated URL.
+        Returns:
+            str: The validated URL.
 
-    Example:
-        ```python
-        file = File()
-        validated_url = file.validate_thumbnail("thumbnail", "https://example.com/image.jpg")
-        print(validated_url)
-        ```
-    """
+        Example:
+            ```python
+            file = File()
+            validated_url = file.validate_thumbnail("thumbnail", "https://example.com/image.jpg")
+            print(validated_url)
+            ```
+        """
 
         return url_validator(url)

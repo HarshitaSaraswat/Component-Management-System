@@ -14,8 +14,8 @@ from connexion import FlaskApp
 from flask import Flask
 
 from ..config import Config, basedir
-from .database import setup_db
-from .logger.handlers import FlaskHandler
+from ..database.utils import setup_db
+from ..log.handlers import FlaskHandler
 from .routes import create_routes
 
 

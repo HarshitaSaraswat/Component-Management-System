@@ -14,7 +14,8 @@ from typing import Literal, Optional
 
 from flask_sqlalchemy.query import Query
 
-from ..files import File, FileType, upload_to_github
+from ..files import File, FileType
+from ..files.operations import upload_to_github
 from ..metadatas import Metadata
 from ..metadatas import _create as create_meatdata
 from ..metadatas import add_tags, metadata_schema, metadatas_schema

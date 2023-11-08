@@ -1,5 +1,3 @@
-#!.venv/bin/python
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
 # |																|
@@ -12,13 +10,5 @@
 # |																|
 # --------------------------------------------------------------
 
-
-from dotenv import load_dotenv
-
-from src import create_app
-
-load_dotenv()
-
-if __name__ == "__main__":
-    app = create_app()
-    app.run(host="127.0.0.1", port=5000, debug=True)
+from .pagination import PsudoPagination, QueryPagination, paginated_schema
+from .search import search_query

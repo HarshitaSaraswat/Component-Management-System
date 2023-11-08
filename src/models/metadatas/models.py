@@ -15,9 +15,9 @@ from sqlalchemy.orm import Relationship, relationship, validates
 from sqlalchemy.types import Float, String
 
 from ...config import Config
-from ..database import ElasticSearchBase, db
-from ..database.guid import GUID
-from ..database.validation import email_validator, url_validator
+from ...database import ElasticSearchBase, db
+from ...database.guid import GUID
+from ...validation import email_validator, url_validator
 from ..files import File  # * Never remove this import.
 
 metadata_tag = db.Table(

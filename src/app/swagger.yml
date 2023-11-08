@@ -236,7 +236,7 @@ components:
 paths:
   /tag:
     get:
-      operationId: "src.app.tags.operations.read_page"
+      operationId: "src.models.tags.operations.read_page"
       tags:
         - "Tags"
       summary: "Gives a paginated list of all tags"
@@ -248,7 +248,7 @@ paths:
           description: "Successfully read tags list"
 
     post:
-      operationId: "src.app.tags.operations.create"
+      operationId: "src.models.tags.operations.create"
       tags:
         - Tags
       summary: "Create a Tag"
@@ -267,7 +267,7 @@ paths:
 
   /tag/{pk}:
     get:
-      operationId: "src.app.tags.operations.read_one"
+      operationId: "src.models.tags.operations.read_one"
       tags:
         - Tags
       summary: "Read one tag"
@@ -280,7 +280,7 @@ paths:
     delete:
       tags:
         - Tags
-      operationId: "src.app.tags.operations.delete"
+      operationId: "src.models.tags.operations.delete"
       summary: "Delete a tag"
       parameters:
         - $ref: "#/components/parameters/pk"
@@ -290,7 +290,7 @@ paths:
 
   /tag/search:
     get:
-      operationId: "src.app.tags.operations.search"
+      operationId: "src.models.tags.operations.search"
       tags:
         - Tags
         - Search
@@ -304,7 +304,7 @@ paths:
 
   /file:
     get:
-      operationId: "src.app.files.operations.read_page"
+      operationId: "src.models.files.operations.read_page"
       tags:
         - "Files"
       summary: "Gives a paginated list of all files"
@@ -316,7 +316,7 @@ paths:
           description: "Successfully read files list"
 
     post:
-      operationId: "src.app.files.operations.create"
+      operationId: "src.models.files.operations.create"
       tags:
         - "Files"
       summary: "Create a File"
@@ -334,7 +334,7 @@ paths:
 
   /file/upload:
     post:
-      operationId: "src.app.files.operations.upload_to_github"
+      operationId: "src.models.files.operations.upload_to_github"
       tags:
         - "Files"
       summary: "Create a File"
@@ -356,7 +356,7 @@ paths:
 
   /file/{pk}:
     get:
-      operationId: "src.app.files.operations.read_one"
+      operationId: "src.models.files.operations.read_one"
       tags:
         - Files
       summary: "Read one file"
@@ -369,7 +369,7 @@ paths:
     delete:
       tags:
         - Files
-      operationId: "src.app.files.operations.delete"
+      operationId: "src.models.files.operations.delete"
       summary: "Delete a file"
       parameters:
         - $ref: "#/components/parameters/pk"
@@ -380,7 +380,7 @@ paths:
 
   /metadata:
     get:
-      operationId: "src.app.metadatas.operations.read_page"
+      operationId: "src.models.metadatas.operations.read_page"
       tags:
         - "Metadatas"
       summary: "Gives a paginated list of all metadatas"
@@ -392,7 +392,7 @@ paths:
           description: "Successfully read metadatas list"
 
     post:
-      operationId: "src.app.metadatas.operations.create"
+      operationId: "src.models.metadatas.operations.create"
       tags:
         - "Metadatas"
       summary: "Create a File"
@@ -411,7 +411,7 @@ paths:
 
   /metadata/search:
     get:
-      operationId: "src.app.metadatas.operations.search"
+      operationId: "src.models.metadatas.operations.search"
       tags:
         - "Metadatas"
         - "Search"
@@ -424,7 +424,7 @@ paths:
 
   /metadata/{pk}:
     get:
-      operationId: "src.app.metadatas.operations.read_one"
+      operationId: "src.models.metadatas.operations.read_one"
       tags:
         - Metadatas
       summary: "Read one metadata"
@@ -437,7 +437,7 @@ paths:
     delete:
       tags:
         - Metadatas
-      operationId: "src.app.metadatas.operations.delete"
+      operationId: "src.models.metadatas.operations.delete"
       summary: "Delete a metadata"
       parameters:
         - $ref: "#/components/parameters/pk"
@@ -447,7 +447,7 @@ paths:
 
   /metadata/{pk}/tags:
     get:
-      operationId: "src.app.metadatas.operations.read_tags"
+      operationId: "src.models.metadatas.operations.read_tags"
       tags:
         - Metadatas
         - Tags
@@ -459,7 +459,7 @@ paths:
           description: "Successfully read tags"
 
     patch:
-      operationId: "src.app.metadatas.operations.add_tags"
+      operationId: "src.models.metadatas.operations.add_tags"
       tags:
         - Metadatas
         - Tags
@@ -480,7 +480,7 @@ paths:
 
   /metadata/{pk}/files:
     get:
-      operationId: "src.app.metadatas.operations.read_files"
+      operationId: "src.models.metadatas.operations.read_files"
       tags:
         - Metadatas
         - Files
@@ -494,7 +494,7 @@ paths:
 
   /license:
     get:
-      operationId: "src.app.licenses.operations.read_all"
+      operationId: "src.models.licenses.operations.read_all"
       tags:
         - "Licenses"
       summary: "Read the list of all licenses"
@@ -504,7 +504,7 @@ paths:
 
   /license/{pk}:
     get:
-      operationId: "src.app.licenses.operations.read_one"
+      operationId: "src.models.licenses.operations.read_one"
       tags:
         - "Licenses"
       summary: "Read one license"
@@ -515,7 +515,7 @@ paths:
           description: "Successfully read license"
   /component:
     get:
-      operationId: "src.app.components.operations.read"
+      operationId: "src.models.components.operations.read"
       tags:
         - "Component"
       summary: "Gives Paginated list of all components"
@@ -534,7 +534,7 @@ paths:
           description: OK
 
     post:
-      operationId: "src.app.components.operations.create"
+      operationId: "src.models.components.operations.create"
       tags:
         - "Component"
       summary: "Create a new component from the given data"

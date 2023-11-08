@@ -1,24 +1,24 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 import uuid
 from typing import Any
+
 from marshmallow_sqlalchemy.schema import SQLAlchemyAutoSchema
 from sqlalchemy.orm import Session
 
-from ..utils import make_elasticsearch_query
 from .definations import db, es
 from .guid import GUID
+from .utils import make_elasticsearch_query
 
 
 class Base(db.Model):
@@ -45,9 +45,11 @@ class Base(db.Model):
 
     id = db.Column(GUID(), primary_key=True, default=lambda: str(uuid.uuid4()))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-    updated_at = db.Column(db.DateTime,
-                    default=db.func.current_timestamp(),
-                    onupdate=db.func.current_timestamp())
+    updated_at = db.Column(
+        db.DateTime,
+        default=db.func.current_timestamp(),
+        onupdate=db.func.current_timestamp(),
+    )
 
     def create(self) -> None:
         """
@@ -123,7 +125,6 @@ class ElasticSearchBase(Base):
         set_schemas(schema, schema_many): Sets the schemas for the ElasticsearchBase class.
     """
 
-
     __abstract__ = True
 
     __es = es
@@ -143,7 +144,9 @@ class ElasticSearchBase(Base):
         """
 
         super().__init__(*args, **kwargs)
-        self.__es.options(ignore_status=[400,404]).indices.create(index=self.__tablename__)
+        self.__es.options(ignore_status=[400, 404]).indices.create(
+            index=self.__tablename__
+        )
 
     def create(self) -> None:
         """
@@ -185,18 +188,13 @@ class ElasticSearchBase(Base):
             raise
 
         sq = self.__es.search(
-            index=self.__tablename__,
-            query={
-                "match": {
-                    field_name : value
-                }
-            }
+            index=self.__tablename__, query={"match": {field_name: value}}
         )
 
         self.__es.update(
-            index = 'index_name',
-            id = sq["hits"]["hits"]["_id"],
-            doc = self.__schema.dump(self),
+            index="index_name",
+            id=sq["hits"]["hits"]["_id"],
+            doc=self.__schema.dump(self),
         )
 
     def delete(self, field_name: str, value: Any) -> None:
@@ -218,7 +216,7 @@ class ElasticSearchBase(Base):
             super().delete()
         except:
             raise
-        self.__es.delete_by_query(index=self.__tablename__, q={field_name : value})
+        self.__es.delete_by_query(index=self.__tablename__, q={field_name: value})
 
     @classmethod
     def elasticsearch(cls, search_key: str) -> set[str]:
@@ -239,7 +237,9 @@ class ElasticSearchBase(Base):
         return {hit["_source"]["name"] for hit in response["hits"]["hits"]}
 
     @classmethod
-    def set_schemas(cls, schema: SQLAlchemyAutoSchema, schema_many: SQLAlchemyAutoSchema) -> None:
+    def set_schemas(
+        cls, schema: SQLAlchemyAutoSchema, schema_many: SQLAlchemyAutoSchema
+    ) -> None:
         """
         Sets the schemas for the ElasticsearchBase class.
 

@@ -14,8 +14,8 @@ from typing import Literal
 
 from flask import Response, abort, make_response
 
+from ...log import logger
 from ..files import File, files_schema
-from ..logger import logger
 from ..tags import Tag, tags_schema
 from ..utils import PsudoPagination, paginated_schema, search_query
 from ..utils.pagination import MAX_PER_PAGE

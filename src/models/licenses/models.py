@@ -1,22 +1,21 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from sqlalchemy.orm import Relationship, relationship, validates
 from sqlalchemy.sql.schema import Column
 from sqlalchemy.types import Boolean, String
 
-from ..database import Base
-from ..database.validation import url_validator
+from ...database import Base
+from ...validation import url_validator
 
 
 class SPDX(Base):
@@ -51,7 +50,6 @@ class SPDX(Base):
 
     metadatas: Relationship = relationship("Metadata", backref="license")
 
-
     @validates("license_page")
     def validate_license_page(self, key, url):
         """
@@ -75,7 +73,6 @@ class SPDX(Base):
         """
 
         return url_validator(url)
-
 
     def __repr__(self) -> str:
         return f'<SPDX "{self.fullname}">'
