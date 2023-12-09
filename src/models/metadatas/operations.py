@@ -15,6 +15,7 @@ from typing import Literal
 from flask import Response, abort, make_response
 
 from ...log import logger
+from ..attributes import Attribute, attribute_schema, attributes_schema
 from ..files import File, files_schema
 from ..tags import Tag, tags_schema
 from ..utils import PsudoPagination, paginated_schema, search_query
@@ -258,7 +259,7 @@ def add_tags(pk, tags) -> Response:
         abort(404, f"Metadata with id {pk} not found")
 
     for tag in tags:
-        existing_tag: Metadata | None = Tag.query.filter(Tag.label == tag).one_or_none()
+        existing_tag: Tag | None = Tag.query.filter(Tag.label == tag).one_or_none()
 
         if existing_tag is None:
             abort(404, f"tag {tag} does not exist!")
@@ -297,7 +298,7 @@ def add_files(pk, file_ids: list) -> Response:
         abort(404, f"Metadata with id {pk} not found")
 
     for id in file_ids:
-        existing_file: Metadata | None = File.query.filter(File.id == id).one_or_none()
+        existing_file: File | None = File.query.filter(File.id == id).one_or_none()
 
         if existing_file is None:
             abort(404, f"file with id {id} does not exist!")
@@ -356,3 +357,28 @@ def search(search_key):
 
     metadatas = search_query(Metadata, Metadata.name, search_key)
     return metadatas_schema.dump(metadatas)
+
+
+def read_attributes(pk):
+    existing_metadata: Metadata = Metadata.query.filter(Metadata.id == pk).one_or_none()
+
+    if existing_metadata is None:
+        abort(404, f"Metadata with id {pk} not found")
+
+    return attributes_schema.dump(existing_metadata.attributes)
+
+
+def add_attributes(pk, attributes):
+    print(f"{pk=}")
+    print(f"{attributes=}")
+    existing_metadata: Metadata = Metadata.query.filter(Metadata.id == pk).one_or_none()
+
+    if existing_metadata is None:
+        abort(404, f"Metadata with id {pk} not found")
+
+    for attribute_data in attributes:
+        attribute_data["metadata_id"] = pk
+        new_attribute: Attribute = attribute_schema.load(attribute_data)
+        new_attribute.create()
+        # ! Does not check if the attribute already exists for the given metadata
+    return make_response("attributes added successfully", 200)

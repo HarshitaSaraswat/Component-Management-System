@@ -77,6 +77,17 @@ components:
       example: ["laptop", "monitor"]
       uniqueItems: true
 
+    Attributes:
+      type: "array"
+      additionalProperties: false
+      items:
+        type: "object"
+        properties:
+          key:
+            type: "string"
+          value:
+            type: "string"
+
     Component:
       type: "object"
       additionalProperties: false
@@ -490,6 +501,39 @@ paths:
       responses:
         "200":
           description: "Successfully read files"
+
+  /metadata/{pk}/attributes:
+    get:
+      operationId: "src.models.metadatas.operations.read_attributes"
+      tags:
+        - Metadatas
+        - Attributes
+      summary: "Read attributes of metadata"
+      parameters:
+        - $ref: "#/components/parameters/pk"
+      responses:
+        "200":
+          description: "Successfully read attributes"
+
+    patch:
+      operationId: "src.models.metadatas.operations.add_attributes"
+      tags:
+        - Metadatas
+        - Attributes
+      summary: "Add attributes to a metadata"
+      parameters:
+        - $ref: "#/components/parameters/pk"
+      requestBody:
+        description: "Attributes to add"
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "attributes"
+              $ref: "#/components/schemas/Attributes"
+      responses:
+        "201":
+          description: "Successfully added attributes to metadata"
 
 
   /license:

@@ -69,15 +69,15 @@ def pre_entry() -> None:
     )
 
     logger.info("creating license entries...")
-    db_license_entry(path.join(basedir, "app/database/data/spdx_license.csv"))
+    db_license_entry(path.join(basedir, "database/data/spdx_license.csv"))
     logger.info("licnses entry complete")
 
     logger.info("creating Tag entries...")
-    db_tags_entry(path.join(basedir, "app/database/data/tags.txt"))
+    db_tags_entry(path.join(basedir, "database/data/tags.txt"))
     logger.info("Tags entry complete")
 
     logger.info("creating Metadata and Files entries...")
-    db_metadata_file_entry(path.join(basedir, "app/database/data/files.json"))
+    db_metadata_file_entry(path.join(basedir, "database/data/files.json"))
     logger.info("Metadatas and Files entry complete")
 
     # logger.info("creating Component entries...")

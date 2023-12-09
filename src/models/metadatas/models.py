@@ -251,6 +251,10 @@ class Metadata(ElasticSearchBase):
         self.files.append(file)
         self.commit()
 
+    def add_attribute(self, attribute: dict):
+        self.attributes.append(attribute)
+        self.commit()
+
     def delete(self):
         """
         Deletes the metadata.
