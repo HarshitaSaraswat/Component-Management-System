@@ -87,6 +87,11 @@ class Metadata(ElasticSearchBase):
         "Attribute", backref="metadata", cascade="all, delete, delete-orphan"
     )
 
+    @validates("attributes")
+    def validate_tool(self, key, attribute):
+        assert attribute.key not in [att.name for att in self.attributes]
+        return attribute
+
     @validates("maintainer")
     def validate_maintainer(self, key, email):
         """
