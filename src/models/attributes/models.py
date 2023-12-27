@@ -1,11 +1,14 @@
+import re
+
 from sqlalchemy.sql.schema import Column, ForeignKey
 from sqlalchemy.types import Integer, String
 
-from ...database import Base
+from ...database import ElasticSearchBase
 from ...database.guid import GUID
+from ...database.utils import make_fuzzy_query
 
 
-class Attribute(Base):
+class Attribute(ElasticSearchBase):
     """
     Represents metadata for a component.
 
@@ -35,3 +38,26 @@ class Attribute(Base):
     value = Column(String(200))
 
     metadata_id = Column(GUID(), ForeignKey("metadatas.id"), nullable=False)
+
+    @classmethod
+    def elasticsearch(cls, search_key: str) -> set[str]:
+        """
+        Performs an Elasticsearch search based on the specified search key and returns a set of matching names.
+
+        Args:
+            search_key: The key to search for.
+
+        Returns:
+            set[str]: A set of matching names.
+        """
+        value_list = re.split(r" |,|\||-|_|\.", search_key)
+        query = {
+            "bool": {
+                "must": [make_fuzzy_query(value) for value in value_list],
+                # "should": query_list,
+            }
+        }
+
+        response = super().elasticsearch(cls.__tablename__, query)
+        # return {hit["_source"]["metadata_id"] for hit in response["hits"]["hits"]}
+        return response

@@ -28,7 +28,7 @@ from .schema import ComponentSchema, component_schema
 def read(
     page: Optional[int] = None,
     page_size: Optional[int] = None,
-    search_key: Optional[str] = None,
+    search_str: Optional[str] = None,
     sort_by: Optional[str] = "name",
     sort_ord: Literal["desc"] | Literal["asc"] = "asc",
     file_types: list = [t.name for t in FileType],
@@ -44,7 +44,7 @@ def read(
             The page number for pagination. Defaults to None.
     page_size : Optional[int], optional
             The number of components per page. Defaults to None.
-    search_key : Optional[str], optional
+    search_str : Optional[str], optional
             The search key to filter components by name. Defaults to None.
     sort_by : Optional[str], optional
             The field to sort components by. Defaults to "name".
@@ -76,9 +76,9 @@ def read(
 
     query = query.filter(Metadata.files.any(File.type.in_(file_types)))
 
-    if search_key:
+    if search_str:
         query = query.filter(
-            Metadata.name.in_(Metadata.elasticsearch(search_key.lower()))
+            Metadata.name.in_(Metadata.elasticsearch(search_str.lower()))
         )
 
     if columns:
