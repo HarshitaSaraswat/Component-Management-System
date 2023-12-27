@@ -14,6 +14,8 @@ from typing import Literal, Optional
 
 from flask_sqlalchemy.query import Query
 
+from src.models.attributes.models import Attribute
+
 from ..files import File, FileType
 from ..files.operations import upload_to_github
 from ..metadatas import Metadata
@@ -80,6 +82,9 @@ def read(
         query = query.filter(
             Metadata.name.in_(Metadata.elasticsearch(search_str.lower()))
         )
+        # query = query.filter(
+        #     Metadata.id.in_(Attribute.elasticsearch(search_str.lower()))
+        # )
 
     if columns:
         query = query.with_entities(*[eval(f"Metadata.{col}") for col in columns])

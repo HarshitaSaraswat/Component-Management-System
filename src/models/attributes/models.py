@@ -1,11 +1,10 @@
 import re
 
 from sqlalchemy.sql.schema import Column, ForeignKey
-from sqlalchemy.types import Integer, String
+from sqlalchemy.types import String
 
 from ...database import ElasticSearchBase
 from ...database.guid import GUID
-from ...database.utils import make_fuzzy_query
 
 
 class Attribute(ElasticSearchBase):
@@ -53,11 +52,12 @@ class Attribute(ElasticSearchBase):
         value_list = re.split(r" |,|\||-|_|\.", search_key)
         query = {
             "bool": {
-                "must": [make_fuzzy_query(value) for value in value_list],
-                # "should": query_list,
-            }
+                "should": [
+                    {"terms": {"key": value_list}},
+                    {"terms": {"value": value_list}},
+                ],
+            },
         }
 
         response = super().elasticsearch(cls.__tablename__, query)
-        # return {hit["_source"]["metadata_id"] for hit in response["hits"]["hits"]}
-        return response
+        return {hit["_source"]["metadata_id"] for hit in response["hits"]["hits"]}
