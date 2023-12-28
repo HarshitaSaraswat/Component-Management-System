@@ -81,9 +81,9 @@ def read(
         query = query.filter(
             Metadata.name.in_(Metadata.elasticsearch(search_str.lower()))
         )
-        # query = query.filter(
-        #     Metadata.id.in_(Attribute.elasticsearch(search_str.lower()))
-        # )
+        matching_attrs = Attribute.elasticsearch(search_str.lower())
+        if matching_attrs:
+            query = query.filter(Metadata.id.in_(matching_attrs))
 
     if columns:
         query = query.with_entities(*[eval(f"Metadata.{col}") for col in columns])
