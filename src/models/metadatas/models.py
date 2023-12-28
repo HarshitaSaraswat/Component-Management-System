@@ -315,8 +315,8 @@ class Metadata(ElasticSearchBase):
         Returns:
             set[str]: A set of matching names.
         """
-
-        query_list = [make_fuzzy_query(value) for value in search_key.split(" ")]
+        value_list = re.split(r" |,|\||-|_|\.", search_key)
+        query_list = [make_fuzzy_query(value) for value in value_list]
         query_list.extend(make_regexp_query(value) for value in value_list)
         query_list.append(
             {
