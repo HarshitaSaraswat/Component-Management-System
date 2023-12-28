@@ -10,6 +10,8 @@
 # |																|
 # --------------------------------------------------------------
 
+import re
+
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import Relationship, relationship, validates
 from sqlalchemy.types import Float, String
@@ -17,6 +19,8 @@ from sqlalchemy.types import Float, String
 from ...config import Config
 from ...database import ElasticSearchBase, db
 from ...database.guid import GUID
+from ...database.utils import make_fuzzy_query, make_regexp_query
+from ...log import logger
 from ...validation import email_validator, url_validator
 from ..files import File  # * Never remove this import.
 
@@ -86,6 +90,11 @@ class Metadata(ElasticSearchBase):
     attributes: Relationship = relationship(
         "Attribute", backref="metadata", cascade="all, delete, delete-orphan"
     )
+
+    @validates("attributes")
+    def validate_tool(self, key, attribute):
+        assert attribute.key not in [att.name for att in self.attributes]
+        return attribute
 
     @validates("maintainer")
     def validate_maintainer(self, key, email):
@@ -295,3 +304,40 @@ class Metadata(ElasticSearchBase):
 
     def __repr__(self) -> str:
         return f'<Metadata "{self.name}">'
+
+    @classmethod
+    def elasticsearch(cls, search_key: str) -> set[str]:
+        """
+        Performs an Elasticsearch search based on the specified search key and returns a set of matching names.
+
+        Args:
+            search_key: The key to search for.
+
+        Returns:
+            set[str]: A set of matching names.
+        """
+        value_list = re.split(r" |,|\||-|_|\.", search_key)
+        query_list = [make_fuzzy_query(value) for value in value_list]
+        query_list.extend(make_regexp_query(value) for value in value_list)
+        query_list.append(
+            {
+                "more_like_this": {
+                    "fields": ["name"],
+                    "like": search_key,
+                    "min_term_freq": 1,
+                    "max_query_terms": 12,
+                }
+            }
+        )
+
+        query = {
+            "bool": {
+                "should": query_list,
+            }
+        }
+        response = super().elasticsearch(cls.__tablename__, query)
+
+        logger.debug(query)
+        logger.debug(response)
+
+        return {hit["_source"]["name"] for hit in response["hits"]["hits"]}
