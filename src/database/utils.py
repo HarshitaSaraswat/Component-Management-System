@@ -165,7 +165,7 @@ def make_must_query_list(search_key: str):
     return [make_fuzzy_query(value) for value in value_list]
 
 
-def make_should_query_list(search_key: str):
+def make_should_query_list(search_key: str, field: list[str]):
     """
     Creates a list of queries based on the given search key.
 
@@ -187,7 +187,7 @@ def make_should_query_list(search_key: str):
     query_list.append(
         {
             "more_like_this": {
-                "fields": ["name"],
+                "fields": field,
                 "like": search_key,
                 "min_term_freq": 1,
                 "max_query_terms": 12,
@@ -198,7 +198,7 @@ def make_should_query_list(search_key: str):
     return query_list
 
 
-def make_elasticsearch_query(search_key: str):
+def make_elasticsearch_query(search_key: str, field: list[str]):
     """
     Creates an Elasticsearch query based on the given search key.
 
@@ -217,6 +217,6 @@ def make_elasticsearch_query(search_key: str):
     return {
         "bool": {
             # "must": make_must_query_list(search_key),
-            "should": make_should_query_list(search_key),
+            "should": make_should_query_list(search_key, field),
         }
     }
