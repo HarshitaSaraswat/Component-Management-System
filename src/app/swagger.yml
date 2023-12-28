@@ -155,8 +155,8 @@ components:
 
   parameters:
 
-    search_key:
-      name: "search_key"
+    search_str:
+      name: "search_str"
       description: "Label of the tag to get"
       in: query
       required: False
@@ -307,7 +307,7 @@ paths:
         - Search
       summary: "search for the lags maching label"
       parameters:
-        - $ref: "#/components/parameters/search_key"
+        - $ref: "#/components/parameters/search_str"
       responses:
         "200":
           description: "Successfully searched tags"
@@ -428,7 +428,7 @@ paths:
         - "Search"
       summary: "Read the list of all metadatas"
       parameters:
-        - $ref: "#/components/parameters/search_key"
+        - $ref: "#/components/parameters/search_str"
       responses:
         "200":
           description: "Successfully searched metadata"
@@ -567,7 +567,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/page_size"
-        - $ref: "#/components/parameters/search_key"
+        - $ref: "#/components/parameters/search_str"
         - $ref: "#/components/parameters/sort_by"
         - $ref: "#/components/parameters/sort_ord"
         - $ref: "#/components/parameters/file_types"

@@ -10,7 +10,6 @@
 # |																|
 # --------------------------------------------------------------
 
-import logging
 import re
 
 from sqlalchemy import Column, ForeignKey

@@ -14,8 +14,7 @@ from typing import Literal, Optional
 
 from flask_sqlalchemy.query import Query
 
-from src.models.attributes.models import Attribute
-
+from ..attributes import Attribute
 from ..files import File, FileType
 from ..files.operations import upload_to_github
 from ..metadatas import Metadata
