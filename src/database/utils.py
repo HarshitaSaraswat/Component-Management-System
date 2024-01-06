@@ -21,6 +21,7 @@ from .definations import db, es
 
 
 def setup_db(app: Flask) -> None:
+    from ..models.attributes import Attribute
     from ..models.files import File
     from ..models.licenses import SPDX
     from ..models.metadatas import Metadata
@@ -39,6 +40,7 @@ def clear_db() -> None:
 
     db.drop_all()
     es.options(ignore_status=[400, 404]).indices.delete(index="metadatas")
+    es.options(ignore_status=[400, 404]).indices.delete(index="attributes")
 
 
 def clear_data() -> None:
@@ -49,8 +51,11 @@ def clear_data() -> None:
             None
     """
 
-    db.drop_all()
+    clear_db()
+
     db.create_all()
+    es.options(ignore_status=[400, 404]).indices.create(index="metadatas")
+    es.options(ignore_status=[400, 404]).indices.create(index="attributes")
 
 
 def pre_entry() -> None:
