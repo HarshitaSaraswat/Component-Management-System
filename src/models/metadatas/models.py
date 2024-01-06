@@ -316,14 +316,18 @@ class Metadata(ElasticSearchBase):
         Returns:
             set[str]: A set of matching names.
         """
-        value_list = re.split(r" |,|\||-|_|\.", search_key)
-        query_list = [make_fuzzy_query(value) for value in value_list]
-        query_list.extend(make_regexp_query(value) for value in value_list)
+
+        search_key += " "
+        match: str = re.findall(r"([\w ]*)[^\w:][\w*:.*$]*", search_key)[0]
+
+        # value_list = re.split(r" |,|\||-|_|\.", search_key)
+        query_list = [make_fuzzy_query(value) for value in match.split(" ")]
+        # query_list.extend(make_regexp_query(value) for value in value_list)
         query_list.append(
             {
                 "more_like_this": {
                     "fields": ["name"],
-                    "like": search_key,
+                    "like": match,
                     "min_term_freq": 1,
                     "max_query_terms": 12,
                 }
@@ -336,8 +340,5 @@ class Metadata(ElasticSearchBase):
             }
         }
         response = super().elasticsearch(cls.__tablename__, query)
-
-        logger.debug(query)
-        logger.debug(response)
 
         return {hit["_source"]["name"] for hit in response["hits"]["hits"]}

@@ -14,6 +14,7 @@ from typing import Literal, Optional
 
 from flask_sqlalchemy.query import Query
 
+from ...log import logger
 from ..attributes import Attribute
 from ..files import File, FileType
 from ..files.operations import upload_to_github
@@ -42,26 +43,26 @@ def read(
     Parameters
     ----------
     page : Optional[int], optional
-            The page number for pagination. Defaults to None.
+                    The page number for pagination. Defaults to None.
     page_size : Optional[int], optional
-            The number of components per page. Defaults to None.
+                    The number of components per page. Defaults to None.
     search_str : Optional[str], optional
-            The search key to filter components by name. Defaults to None.
+                    The search key to filter components by name. Defaults to None.
     sort_by : Optional[str], optional
-            The field to sort components by. Defaults to "name".
+                    The field to sort components by. Defaults to "name".
     sort_ord : Literal["desc"] | Literal["asc"], optional
-            The sort order for the components. Defaults to "asc".
+                    The sort order for the components. Defaults to "asc".
     file_types : list, optional
-            The list of file types to filter components by. Defaults to [t.name for t in FileType].
+                    The list of file types to filter components by. Defaults to [t.name for t in FileType].
     tags : Optional[list], optional
-            The list of tags to filter components by. Defaults to None.
+                    The list of tags to filter components by. Defaults to None.
     columns : Optional[list], optional
-            The list of columns to include in the query result. Defaults to None.
+                    The list of columns to include in the query result. Defaults to None.
 
     Returns
     -------
     tuple
-            A tuple containing the components response and the HTTP status code.
+                    A tuple containing the components response and the HTTP status code.
 
     Notes
     -----
@@ -81,8 +82,9 @@ def read(
         query = query.filter(
             Metadata.name.in_(Metadata.elasticsearch(search_str.lower()))
         )
-        matching_attrs = Attribute.elasticsearch(search_str.lower())
-        if matching_attrs:
+        if ":" in search_str:
+            matching_attrs = Attribute.elasticsearch(search_str.lower())
+            logger.debug(f"{matching_attrs}")
             query = query.filter(Metadata.id.in_(matching_attrs))
 
     if columns:
@@ -100,6 +102,7 @@ def read(
     for component, metadata in zip(components_resp.get("items"), metadata_resp):
         component["metadata"] = metadata
         component["id"] = metadata["id"]
+
     return components_resp, 200
 
 
