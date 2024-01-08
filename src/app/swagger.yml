@@ -100,11 +100,16 @@ components:
       additionalProperties: false
       items:
         type: "string"
+<<<<<<< HEAD
         # pattern: ^[a-zA-Z0-9_]+$
+=======
+        pattern: ^[a-zA-Z0-9_]+$
+>>>>>>> 1f54949 (improved open-api score, added maxlength, pattern, etc to components)
         maxLength: 32
       example: ["laptop", "monitor"]
       uniqueItems: true
       maxItems: 32
+<<<<<<< HEAD
 
     Attribute:
       type: "object"
@@ -118,12 +123,28 @@ components:
           # pattern: ^[a-zA-Z0-9_]+$
           maxLength: 32
       additionalProperties: false
+=======
+>>>>>>> 1f54949 (improved open-api score, added maxlength, pattern, etc to components)
 
     Attributes:
       type: "array"
       additionalProperties: false
       items:
+<<<<<<< HEAD
         $ref: "#/components/schemas/Attribute"
+=======
+        type: "object"
+        properties:
+          key:
+            type: "string"
+            pattern: ^[a-zA-Z0-9_]+$
+            maxLength: 32
+          value:
+            type: "string"
+            pattern: ^[a-zA-Z0-9_]+$
+            maxLength: 32
+        additionalProperties: false
+>>>>>>> 1f54949 (improved open-api score, added maxlength, pattern, etc to components)
       maxItems: 32
 
     Component:
@@ -148,7 +169,11 @@ components:
           $ref: "#/components/schemas/File"
         repository:
           type: string
+<<<<<<< HEAD
           pattern: ^[\w -_]+$
+=======
+          pattern: ^[\w ]+$
+>>>>>>> 1f54949 (improved open-api score, added maxlength, pattern, etc to components)
           maxLength: 40
         branch:
           type: string
@@ -174,14 +199,21 @@ components:
           maxLength: 50
         description:
           type: "string"
+<<<<<<< HEAD
           # pattern: ^[\w ]+$
+=======
+          pattern: ^[\w ]+$
+>>>>>>> 1f54949 (improved open-api score, added maxlength, pattern, etc to components)
           maxLength: 500
         license_id:
           type: "string"
           maxLength: 32
           pattern: ^\w{32}$
+<<<<<<< HEAD
         attributes:
           $ref: "#/components/schemas/Attributes"
+=======
+>>>>>>> 1f54949 (improved open-api score, added maxlength, pattern, etc to components)
 
     File:
       type: string
