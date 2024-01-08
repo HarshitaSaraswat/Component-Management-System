@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: "FreeCad Component Management API"
-  description: "An API for Component-filesanf their Metadata Database"
+  description: "An API for Component-files and their Metadata Database"
   version: "1.0.0"
 
 servers:
@@ -20,7 +20,7 @@ components:
         label:
           type: "string"
           maxLength: 20
-          pattern: \w
+          pattern: ^[a-zA-Z0-9_]+$
 
     Filedata:
       type: "object"
@@ -36,8 +36,8 @@ components:
           pattern: https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)
         metadata_id:
           type: "string"
-          maxLength: 36
-          pattern: \w
+          maxLength: 32
+          pattern: ^\w{32}$
         type:
           type: "string"
           enum:
@@ -48,6 +48,9 @@ components:
             - stp
         size:
           type: number
+          minimum: 0
+          maximum: 100000000
+          format: double
 
     Metadata:
       type: "object"
@@ -60,28 +63,48 @@ components:
       properties:
         name:
           type: "string"
+          pattern: ^[\w ]+$
+          maxLength: 50
         version:
           type: "string"
+          pattern: ^[\d.]+$
+          maxLength: 20
         maintainer:
           type: "string"
+          pattern: ([a-zA-Z0-9+._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)
+          maxLength: 50
         author:
           type: "string"
+          pattern: ([a-zA-Z0-9+._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)
+          maxLength: 50
         thumbnail:
           type: "string"
+          pattern: https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)
+          maxLength: 200
         description:
           type: "string"
+          pattern: ^[\w ]+$
+          maxLength: 500
         rating:
-          type: "number"
+          type: "integer"
+          maximum: 5
+          minimum: 0
+          format: int32
         license_id:
           type: "string"
+          maxLength: 32
+          pattern: ^\w{32}$
 
     Tags:
       type: "array"
       additionalProperties: false
       items:
         type: "string"
+        pattern: ^[a-zA-Z0-9_]+$
+        maxLength: 32
       example: ["laptop", "monitor"]
       uniqueItems: true
+      maxItems: 32
 
     Attributes:
       type: "array"
@@ -91,8 +114,14 @@ components:
         properties:
           key:
             type: "string"
+            pattern: ^[a-zA-Z0-9_]+$
+            maxLength: 32
           value:
             type: "string"
+            pattern: ^[a-zA-Z0-9_]+$
+            maxLength: 32
+        additionalProperties: false
+      maxItems: 32
 
     Component:
       type: "object"
@@ -111,31 +140,50 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/File"
+          maxItems: 10
         thumbnail_image:
           $ref: "#/components/schemas/File"
         repository:
           type: string
+          pattern: ^[\w ]+$
+          maxLength: 40
         branch:
           type: string
+          pattern: ^[\w ]+$
+          maxLength: 62
         tags:
           $ref: "#/components/schemas/Tags"
         name:
           type: "string"
+          pattern: ^[\w ]+$
+          maxLength: 50
         version:
           type: "string"
+          pattern: ^[\d.]+$
+          maxLength: 20
         maintainer:
           type: "string"
+          pattern: ([a-zA-Z0-9+._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)
+          maxLength: 50
         author:
           type: "string"
+          pattern: ([a-zA-Z0-9+._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)
+          maxLength: 50
         description:
           type: "string"
+          pattern: ^[\w ]+$
+          maxLength: 500
         license_id:
           type: "string"
+          maxLength: 32
+          pattern: ^\w{32}$
 
     File:
       type: string
       additionalProperties: false
       format: binary
+      maxLength: 1048576
+
 
     ComponentFiles:
       type: object
@@ -150,14 +198,21 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/File"
+          maxItems: 10
         thumbnail_image:
           $ref: "#/components/schemas/File"
         repository:
           type: string
+          pattern: ^[\w ]+$
+          maxLength: 40
         branch:
           type: string
+          pattern: ^[\w ]+$
+          maxLength: 62
         metadata_id:
           type: string
+          maxLength: 32
+          pattern: ^\w{32}$
 
   parameters:
 
@@ -169,6 +224,8 @@ components:
       schema:
         type: "string"
         example: "cable"
+        pattern: ^[\w ]+$
+        maxLength: 100
 
     pk:
       name: "pk"
@@ -177,6 +234,8 @@ components:
       required: True
       schema:
         type: "string"
+        maxLength: 32
+        pattern: ^\w{32}$
 
     page:
       name: "page"
@@ -186,6 +245,9 @@ components:
       schema:
         type: "integer"
         example: 2
+        maximum: 2048
+        minimum: 1
+        format: int64
 
     page_size:
       name: "page_size"
@@ -195,6 +257,9 @@ components:
       schema:
         type: "integer"
         example: 4
+        maximum: 100
+        minimum: 1
+        format: int32
 
     sort_by:
       name: "sort_by"
@@ -204,6 +269,8 @@ components:
       schema:
         type: "string"
         example: "name"
+        pattern: ^[\w]+$
+        maxLength: 32
 
     sort_ord:
       name: "sort_ord"
@@ -226,6 +293,9 @@ components:
         type: "array"
         items:
           type: string
+          pattern: ^[a-zA-Z0-9_]+$
+          maxLength: 32
+        maxItems: 32
       # collectionFormat: multi
 
     columns:
@@ -237,6 +307,9 @@ components:
         type: "array"
         items:
           type: string
+          pattern: ^[\w ]+$
+          maxLength: 32
+        maxItems: 10
       # collectionFormat: multi
 
     file_types:
@@ -248,6 +321,9 @@ components:
         type: "array"
         items:
           type: string
+          pattern: ^[\w ]+$
+          maxLength: 32
+        maxItems: 20
       # collectionFormat: multi
 
 paths:
