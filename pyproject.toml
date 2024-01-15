@@ -2,6 +2,7 @@
 name = "component-management-system"
 version = "0.1.0"
 description = ""
+license = "MIT"
 authors = ["Amulya Paritosh <amulya1171@gmail.com>"]
 readme = "README.md"
 packages = [{include = "src"}]
