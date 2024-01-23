@@ -13,7 +13,7 @@
 import re
 
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.orm import Relationship, relationship, validates
+from sqlalchemy.orm import Mapped, Relationship, relationship, validates
 from sqlalchemy.types import Float, String
 
 from ...config import Config
@@ -68,7 +68,7 @@ class Metadata(ElasticSearchBase):
     """
 
     __tablename__: str = "metadatas"
-    __allow_unmapped__ = True
+    # __allow_unmapped__ = True
 
     name = Column(String(200), nullable=False, unique=True)
     version = Column(String(50), nullable=False)
@@ -81,13 +81,11 @@ class Metadata(ElasticSearchBase):
 
     license_id = Column(GUID(), ForeignKey("spdx_licenses.id"), nullable=True)
 
-    files: Relationship = relationship(
+    files = relationship(
         "File", backref="metadata", cascade="all, delete, delete-orphan"
     )
-    tags: Relationship = relationship(
-        "Tag", secondary=metadata_tag, backref="metadatas"
-    )
-    attributes: Relationship = relationship(
+    tags = relationship("Tag", secondary=metadata_tag, backref="metadatas")
+    attributes = relationship(
         "Attribute", backref="metadata", cascade="all, delete, delete-orphan"
     )
 
