@@ -14,6 +14,7 @@ import logging
 import os
 
 basedir: str = os.path.abspath(os.path.dirname(__file__))
+from typing import Optional
 
 
 class Config:
@@ -44,4 +45,9 @@ class Config:
         os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", "0") == "1"
     )
 
-    LOG_LEVEL = logging.INFO
+    LOG_LEVEL = logging.DEBUG
+
+    GITHUB_OAUTH_CLIENT_ID: Optional[str] = os.environ.get("GITHUB_OAUTH_CLIENT_ID")
+    GITHUB_OAUTH_CLIENT_SECRET: Optional[str] = os.environ.get(
+        "GITHUB_OAUTH_CLIENT_SECRET"
+    )

@@ -18,6 +18,6 @@ from dotenv import load_dotenv
 from src import create_app
 
 if __name__ == "__main__":
-    load_dotenv(".env", override=True)
+    load_dotenv(override=True)
     app = create_app()
     app.run(host="127.0.0.1", port=5000)

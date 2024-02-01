@@ -13,13 +13,13 @@
 import re
 
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.orm import Mapped, Relationship, relationship, validates
+from sqlalchemy.orm import relationship, validates
 from sqlalchemy.types import Float, String
 
 from ...config import Config
 from ...database import ElasticSearchBase, db
 from ...database.guid import GUID
-from ...database.utils import make_fuzzy_query, make_regexp_query
+from ...database.utils import make_fuzzy_query
 from ...log import logger
 from ...validation import email_validator, url_validator
 from ..files import File  # * Never remove this import.
