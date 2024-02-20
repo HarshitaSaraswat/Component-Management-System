@@ -1,6 +1,6 @@
 from flask import Flask, request
 
-from .authentication import exchange_code_for_token
+from .authentication_middleware import exchange_code_for_token
 
 
 def create_routes(app: Flask):
