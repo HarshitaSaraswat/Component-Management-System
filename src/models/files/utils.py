@@ -1,19 +1,20 @@
-
 # SPDX-License-Identifier: MIT
 # --------------------------------------------------------------
-#|																|
-#|             Copyright 2023 - 2023, Amulya Paritosh			|
-#|																|
-#|  This file is part of Component Library Plugin for FreeCAD.	|
-#|																|
-#|               This file was created as a part of				|
-#|              Google Summer Of Code Program - 2023			|
-#|																|
+# |																|
+# |             Copyright 2023 - 2023, Amulya Paritosh			|
+# |																|
+# |  This file is part of Component Library Plugin for FreeCAD.	|
+# |																|
+# |               This file was created as a part of				|
+# |              Google Summer Of Code Program - 2023			|
+# |																|
 # --------------------------------------------------------------
 
 from functools import lru_cache
 
 from github import ContentFile, Github, Repository
+
+from ...log import logger
 
 
 @lru_cache
@@ -41,7 +42,6 @@ def get_repository(access_token, repository) -> Repository.Repository:
 
     g = Github(access_token)
     return g.get_user().get_repo(repository)
-
 
 
 def update_file(repository: Repository.Repository, branch, raw_file_data, destination_file_path) -> ContentFile.ContentFile:
@@ -123,6 +123,7 @@ def upload_new_file(repository: Repository.Repository, branch, raw_file_data, de
         print(uploaded_file.path)
         ```
     """
+    logger.info(f"Uploading new file to {destination_file_path}")
 
     return repository.create_file(
         destination_file_path,

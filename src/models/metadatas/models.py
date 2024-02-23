@@ -119,7 +119,7 @@ class Metadata(ElasticSearchBase):
             ```
         """
 
-        return email if Config.DEBUG else email_validator(email)
+        return email_validator(email)
 
     @validates("author")
     def validate_author(self, key, author):
@@ -146,7 +146,7 @@ class Metadata(ElasticSearchBase):
             ```
         """
 
-        return author if Config.DEBUG else email_validator(author)
+        return email_validator(author)
 
     @validates("thumbnail")
     def validate_thumbnail(self, key, url):
@@ -173,7 +173,7 @@ class Metadata(ElasticSearchBase):
             ```
         """
 
-        return url if Config.DEBUG else url_validator(url)
+        return url_validator(url)
 
     @validates("rating")
     def validate_rating(self, key, rating):

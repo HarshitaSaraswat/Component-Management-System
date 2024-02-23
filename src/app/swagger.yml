@@ -100,7 +100,7 @@ components:
       additionalProperties: false
       items:
         type: "string"
-        pattern: ^[a-zA-Z0-9_]+$
+        # pattern: ^[a-zA-Z0-9_]+$
         maxLength: 32
       example: ["laptop", "monitor"]
       uniqueItems: true
@@ -145,7 +145,7 @@ components:
           $ref: "#/components/schemas/File"
         repository:
           type: string
-          pattern: ^[\w ]+$
+          pattern: ^[\w -_]+$
           maxLength: 40
         branch:
           type: string
@@ -171,7 +171,7 @@ components:
           maxLength: 50
         description:
           type: "string"
-          pattern: ^[\w ]+$
+          # pattern: ^[\w ]+$
           maxLength: 500
         license_id:
           type: "string"

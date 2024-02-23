@@ -125,6 +125,8 @@ def create(component_data: dict):
     This function creates a component by creating metadata, adding tags, and uploading to GitHub. It returns the component response along with the HTTP status code.
     """
 
+    logger.debug(f"Creating component with data: {component_data}")
+
     metadata_data: dict = {
         "author": component_data.get("author", ""),
         "description": component_data.get("description", ""),
