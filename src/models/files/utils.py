@@ -44,7 +44,9 @@ def get_repository(access_token, repository) -> Repository.Repository:
     return g.get_user().get_repo(repository)
 
 
-def update_file(repository: Repository.Repository, branch, raw_file_data, destination_file_path) -> ContentFile.ContentFile:
+def update_file(
+    repository: Repository.Repository, branch, raw_file_data, destination_file_path
+) -> ContentFile.ContentFile:
     """
     Updates a file in the repository with the provided raw file data.
 
@@ -82,7 +84,9 @@ def update_file(repository: Repository.Repository, branch, raw_file_data, destin
             contents.extend(repository.get_contents(file_content.path))
         else:
             file = file_content
-            all_files.append(str(file).replace('ContentFile(path="', '').replace('")', ''))
+            all_files.append(
+                str(file).replace('ContentFile(path="', "").replace('")', "")
+            )
 
     if destination_file_path not in all_files:
         raise FileNotFoundError("The destination file path for found")
@@ -98,7 +102,9 @@ def update_file(repository: Repository.Repository, branch, raw_file_data, destin
     )["content"]
 
 
-def upload_new_file(repository: Repository.Repository, branch, raw_file_data, destination_file_path) -> ContentFile.ContentFile:
+def upload_new_file(
+    repository: Repository.Repository, branch, raw_file_data, destination_file_path
+) -> ContentFile.ContentFile:
     """
     Uploads a new file to the repository with the provided raw file data.
 
