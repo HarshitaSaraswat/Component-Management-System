@@ -80,6 +80,8 @@ class Metadata(ElasticSearchBase):
     rating = Column(Float)
 
     license_id = Column(GUID(), ForeignKey("spdx_licenses.id"), nullable=True)
+    user_id = Column(GUID(), ForeignKey("users.id"), nullable=True)
+    # TODO: Add default user as freecad github
 
     files = relationship(
         "File", backref="metadata", cascade="all, delete, delete-orphan"
