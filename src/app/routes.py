@@ -1,6 +1,6 @@
 from flask import Flask, request
 
-from ..authentication.github_OAuth import exchange_code_for_token
+from ..authentication.utils import exchange_code_for_token
 
 
 def create_routes(app: Flask):

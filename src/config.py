@@ -51,3 +51,5 @@ class Config:
     GITHUB_OAUTH_CLIENT_SECRET: Optional[str] = os.environ.get(
         "GITHUB_OAUTH_CLIENT_SECRET"
     )
+
+    FLASK_SECRET: str = os.environ.get("FLASK_SECRET_KEY")
