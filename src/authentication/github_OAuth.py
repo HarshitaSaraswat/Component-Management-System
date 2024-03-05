@@ -27,15 +27,16 @@ def exchange_code_for_token(code: str):
     if response.status_code == 200:
         return response.json().get("access_token")
 
-    def get_user(auth_token: str):
-        if not auth_token:
-            raise ValueError("The authentication token has to be supplied!")
 
-        response = requests.get(
-            "https://api.github.com/user",
-            headers={"Authorization": f"token {auth_token}"},
-            timeout=10,
-        )
+def get_user(auth_token: str):
+    if not auth_token:
+        raise ValueError("The authentication token has to be supplied!")
 
-        if response.status_code == 200:
-            return response.json()
+    response = requests.get(
+        "https://api.github.com/user",
+        headers={"Authorization": f"token {auth_token}"},
+        timeout=10,
+    )
+
+    if response.status_code == 200:
+        return response.json()
