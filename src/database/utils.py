@@ -21,10 +21,11 @@ from .definations import db, es
 
 
 def setup_db(app: Flask) -> None:
+    from ..models.metadatas import Metadata
+    from ..models.users import User
     from ..models.attributes import Attribute
     from ..models.files import File
     from ..models.licenses import SPDX
-    from ..models.metadatas import Metadata
     from ..models.tags import Tag
 
     db.init_app(app)
