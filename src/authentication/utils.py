@@ -22,7 +22,7 @@ def decode_auth_token(auth_token):
     """
     Decode the JWT authentication token and return the user ID.
     """
-    payload = jwt.decode(auth_token, Config.FLASK_SECRET)
+    payload = jwt.decode(auth_token, Config.FLASK_SECRET, algorithms=["HS256"])
     return payload["sub"]
 
 

@@ -1,6 +1,11 @@
 from flask import Flask, request
 
-from ..authentication.utils import exchange_code_for_token
+from ..authentication.utils import (
+    encode_auth_token,
+    exchange_code_for_token,
+    get_github_user,
+)
+from ..models.users import User
 
 
 def create_routes(app: Flask):
@@ -18,20 +23,42 @@ def create_routes(app: Flask):
     def api():
         return "Component Management System API", 200
 
+    @app.route("/login/app/authorize", methods=["GET"])
+    def auth_with_access_token():
+        access_token = request.headers.get("access_token")
+        if not access_token:
+            return "No access token received", 400
+
+        user_data = get_github_user(access_token)
+        user = User.query.filter_by(username=user_data["login"]).first()
+
+        if not user:
+            user = User(username=user_data["login"], admin=False)
+            user.create()
+
+        return {
+            "jwt": encode_auth_token(str(user.id)),
+        }, 200
+
     @app.route("/login/github/authorized", methods=["GET"])
     def exchange_code():
         code = request.args.get("code")
         if not code:
             return "No code received", 400
 
-        app.logger.debug(f"{code=}")
         auth_token = exchange_code_for_token(code)
 
         if auth_token is None:
             return "Could not authenticate with GitHub", 400
 
-        app.logger.debug(f"{auth_token=}")
+        user_data = get_github_user(auth_token)
+        user = User.query.filter_by(username=user_data["login"]).first()
+
+        if not user:
+            user = User(username=user_data["login"], admin=False)
+            user.create()
 
         return {
-            "auth_token": auth_token,
+            "github_auth_token": auth_token,
+            "jwt": encode_auth_token(user.id),
         }, 200

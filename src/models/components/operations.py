@@ -12,8 +12,14 @@
 
 from typing import Literal, Optional
 
+import jwt
+from flask import abort, request
 from flask_sqlalchemy.query import Query
+from werkzeug.exceptions import HTTPException
 
+from src.models.users.models import User
+
+from ...authentication.utils import decode_auth_token
 from ...log import logger
 from ..attributes import Attribute
 from ..files import File, FileType
@@ -125,19 +131,43 @@ def create(component_data: dict):
     This function creates a component by creating metadata, adding tags, and uploading to GitHub. It returns the component response along with the HTTP status code.
     """
 
+    token = request.headers.get("Token")
+    logger.debug(f"{token=}")
+    if not token:
+        return "token not found", 498
+
+    try:
+        user_id = decode_auth_token(token)
+    except jwt.ExpiredSignatureError:
+        logger.error("Token expired. Please log in again.")
+        return "Token expired. Please log in again.", 498
+    except jwt.InvalidTokenError:
+        logger.error("Invalid token. Please log in again.")
+        return "Invalid token. Please log in again.", 498
+
+    user: User = User.query.filter(User.id == user_id).one_or_none()
+
     logger.debug(f"Creating component with data: {component_data}")
 
     metadata_data: dict = {
         "author": component_data.get("author", ""),
         "description": component_data.get("description", ""),
         "license_id": component_data.get("license_id", ""),
+        "user_id": str(user.id),
         "maintainer": component_data.get("maintainer", ""),
         "name": component_data.get("name", ""),
         "rating": 0,
         "version": component_data.get("version", ""),
     }
 
-    metadata: Metadata = create_meatdata(metadata_data)
+    try:
+        metadata: Metadata = create_meatdata(metadata_data)
+    except ValueError as err:
+        logger.error(f"Error creating component: {err}")
+        return str(err), 406
+
+    user.metadatas.append(metadata)
+    user.commit()
     add_tags(metadata.id, component_data.get("tags"))
     component_data["metadata_id"] = str(metadata.id)
     upload_to_github(component_data)
