@@ -23,6 +23,7 @@ from ...database.utils import make_fuzzy_query
 from ...log import logger
 from ...validation import email_validator, url_validator
 from ..files import File  # * Never remove this import.
+from ..tags import Tag  # * Never remove this import.
 
 metadata_tag = db.Table(
     "metadata_tag",
