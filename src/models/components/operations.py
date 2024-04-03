@@ -15,6 +15,9 @@ from typing import Literal, Optional
 import jwt
 from flask import request
 from flask_sqlalchemy.query import Query
+from werkzeug.exceptions import HTTPException
+
+from src.models.users.models import User
 
 from src.models.users.models import User
 
