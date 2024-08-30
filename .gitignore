@@ -54,4 +54,4 @@ docs/_build/
 .venv
 .vscode
 test
-poetry.lock
+app.db

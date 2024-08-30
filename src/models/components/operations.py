@@ -13,9 +13,8 @@
 from typing import Literal, Optional
 
 import jwt
-from flask import abort, request
+from flask import request
 from flask_sqlalchemy.query import Query
-from werkzeug.exceptions import HTTPException
 
 from src.models.users.models import User
 
@@ -25,8 +24,8 @@ from ..attributes import Attribute
 from ..files import File, FileType
 from ..files.operations import upload_to_github
 from ..metadatas import Metadata
-from ..metadatas import _create as create_meatdata
-from ..metadatas import add_tags, metadata_schema, metadatas_schema
+from ..metadatas import _create as create_metadata
+from ..metadatas import add_attributes, add_tags, metadata_schema, metadatas_schema
 from ..tags import Tag
 from ..utils import paginated_schema
 from ..utils.pagination import MAX_PER_PAGE
@@ -161,7 +160,7 @@ def create(component_data: dict):
     }
 
     try:
-        metadata: Metadata = create_meatdata(metadata_data)
+        metadata: Metadata = create_metadata(metadata_data)
     except ValueError as err:
         logger.error(f"Error creating component: {err}")
         return str(err), 406
@@ -169,6 +168,7 @@ def create(component_data: dict):
     user.metadatas.append(metadata)
     user.commit()
     add_tags(metadata.id, component_data.get("tags"))
+    add_attributes(metadata.id, component_data.get("attributes"))
     component_data["metadata_id"] = str(metadata.id)
     upload_to_github(component_data)
 

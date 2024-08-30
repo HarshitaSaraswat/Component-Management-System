@@ -4,6 +4,7 @@ import jwt
 import requests
 
 from ..config import Config
+from ..log import logger
 
 
 def encode_auth_token(user_id) -> str:
@@ -11,9 +12,9 @@ def encode_auth_token(user_id) -> str:
     Generate the JWT authentication token for the user.
     """
     payload = {
-        "exp": datetime.datetime.now(datetime.UTC) + datetime.timedelta(hours=1),
-        "iat": datetime.datetime.now(datetime.UTC),
-        "sub": user_id,
+        "exp": datetime.datetime.now() + datetime.timedelta(hours=1),
+        "iat": datetime.datetime.now(),
+        "sub": str(user_id),
     }
     return jwt.encode(payload, Config.FLASK_SECRET, algorithm="HS256")
 
@@ -66,6 +67,9 @@ def get_github_user(auth_token: str):
         headers={"Authorization": f"token {auth_token}"},
         timeout=10,
     )
+
+    logger.debug(f"token provided: {auth_token}")
+    logger.debug(f"GitHub API response: {response.json()}")
 
     if response.status_code == 200:
         return response.json()

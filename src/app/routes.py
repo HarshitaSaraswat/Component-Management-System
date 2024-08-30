@@ -24,7 +24,7 @@ def create_routes(app: Flask):
         return "Component Management System API", 200
 
     @app.route("/login/app/authorize", methods=["GET"])
-    def auth_with_access_token():
+    def auth_with_access_token():  # -> tuple[Literal['No access token received'], Literal[400]] ...:
         access_token = request.headers.get("access_token")
         if not access_token:
             return "No access token received", 400
