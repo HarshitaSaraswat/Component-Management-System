@@ -16,7 +16,7 @@ flask = "2.2.2"
 elasticsearch = "^8.8.0"
 python-dotenv = "^1.0.0"
 pygithub = "^1.59.0"
-pyjwt = "^2.8.0"
+pyjwt = "2.5"
 
 
 [build-system]

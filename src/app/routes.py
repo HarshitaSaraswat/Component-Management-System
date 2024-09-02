@@ -1,5 +1,7 @@
 from flask import Flask, request
 
+from src.log import logger
+
 from ..authentication.utils import (
     encode_auth_token,
     exchange_code_for_token,
@@ -35,9 +37,10 @@ def create_routes(app: Flask):
         if not user:
             user = User(username=user_data["login"], admin=False)
             user.create()
-
+        jwt = encode_auth_token(str(user.id))
+        logger.debug(f"{jwt=}")
         return {
-            "jwt": encode_auth_token(str(user.id)),
+            "jwt": jwt,
         }, 200
 
     @app.route("/login/github/authorized", methods=["GET"])

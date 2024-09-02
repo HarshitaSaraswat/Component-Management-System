@@ -14,7 +14,7 @@ from functools import lru_cache
 
 from github import ContentFile, Github, Repository
 
-from ...log import logger
+# from ...log import logger
 
 
 @lru_cache
@@ -123,7 +123,7 @@ def upload_new_file(repository: Repository.Repository, branch, raw_file_data, de
         print(uploaded_file.path)
         ```
     """
-    logger.info(f"Uploading new file to {destination_file_path}")
+    # logger.info(f"Uploading new file to {destination_file_path}")
 
     return repository.create_file(
         destination_file_path,

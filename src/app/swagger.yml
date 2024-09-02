@@ -106,21 +106,24 @@ components:
       uniqueItems: true
       maxItems: 32
 
+    Attribute:
+      type: "object"
+      properties:
+        key:
+          type: "string"
+          # pattern: ^[a-zA-Z0-9_]+$
+          maxLength: 32
+        value:
+          type: "string"
+          # pattern: ^[a-zA-Z0-9_]+$
+          maxLength: 32
+      additionalProperties: false
+
     Attributes:
       type: "array"
       additionalProperties: false
       items:
-        type: "object"
-        properties:
-          key:
-            type: "string"
-            pattern: ^[a-zA-Z0-9_]+$
-            maxLength: 32
-          value:
-            type: "string"
-            pattern: ^[a-zA-Z0-9_]+$
-            maxLength: 32
-        additionalProperties: false
+        $ref: "#/components/schemas/Attribute"
       maxItems: 32
 
     Component:
@@ -668,8 +671,13 @@ paths:
       summary: "Create a new component from the given data"
       parameters:
         - in: header
+          name: Token
+          description: "api jwt"
+          schema:
+            type: string
+        - in: header
           name: X-Access-Token
-          description: "github access token"
+          description: "api jwt"
           schema:
             type: string
       requestBody:
