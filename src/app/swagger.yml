@@ -723,3 +723,31 @@ paths:
       responses:
         "201":
           description: "Successfully created a Component"
+
+  /auth/github:
+    get:
+      operationId: "src.authentication.services.auth_with_access_token"
+      tags:
+        - "Users"
+        - "Authentications"
+      summary: "Login to the API"
+      parameters:
+        - in: header
+          name: X-Access-Token
+          description: "Github Access Token"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Successfully logged in"
+
+    /auth/github/callback:
+      get:
+        operationId: "src.authentication.services.github_oauth_callback"
+        tags:
+          - "Users"
+          - "Authentications"
+        summary: "Login to the API with Github"
+        responses:
+          "200":
+            description: "Successfully logged in with Github"
