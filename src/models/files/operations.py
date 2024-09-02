@@ -218,13 +218,12 @@ def upload_to_github(upload_info):
         "files": [],
         "metadata": None,
     }
-    metadata_name_without_space = metadata.name.replace(" ", "-")
     for file in files:
         content = upload_new_file(
             repo,
             upload_info.get("branch"),
             file.stream.read(),
-            f"{metadata_name_without_space}/{file.filename.rsplit('/', 1)[-1]}",
+            f"{metadata.name}/{file.filename.rsplit('/', 1)[-1]}",
         )
 
         resp, _ = create(
@@ -242,7 +241,7 @@ def upload_to_github(upload_info):
             repo,
             upload_info.get("branch"),
             thumbnail_file.stream.read(),
-            f"{metadata_name_without_space}/thumbnail{Path(thumbnail_file.filename).suffix}",
+            f"{metadata.name}/thumbnail{Path(thumbnail_file.filename).suffix}",
         )
         metadata.thumbnail = content.download_url
     else:

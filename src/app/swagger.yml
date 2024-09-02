@@ -703,13 +703,8 @@ paths:
       summary: "Create a new component from the given data"
       parameters:
         - in: header
-          name: Token
-          description: "api jwt"
-          schema:
-            type: string
-        - in: header
           name: X-Access-Token
-          description: "api jwt"
+          description: "github access token"
           schema:
             type: string
       requestBody:

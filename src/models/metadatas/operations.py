@@ -377,8 +377,6 @@ def add_attributes(pk, attributes):
         abort(404, f"Metadata with id {pk} not found")
 
     for attribute_data in attributes:
-        if len(attribute_data.values()) < 1:
-            continue
         attribute_data["metadata_id"] = pk
         new_attribute: Attribute = attribute_schema.load(attribute_data)
         new_attribute.create()

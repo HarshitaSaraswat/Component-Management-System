@@ -33,7 +33,6 @@ from ..tags import Tag
 from ..utils import paginated_schema
 from ..utils.pagination import MAX_PER_PAGE
 from .schema import ComponentSchema, component_schema
-from src import log
 
 
 def read(
@@ -135,7 +134,6 @@ def create(component_data: dict):
     """
 
     token = request.headers.get("Token")
-    logger.debug(f"{request.headers=}")
     logger.debug(f"{token=}")
     if not token:
         return "token not found", 498
@@ -173,8 +171,7 @@ def create(component_data: dict):
     user.metadatas.append(metadata)
     user.commit()
     add_tags(metadata.id, component_data.get("tags"))
-    if component_data.get("attributes"):
-        add_attributes(metadata.id, component_data.get("attributes"))
+    add_attributes(metadata.id, component_data.get("attributes"))
     component_data["metadata_id"] = str(metadata.id)
     upload_to_github(component_data)
 
