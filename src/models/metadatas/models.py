@@ -13,16 +13,17 @@
 import re
 
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.orm import Relationship, relationship, validates
+from sqlalchemy.orm import relationship, validates
 from sqlalchemy.types import Float, String
 
 from ...config import Config
 from ...database import ElasticSearchBase, db
 from ...database.guid import GUID
-from ...database.utils import make_fuzzy_query, make_regexp_query
+from ...database.utils import make_fuzzy_query
 from ...log import logger
 from ...validation import email_validator, url_validator
 from ..files import File  # * Never remove this import.
+from ..tags import Tag  # * Never remove this import.
 
 metadata_tag = db.Table(
     "metadata_tag",
@@ -68,7 +69,7 @@ class Metadata(ElasticSearchBase):
     """
 
     __tablename__: str = "metadatas"
-    __allow_unmapped__ = True
+    # __allow_unmapped__ = True
 
     name = Column(String(200), nullable=False, unique=True)
     version = Column(String(50), nullable=False)
@@ -80,14 +81,14 @@ class Metadata(ElasticSearchBase):
     rating = Column(Float)
 
     license_id = Column(GUID(), ForeignKey("spdx_licenses.id"), nullable=True)
+    user_id = Column(GUID(), ForeignKey("users.id"), nullable=True)
+    # TODO: Add default user as freecad github
 
-    files: Relationship = relationship(
+    files = relationship(
         "File", backref="metadata", cascade="all, delete, delete-orphan"
     )
-    tags: Relationship = relationship(
-        "Tag", secondary=metadata_tag, backref="metadatas"
-    )
-    attributes: Relationship = relationship(
+    tags = relationship("Tag", secondary=metadata_tag, backref="metadatas")
+    attributes = relationship(
         "Attribute", backref="metadata", cascade="all, delete, delete-orphan"
     )
 
@@ -121,7 +122,7 @@ class Metadata(ElasticSearchBase):
             ```
         """
 
-        return email if Config.DEBUG else email_validator(email)
+        return email_validator(email)
 
     @validates("author")
     def validate_author(self, key, author):
@@ -148,7 +149,7 @@ class Metadata(ElasticSearchBase):
             ```
         """
 
-        return author if Config.DEBUG else email_validator(author)
+        return email_validator(author)
 
     @validates("thumbnail")
     def validate_thumbnail(self, key, url):
@@ -175,7 +176,7 @@ class Metadata(ElasticSearchBase):
             ```
         """
 
-        return url if Config.DEBUG else url_validator(url)
+        return url_validator(url)
 
     @validates("rating")
     def validate_rating(self, key, rating):
@@ -316,14 +317,18 @@ class Metadata(ElasticSearchBase):
         Returns:
             set[str]: A set of matching names.
         """
-        value_list = re.split(r" |,|\||-|_|\.", search_key)
-        query_list = [make_fuzzy_query(value) for value in value_list]
-        query_list.extend(make_regexp_query(value) for value in value_list)
+
+        search_key += " "
+        match: str = re.findall(r"([\w ]*)[^\w:][\w*:.*$]*", search_key)[0]
+
+        # value_list = re.split(r" |,|\||-|_|\.", search_key)
+        query_list = [make_fuzzy_query(value) for value in match.split(" ")]
+        # query_list.extend(make_regexp_query(value) for value in value_list)
         query_list.append(
             {
                 "more_like_this": {
                     "fields": ["name"],
-                    "like": search_key,
+                    "like": match,
                     "min_term_freq": 1,
                     "max_query_terms": 12,
                 }
@@ -336,8 +341,5 @@ class Metadata(ElasticSearchBase):
             }
         }
         response = super().elasticsearch(cls.__tablename__, query)
-
-        logger.debug(query)
-        logger.debug(response)
 
         return {hit["_source"]["name"] for hit in response["hits"]["hits"]}

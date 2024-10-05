@@ -5,29 +5,21 @@ from sqlalchemy.types import String
 
 from ...database import ElasticSearchBase
 from ...database.guid import GUID
+from ...log import logger
 
 
 class Attribute(ElasticSearchBase):
     """
-    Represents metadata for a component.
+    Represents an attribute of a component.
 
-    This class inherits from `ElasticSearchBase` and defines the metadata fields for a component.
-    The class includes columns for name, version, maintainer, author, thumbnail, description, rating, and license ID.
-    It also defines relationships with files and tags.
+    This class inherits from `ElasticSearchBase` and provides a method for performing an Elasticsearch search
+    based on a specified search key. It returns a set of matching names.
 
-    The class provides methods for adding tags and files, as well as deleting and updating the metadata.
+    Args:
+        search_key (str): The key to search for.
 
-    Example:
-        ```python
-        metadata = Metadata()
-        metadata.name = "Component A"
-        metadata.version = "1.0.0"
-        metadata.maintainer = "John Doe"
-        metadata.add_tag("tag1")
-        metadata.add_file("file1")
-        metadata.commit()
-        print(metadata)
-        ```
+    Returns:
+        set[str]: A set of matching names.
     """
 
     __tablename__: str = "attributes"
@@ -49,15 +41,46 @@ class Attribute(ElasticSearchBase):
         Returns:
             set[str]: A set of matching names.
         """
-        value_list = re.split(r" |,|\||-|_|\.", search_key)
+        search_key += " "
+        pairs: dict[str, str] = {
+            x.split(":")[0].replace("_", " "): x.split(":")[1].replace("_", " ")
+            for x in re.findall(r"(\w+:\w+)", search_key)
+        }
+        keys_only: list[str] = [
+            item.replace("_", " ") for item in re.findall(r"(\w+):[^\w]", search_key)
+        ]
+        values_only: list[str] = [
+            item.replace("_", " ") for item in re.findall(r"[^\w]:(\w+)", search_key)
+        ]
+        # working in (\w* [\w]+:)[^:\w*] for values that catches values that has space(char) in them
+        logger.debug(f"{pairs=}")
+        logger.debug(f"{keys_only=}")
+        logger.debug(f"{values_only=}")
+
+        should_queries = []
+
+        if pairs:
+            should_queries.extend(
+                [
+                    {"terms": {"key.keyword": list(pairs.keys())}},
+                    {"terms": {"value.keyword": list(pairs.values())}},
+                ]
+            )
+        if keys_only:
+            should_queries.append(
+                {"terms": {"key.keyword": keys_only}},
+            )
+        if values_only:
+            should_queries.append(
+                {"terms": {"value.keyword": values_only}},
+            )
+        # ! when empty list is passed to must, it returns all the attributes
         query = {
             "bool": {
-                "should": [
-                    {"terms": {"key": value_list}},
-                    {"terms": {"value": value_list}},
-                ],
+                "should": should_queries,
             },
         }
 
         response = super().elasticsearch(cls.__tablename__, query)
+        logger.debug(f"{response=}")
         return {hit["_source"]["metadata_id"] for hit in response["hits"]["hits"]}

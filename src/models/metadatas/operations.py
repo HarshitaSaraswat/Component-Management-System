@@ -137,7 +137,7 @@ def _create(metadata: dict) -> Metadata:
     ).one_or_none()
 
     if existing_metadata is not None:
-        abort(406, "This Metadata already exists")
+        raise ValueError(f"Metadata with name {metadata.get('name')} already exists!")
 
     logger.info(metadata)
 

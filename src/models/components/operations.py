@@ -12,14 +12,23 @@
 
 from typing import Literal, Optional
 
+import jwt
+from flask import request
 from flask_sqlalchemy.query import Query
+from werkzeug.exceptions import HTTPException
 
+from src.models.users.models import User
+
+from src.models.users.models import User
+
+from ...authentication.utils import decode_auth_token
+from ...log import logger
 from ..attributes import Attribute
 from ..files import File, FileType
 from ..files.operations import upload_to_github
 from ..metadatas import Metadata
-from ..metadatas import _create as create_meatdata
-from ..metadatas import add_tags, metadata_schema, metadatas_schema
+from ..metadatas import _create as create_metadata
+from ..metadatas import add_attributes, add_tags, metadata_schema, metadatas_schema
 from ..tags import Tag
 from ..utils import paginated_schema
 from ..utils.pagination import MAX_PER_PAGE
@@ -42,26 +51,26 @@ def read(
     Parameters
     ----------
     page : Optional[int], optional
-            The page number for pagination. Defaults to None.
+                    The page number for pagination. Defaults to None.
     page_size : Optional[int], optional
-            The number of components per page. Defaults to None.
+                    The number of components per page. Defaults to None.
     search_str : Optional[str], optional
-            The search key to filter components by name. Defaults to None.
+                    The search key to filter components by name. Defaults to None.
     sort_by : Optional[str], optional
-            The field to sort components by. Defaults to "name".
+                    The field to sort components by. Defaults to "name".
     sort_ord : Literal["desc"] | Literal["asc"], optional
-            The sort order for the components. Defaults to "asc".
+                    The sort order for the components. Defaults to "asc".
     file_types : list, optional
-            The list of file types to filter components by. Defaults to [t.name for t in FileType].
+                    The list of file types to filter components by. Defaults to [t.name for t in FileType].
     tags : Optional[list], optional
-            The list of tags to filter components by. Defaults to None.
+                    The list of tags to filter components by. Defaults to None.
     columns : Optional[list], optional
-            The list of columns to include in the query result. Defaults to None.
+                    The list of columns to include in the query result. Defaults to None.
 
     Returns
     -------
     tuple
-            A tuple containing the components response and the HTTP status code.
+                    A tuple containing the components response and the HTTP status code.
 
     Notes
     -----
@@ -81,8 +90,9 @@ def read(
         query = query.filter(
             Metadata.name.in_(Metadata.elasticsearch(search_str.lower()))
         )
-        matching_attrs = Attribute.elasticsearch(search_str.lower())
-        if matching_attrs:
+        if ":" in search_str:
+            matching_attrs = Attribute.elasticsearch(search_str.lower())
+            logger.debug(f"{matching_attrs}")
             query = query.filter(Metadata.id.in_(matching_attrs))
 
     if columns:
@@ -100,6 +110,7 @@ def read(
     for component, metadata in zip(components_resp.get("items"), metadata_resp):
         component["metadata"] = metadata
         component["id"] = metadata["id"]
+
     return components_resp, 200
 
 
@@ -122,18 +133,45 @@ def create(component_data: dict):
     This function creates a component by creating metadata, adding tags, and uploading to GitHub. It returns the component response along with the HTTP status code.
     """
 
+    token = request.headers.get("Token")
+    logger.debug(f"{token=}")
+    if not token:
+        return "token not found", 498
+
+    try:
+        user_id = decode_auth_token(token)
+    except jwt.ExpiredSignatureError:
+        logger.error("Token expired. Please log in again.")
+        return "Token expired. Please log in again.", 498
+    except jwt.InvalidTokenError:
+        logger.error("Invalid token. Please log in again.")
+        return "Invalid token. Please log in again.", 498
+
+    user: User = User.query.filter(User.id == user_id).one_or_none()
+
+    logger.debug(f"Creating component with data: {component_data}")
+
     metadata_data: dict = {
         "author": component_data.get("author", ""),
         "description": component_data.get("description", ""),
         "license_id": component_data.get("license_id", ""),
+        "user_id": str(user.id),
         "maintainer": component_data.get("maintainer", ""),
         "name": component_data.get("name", ""),
         "rating": 0,
         "version": component_data.get("version", ""),
     }
 
-    metadata: Metadata = create_meatdata(metadata_data)
+    try:
+        metadata: Metadata = create_metadata(metadata_data)
+    except ValueError as err:
+        logger.error(f"Error creating component: {err}")
+        return str(err), 406
+
+    user.metadatas.append(metadata)
+    user.commit()
     add_tags(metadata.id, component_data.get("tags"))
+    add_attributes(metadata.id, component_data.get("attributes"))
     component_data["metadata_id"] = str(metadata.id)
     upload_to_github(component_data)
 
