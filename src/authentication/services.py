@@ -10,7 +10,7 @@ from src.log import logger
 
 
 def auth_with_access_token():  # -> tuple[Literal['No access token received'], Literal[400]] ...:
-    access_token = request.headers.get("access_token")
+    access_token = request.headers.get("X-Access-Token")
     if not access_token:
         return "No access token received", 400
 
@@ -27,7 +27,7 @@ def auth_with_access_token():  # -> tuple[Literal['No access token received'], L
     }, 200
 
 
-def exchange_code():
+def github_oauth_callback():
     code = request.args.get("code")
     if not code:
         return "No code received", 400
